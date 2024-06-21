@@ -29,6 +29,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@prisma/client": "^5.15.1",
     "express": "^4.19.2",
     "uuid": "^10.0.0",
     "winston": "^3.13.0",

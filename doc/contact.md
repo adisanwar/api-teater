@@ -139,7 +139,8 @@ Endpoint : GET /api/contacts
 Query Parameter :
 - name : string, contact first name or contact last name, optional
 - phone : string, contact phone, optional
-- email : string, contact email, optional
+- email : string, contact email
+- ktp   : number  contact ktp
 - page : number, default 1
 - size : number, default 10
 
@@ -156,14 +157,16 @@ Response Body (Success) :
       "first_name" : "Eko Kurniawan",
       "last_name" : "Khannedy",
       "email" : "eko@example.com",
-      "phone" : "089999999"
+      "phone" : "089999999",
+      "ktp"   : "3872642987"
     },
     {
       "id" : 2,
       "first_name" : "Eko Kurniawan",
       "last_name" : "Khannedy",
       "email" : "eko@example.com",
-      "phone" : "089999999"
+      "phone" : "089999999",
+      "ktp"   : "37482980"
     }
   ],
   "paging" : {
