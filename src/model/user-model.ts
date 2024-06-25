@@ -9,11 +9,11 @@ export type UserResponse = {
 
 export type CreateUserRequest = {
     username: string;
-    name: string;
-    token?:string;
+    password: string;
+    name:string;
 }
 
-export function ToUserResponse(user:User): UserResponse {
+export function toUserResponse(user:User): UserResponse {
     return {
         name: user.name,
         username: user.username      

@@ -1,9 +1,10 @@
 import { request } from "express";
-import {CreateUserRequest, UserResponse } from "../model/user-model";
+import {CreateUserRequest, UserResponse, toUserResponse } from "../model/user-model";
 import { UserValidation } from "../validation/user-validation";
 import { prismaClient } from "../application/database"
 import { Validation } from "../validation/validation";
 import { ResponseError } from "../error/response-error";
+import bcrypt from "bcrypt";
 
 export class UserService {
     static async register(request: CreateUserRequest): Promise<UserResponse> {
@@ -17,19 +18,17 @@ export class UserService {
       });
   
       if (totalUserWithSameUsername != 0) {
-        throw new ResponseError(`400`); // Handle username conflict
+        throw new ResponseError(400, "Username Already exist"); 
+
       }
-  
-    //   // Implement user creation using Prisma or other methods
-    //   const createdUser = await prismaClient.user.create({
-    //     data: user,
-    //   });
-  
-    //   // Return the response data (assuming UserResponse includes relevant data)
-    //   return {
-    //     id: createdUser.id,
-    //     username: createdUser.username,
-    //     // Include other relevant user details
+
+      registerRequest.password = await bcrypt.hash(registerRequest.password, 10);
+      
+      const user = await prismaClient.user.create({
+        data: registerRequest
+      });
+
+      return toUserResponse(user);
       };
     }
   
