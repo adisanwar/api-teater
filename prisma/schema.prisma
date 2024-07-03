@@ -52,8 +52,3 @@ model Address {
 
   @@map("addresses")
 }
-
-model Schedules {
-  id          Int
-  
-}
