@@ -7,7 +7,7 @@ export class UserTest {
     static async delete() {
         await prismaClient.user.deleteMany({
             where: {
-                username: "test"
+                username: "adi"
             }
         })
     }
@@ -15,10 +15,10 @@ export class UserTest {
     static async create() {
         await prismaClient.user.create({
             data: {
-                username: "test",
-                name: "test",
-                password: await bcrypt.hash("test", 10),
-                token: "test"
+                username: "adi",
+                name: "adi",
+                password: await bcrypt.hash("adi", 10),
+                token: "adi"
             }
         })
     }
@@ -26,7 +26,7 @@ export class UserTest {
     static async get(): Promise<User> {
         const user = await prismaClient.user.findFirst({
             where: {
-                username: "test"
+                username: "adi"
             }
         })
 
@@ -44,7 +44,7 @@ export class ContactTest {
     static async deleteAll() {
         await prismaClient.contact.deleteMany({
             where: {
-                username: "test"
+                username: "adi"
             }
         })
     }
@@ -52,11 +52,11 @@ export class ContactTest {
     static async create() {
         await prismaClient.contact.create({
             data: {
-                first_name: "test",
-                last_name: "test",
-                email: "test@example.com",
+                first_name: "adi",
+                last_name: "adi",
+                email: "adi@example.com",
                 phone: "08999999",
-                username: "test"
+                username: "adi"
             }
         });
     }
@@ -64,7 +64,7 @@ export class ContactTest {
     static async get(): Promise<Contact> {
         const contact = await prismaClient.contact.findFirst({
             where: {
-                username: "test"
+                username: "adi"
             }
         });
 
@@ -83,7 +83,7 @@ export class AddressTest {
         await prismaClient.address.deleteMany({
             where: {
                 contact: {
-                    username: "test"
+                    username: "adi"
                 }
             }
         })
@@ -107,7 +107,7 @@ export class AddressTest {
         const address = await prismaClient.address.findFirst({
             where: {
                 contact: {
-                    username: "test"
+                    username: "adi"
                 }
             }
         });

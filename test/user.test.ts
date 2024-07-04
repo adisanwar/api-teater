@@ -1,14 +1,14 @@
 import supertest from "supertest";
 import {web} from "../src/application/web";
 import {logger} from "../src/application/logging";
-// import {UserTest} from "./test-util";
+import {UserTest} from "./test-util";
 // import bcrypt from "bcrypt";
 
 describe('POST /api/users', () => {
 
-    // afterEach(async () => {
-    //     await UserTest.delete();
-    // })
+    afterEach(async () => {
+        await UserTest.delete();
+    })
 
     it('should reject register new user if request is invalid', async () => {
         const response = await supertest(web)
@@ -28,15 +28,15 @@ describe('POST /api/users', () => {
         const response = await supertest(web)
             .post("/api/users")
             .send({
-                username: "test",
-                password: "test",
-                name: "test"
+                username: "adi",
+                password: "adi",
+                name: "adi"
             });
 
         logger.debug(response.body);
         expect(response.status).toBe(200);
-        expect(response.body.data.username).toBe("test");
-        expect(response.body.data.name).toBe("test");
+        expect(response.body.data.username).toBe("adi");
+        expect(response.body.data.name).toBe("adi");
     });
 
 });
