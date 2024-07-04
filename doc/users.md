@@ -10,7 +10,8 @@ Request Body :
 {
   "username" : "Adi",
   "password" : "rahasia",
-  "name" : " Adi"
+  "name" : " Adi",
+  "isAdmin" : "true/false"
 }
 ```
 
@@ -42,7 +43,8 @@ Request Body :
 ```json
 {
   "username" : "Adi",
-  "password" : "rahasia"
+  "password" : "rahasia",
+  "isAdmin"     : "true"
 }
 ```
 

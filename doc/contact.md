@@ -14,7 +14,9 @@ Request Body :
   "first_name" : "Eko Kurniawan",
   "last_name" : "Khannedy",
   "email" : "eko@example.com",
-  "phone" : "089999999"
+  "phone" : "089999999",
+  "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
 }
 ```
 
@@ -27,7 +29,8 @@ Response Body (Success) :
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
     "email" : "eko@example.com",
-    "phone" : "089999999"
+    "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
   }
 }
 ```
@@ -56,7 +59,9 @@ Response Body (Success) :
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
     "email" : "eko@example.com",
-    "phone" : "089999999"
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
   }
 }
 ```
@@ -71,7 +76,7 @@ Response Body (Failed) :
 
 ## Update Contact
 
-Endpoint : PUT /api/contacts/:id
+Endpoint : PATCH /api/contacts/:id
 
 Request Header :
 - X-API-TOKEN : token
@@ -83,7 +88,9 @@ Request Body :
   "first_name" : "Eko Kurniawan",
   "last_name" : "Khannedy",
   "email" : "eko@example.com",
-  "phone" : "089999999"
+  "phone" : "089999999",
+  "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
 }
 ```
 
@@ -96,7 +103,9 @@ Response Body (Success) :
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
     "email" : "eko@example.com",
-    "phone" : "089999999"
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
   }
 }
 ```
@@ -158,7 +167,8 @@ Response Body (Success) :
       "last_name" : "Khannedy",
       "email" : "eko@example.com",
       "phone" : "089999999",
-      "ktp"   : "3872642987"
+      "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
     },
     {
       "id" : 2,
@@ -166,7 +176,8 @@ Response Body (Success) :
       "last_name" : "Khannedy",
       "email" : "eko@example.com",
       "phone" : "089999999",
-      "ktp"   : "37482980"
+      "dateofbirth" : "12/12/1290",
+  "nationalID"  : "283746"
     }
   ],
   "paging" : {
