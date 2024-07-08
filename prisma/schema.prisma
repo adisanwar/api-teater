@@ -19,19 +19,23 @@ model User {
   name     String  @db.VarChar(100)
   token    String? @db.VarChar(100)
 
+
+  ticket Ticket[]
   contacts Contact[]
 
   @@map("users")
 }
 
 model Contact {
-  id         Int     @id @default(autoincrement())
-  first_name String  @db.VarChar(100)
-  last_name  String? @db.VarChar(100)
-  email      String @db.VarChar(100)
-  phone      String? @db.VarChar(20)
-  ktp        BigInt   @db.BigInt
-  username   String  @db.VarChar(100)
+  id          Int     @id @default(autoincrement())
+  first_name  String  @db.VarChar(100)
+  last_name   String? @db.VarChar(100)
+  email       String? @db.VarChar(100)
+  phone       String? @db.VarChar(20)
+  dateofbirth DateTime?
+  ofcNo       String?  @db.VarChar(20)
+  nationalId  BigInt?   @db.BigInt
+  username    String  @db.VarChar(100)
 
   user      User      @relation(fields: [username], references: [username])
   addresses Address[]
@@ -51,4 +55,66 @@ model Address {
   contact Contact @relation(fields: [contact_id], references: [id])
 
   @@map("addresses")
+}
+
+model Show {
+  id          Int     @id @default(autoincrement())
+  title       String  @db.VarChar(255)
+  Description String? @db.VarChar(255)
+  Duration    String? @db.VarChar(50)
+  Rating      String? @db.VarChar(20)
+
+  showtime Showtime []
+
+  @@map("shows")
+}
+
+model Showtime {
+  id          Int     @id @default(autoincrement())
+  showDate    DateTime?
+  showTime    String? @db.VarChar(255)
+  showId      Int
+
+  show Show @relation(fields: [showId], references: [id])
+  ticket Ticket []
+
+  @@map("showtimes")
+}
+
+model Theater {
+  id          Int     @id @default(autoincrement())
+  name       String  @db.VarChar(255)
+  location String? @db.VarChar(255)
+  capacity    String? @db.VarChar(50)
+
+  @@map("theaters")
+}
+
+model Ticket {
+  id           Int     @id @default(autoincrement())
+  seatNumber   String  @db.VarChar(255)
+  price        String? @db.VarChar(255)
+  purchaseDate DateTime?
+  showtimeId   Int
+  username     String  @db.VarChar(100) 
+
+  showtime Showtime @relation(fields: [showtimeId], references: [id])
+  user User @relation(fields: [username], references: [username])
+
+  payment Payment[]   
+
+  @@map("tickets")
+}
+
+model Payment {
+  id            Int     @id @default(autoincrement())
+  amount        String  @db.VarChar(255)
+  paymentDate   DateTime?
+  metodePayment String? @db.VarChar(50)
+  status        String? @db.VarChar(50)
+  ticketId      Int    
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+
+  @@map("payments")
 }

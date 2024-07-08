@@ -11,12 +11,16 @@ Request Body :
 
 ```json
 {
-  "first_name" : "Eko Kurniawan",
-  "last_name" : "Khannedy",
-  "email" : "eko@example.com",
-  "phone" : "089999999",
-  "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+  "data" : {
+    "first_name" : "Eko Kurniawan",
+    "last_name" : "Khannedy",
+    "ofcNo" : "123",
+    "email" : "eko@example.com",
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+    "idJkt": "1",
+  "nationalId"  : "283746"
+  }
 }
 ```
 
@@ -28,9 +32,12 @@ Response Body (Success) :
     "id" : 1,
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
+    "ofcNo" : "123",
     "email" : "eko@example.com",
+    "phone" : "089999999",
     "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+    "idJkt": "1",
+  "nationalId"  : "283746"
   }
 }
 ```
@@ -58,10 +65,12 @@ Response Body (Success) :
     "id" : 1,
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
+    "ofcNo" : "123",
     "email" : "eko@example.com",
     "phone" : "089999999",
     "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+    "idJkt": "1",
+  "nationalId"  : "283746"
   }
 }
 ```
@@ -85,12 +94,17 @@ Request Body :
 
 ```json
 {
-  "first_name" : "Eko Kurniawan",
-  "last_name" : "Khannedy",
-  "email" : "eko@example.com",
-  "phone" : "089999999",
-  "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+  "data" : {
+    "id" : 1,
+    "first_name" : "Eko Kurniawan",
+    "last_name" : "Khannedy",
+    "ofcNo" : "123",
+    "email" : "eko@example.com",
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+    "idJkt": "1",
+  "nationalId"  : "283746"
+  }
 }
 ```
 
@@ -98,14 +112,16 @@ Response Body (Success) :
 
 ```json
 {
-  "data" : {
+ "data" : {
     "id" : 1,
     "first_name" : "Eko Kurniawan",
     "last_name" : "Khannedy",
+    "ofcNo" : "123",
     "email" : "eko@example.com",
     "phone" : "089999999",
     "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+    "idJkt": "1",
+  "nationalId"  : "283746"
   }
 }
 ```
@@ -162,22 +178,26 @@ Response Body (Success) :
 {
   "data" : [
     {
-      "id" : 1,
-      "first_name" : "Eko Kurniawan",
-      "last_name" : "Khannedy",
-      "email" : "eko@example.com",
-      "phone" : "089999999",
-      "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
-    },
+    "id" : 1,
+    "first_name" : "Eko Kurniawan",
+    "last_name" : "Khannedy",
+    "ofcNo" : "123",
+    "email" : "eko@example.com",
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+    "idJkt": "1",
+  "nationalId"  : "283746"
+  },
     {
-      "id" : 2,
-      "first_name" : "Eko Kurniawan",
-      "last_name" : "Khannedy",
-      "email" : "eko@example.com",
-      "phone" : "089999999",
-      "dateofbirth" : "12/12/1290",
-  "nationalID"  : "283746"
+    "id" : 1,
+    "first_name" : "Eko Kurniawan",
+    "last_name" : "Khannedy",
+    "ofcNo" : "123",
+    "email" : "eko@example.com",
+    "phone" : "089999999",
+    "dateofbirth" : "12/12/1290",
+    "idJkt": "1",
+  "nationalId"  : "283746"
     }
   ],
   "paging" : {

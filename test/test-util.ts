@@ -39,27 +39,28 @@ export class UserTest {
 
 }
 
-// export class ContactTest {
+export class ContactTest {
 
-//     static async deleteAll() {
-//         await prismaClient.contact.deleteMany({
-//             where: {
-//                 username: "adi"
-//             }
-//         })
-//     }
+    static async deleteAll() {
+        await prismaClient.contact.deleteMany({
+            where: {
+                username: "adi"
+            }
+        })
+    }
 
-//     static async create() {
-//         await prismaClient.contact.create({
-//             data: {
-//                 first_name: "adi",
-//                 last_name: "adi",
-//                 email: "adi@example.com",
-//                 phone: "08999999",
-//                 username: "adi"
-//             }
-//         });
-//     }
+    static async create() {
+
+        await prismaClient.contact.create({
+            data: {
+                first_name: "adi",
+                last_name: "adi",
+                email: "adi@example.com",
+                phone: "08999999",
+                username: "adi"
+            }
+        });
+    }
 
 //     static async get(): Promise<Contact> {
 //         const contact = await prismaClient.contact.findFirst({
@@ -75,7 +76,7 @@ export class UserTest {
 //         return contact;
 //     }
 
-// }
+}
 
 // export class AddressTest {
 

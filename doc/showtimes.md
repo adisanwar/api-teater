@@ -11,7 +11,6 @@ Request Body :
 
 ```json
 {
-"showtimeId": "uuid",
 "showId": "uuid",
 "theterid": "uuid",
 "showDate": "Tanggal pertunjukan.",
