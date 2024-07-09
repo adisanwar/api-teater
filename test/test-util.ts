@@ -44,7 +44,7 @@ export class ContactTest {
     static async deleteAll() {
         await prismaClient.contact.deleteMany({
             where: {
-                username: "adi"
+                username: "test"
             }
         })
     }
@@ -57,7 +57,10 @@ export class ContactTest {
                 last_name: "adi",
                 email: "adi@example.com",
                 phone: "08999999",
-                username: "adi"
+                username: "test",
+                ofcNo: "7865297",
+                nationalId: 3745623875,
+
             }
         });
     }

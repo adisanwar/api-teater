@@ -13,11 +13,11 @@ CREATE TABLE `contacts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(100) NOT NULL,
     `last_name` VARCHAR(100) NULL,
-    `email` VARCHAR(100) NOT NULL,
+    `email` VARCHAR(100) NULL,
     `phone` VARCHAR(20) NULL,
     `dateofbirth` DATETIME(3) NULL,
-    `ofcNo` VARCHAR(20) NOT NULL,
-    `nationalId` BIGINT NOT NULL,
+    `ofcNo` VARCHAR(20) NULL,
+    `nationalId` BIGINT NULL,
     `username` VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (`id`)
