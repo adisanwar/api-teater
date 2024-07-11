@@ -35,7 +35,7 @@ model Contact {
   dateofbirth DateTime?
   ofcNo       String?  @db.VarChar(20)
   nationalId  BigInt?   @db.BigInt
-  username    String  @db.VarChar(100)
+ username   String  @db.VarChar(100)
 
   user      User      @relation(fields: [username], references: [username])
   addresses Address[]

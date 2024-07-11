@@ -50,77 +50,73 @@ export class ContactTest {
     }
 
     static async create() {
-
         await prismaClient.contact.create({
             data: {
-                first_name: "adi",
-                last_name: "adi",
-                email: "adi@example.com",
+                first_name: "test",
+                last_name: "test",
+                email: "test@example.com",
                 phone: "08999999",
-                username: "test",
-                ofcNo: "7865297",
-                nationalId: 3745623875,
-
+                username: "test"
             }
         });
     }
 
-//     static async get(): Promise<Contact> {
-//         const contact = await prismaClient.contact.findFirst({
-//             where: {
-//                 username: "adi"
-//             }
-//         });
+    static async get(): Promise<Contact> {
+        const contact = await prismaClient.contact.findFirst({
+            where: {
+                username: "test"
+            }
+        });
 
-//         if (!contact) {
-//             throw new Error("Contact is not found");
-//         }
+        if (!contact) {
+            throw new Error("Contact is not found");
+        }
 
-//         return contact;
-//     }
+        return contact;
+    }
 
 }
 
-// export class AddressTest {
+export class AddressTest {
 
-//     static async deleteAll() {
-//         await prismaClient.address.deleteMany({
-//             where: {
-//                 contact: {
-//                     username: "adi"
-//                 }
-//             }
-//         })
-//     }
+    static async deleteAll() {
+        await prismaClient.address.deleteMany({
+            where: {
+                contact: {
+                    username: "test"
+                }
+            }
+        })
+    }
 
-//     static async create() {
-//         const contact = await ContactTest.get();
-//         await prismaClient.address.create({
-//             data: {
-//                 contact_id: contact.id,
-//                 street: "Jalan test",
-//                 city: "Kota test",
-//                 province: "Provinsi test",
-//                 country: "Indonesia",
-//                 postal_code: "11111"
-//             }
-//         })
-//     }
+    static async create() {
+        const contact = await ContactTest.get();
+        await prismaClient.address.create({
+            data: {
+                contact_id: contact.id,
+                street: "Jalan test",
+                city: "Kota test",
+                province: "Provinsi test",
+                country: "Indonesia",
+                postal_code: "11111"
+            }
+        })
+    }
 
-//     static async get(): Promise<Address> {
-//         const address = await prismaClient.address.findFirst({
-//             where: {
-//                 contact: {
-//                     username: "adi"
-//                 }
-//             }
-//         });
+    static async get(): Promise<Address> {
+        const address = await prismaClient.address.findFirst({
+            where: {
+                contact: {
+                    username: "test"
+                }
+            }
+        });
 
-//         if (!address) {
-//             throw new Error("Address is not found")
-//         }
+        if (!address) {
+            throw new Error("Address is not found")
+        }
 
-//         return address;
-//     }
+        return address;
+    }
 
-// }
+}
