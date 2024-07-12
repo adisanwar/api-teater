@@ -1,7 +1,7 @@
 import {Theater} from "@prisma/client";
 
 export type TheaterResponse = {
-    id: number;
+    id: Number;
     name: String,
     location?: String | null,
     capacity?: String | null,
@@ -14,11 +14,16 @@ export type CreateTheaterRequest = {
 }
 
 export type UpdateTheaterRequest = {
-    id: number;
+    id: Number;
     name: String;
     location?: String;
     capacity?: String;
 }
+
+// export type GetTheaterRequest = {
+//     theterId: number;
+//     id: number;
+// }
 
 // export type SearchTheaterRequest = {
 //     name?: string;

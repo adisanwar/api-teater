@@ -1,4 +1,4 @@
-import {Show, User} from "@prisma/client";
+import {Show, Theater, User} from "@prisma/client";
 import { CreateShowRequest, ShowResponse, toShowResponse, UpdateShowRequest } from "../model/show-model";
 import {Validation} from "../validation/validation";
 import {prismaClient} from "../application/database";
@@ -7,11 +7,15 @@ import { ShowValidation } from "../validation/show-valiidation";
 
 export class ShowService {
 
-    static async create(request: CreateShowRequest): Promise<ShowResponse> {
+    static async create(theater: Theater, request: CreateShowRequest): Promise<ShowResponse> {
         const createRequest = Validation.validate(ShowValidation.CREATE, request);
 
+        const record = {
+            ...createRequest,
+            ...{theater:theater.id}
+        }
         const show = await prismaClient.show.create({
-            data: createRequest
+            data: record
         });
 
         return toShowResponse(show);

@@ -87,7 +87,7 @@ model Showtime {
 model Theater {
   id          Int     @id @default(autoincrement())
   name       String  @db.VarChar(255)
-  location String? @db.VarChar(255)
+  location    String? @db.VarChar(255)
   capacity    String? @db.VarChar(50)
 
   shows     Show[] // Relasi ke Show

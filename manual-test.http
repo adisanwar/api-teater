@@ -16,13 +16,13 @@ Accept: application/json
 
 {
   "username": "eko",
-  "password" : "rahasia"
+  "password" : "eko123"
 }
 
 ### Get User
 GET http://localhost:3000/api/users/current
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Logout User
 DELETE http://localhost:3000/api/users/current
@@ -33,7 +33,7 @@ X-API-TOKEN: 8ced4df6-73a9-4353-9bcd-55f0dbb83cc9
 PATCH http://localhost:3000/api/users/current
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 23c057e8-64ed-4542-bea9-433e0e7a0c25
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "name" : "Eko Kurniawan"
@@ -43,7 +43,7 @@ X-API-TOKEN: 23c057e8-64ed-4542-bea9-433e0e7a0c25
 PATCH http://localhost:3000/api/users/current
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 23c057e8-64ed-4542-bea9-433e0e7a0c25
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "password" : "rahasia"
@@ -53,7 +53,7 @@ X-API-TOKEN: 23c057e8-64ed-4542-bea9-433e0e7a0c25
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "first_name" : "Budi Kurniawan",
@@ -63,10 +63,10 @@ X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
 }
 
 ### Update Contact
-PUT http://localhost:3000/api/contacts/128
+PUT http://localhost:3000/api/contacts/48
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "first_name" : "Eko",
@@ -78,23 +78,23 @@ X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
 ### Get Contact
 GET http://localhost:3000/api/contacts/128
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Remove Contact
 DELETE http://localhost:3000/api/contacts/128
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Search Contact
 GET http://localhost:3000/api/contacts
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Add Address
-POST http://localhost:3000/api/contacts/130/addresses
+POST http://localhost:3000/api/contacts/41/addresses
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "street" : "Jalan B",
@@ -105,15 +105,15 @@ X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
 }
 
 ### Get Address
-GET http://localhost:3000/api/contacts/130/addresses/59
+GET http://localhost:3000/api/contacts/41/addresses/59
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Update Address
-PUT http://localhost:3000/api/contacts/130/addresses/59
+PUT http://localhost:3000/api/contacts/41/addresses/41
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "street" : "Jalan C",
@@ -124,11 +124,11 @@ X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
 }
 
 ### List Address
-GET http://localhost:3000/api/contacts/130/addresses
+GET http://localhost:3000/api/contacts/41/addresses
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Remove Address
-DELETE http://localhost:3000/api/contacts/130/addresses/59
+DELETE http://localhost:3000/api/contacts/41/addresses/59
 Accept: application/json
-X-API-TOKEN: 25edd380-731c-4d9f-ac9b-b49f01e205bd
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
