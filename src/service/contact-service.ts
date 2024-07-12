@@ -18,7 +18,7 @@ export class ContactService {
     static async create(user: User, request: CreateContactRequest): Promise<ContactResponse> {
         const createRequest = Validation.validate(ContactValidation.CREATE, request);
 
-        const record = {
+        const record : any = {
             ...createRequest,
             ...{username: user.username}
         };
@@ -52,7 +52,7 @@ export class ContactService {
     }
 
     static async update(user: User, request: UpdateContactRequest) : Promise<ContactResponse> {
-        const updateRequest = Validation.validate(ContactValidation.UPDATE, request);
+        const updateRequest : any  = Validation.validate(ContactValidation.UPDATE, request);
         await this.checkContactMustExists(user.username, updateRequest.id);
 
         const contact = await prismaClient.contact.update({

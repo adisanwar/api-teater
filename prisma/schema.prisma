@@ -60,9 +60,12 @@ model Address {
 model Show {
   id          Int     @id @default(autoincrement())
   title       String  @db.VarChar(255)
-  Description String? @db.VarChar(255)
-  Duration    String? @db.VarChar(50)
-  Rating      String? @db.VarChar(20)
+  description String? @db.VarChar(255)
+  duration    String? @db.VarChar(50)
+  rating      String? @db.VarChar(20)
+  theaterId   Int     // Foreign key ke Theater
+  
+  theater     Theater @relation(fields: [theaterId], references: [id])
 
   showtime Showtime []
 
@@ -86,6 +89,8 @@ model Theater {
   name       String  @db.VarChar(255)
   location String? @db.VarChar(255)
   capacity    String? @db.VarChar(50)
+
+  shows     Show[] // Relasi ke Show
 
   @@map("theaters")
 }

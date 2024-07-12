@@ -6,6 +6,9 @@ export type ContactResponse = {
     last_name?: string | null;
     email?: string | null;
     phone?: string | null;
+    dateofbirth?: Date | null;
+    ofcNo?:String | null;
+    nationalId?:BigInt | null;
 }
 
 export type CreateContactRequest = {
@@ -13,6 +16,9 @@ export type CreateContactRequest = {
     last_name?: string;
     email?: string;
     phone?: string;
+    dateofbirth?: Date;
+    ofcNo?:String;
+    nationalId?:BigInt;
 }
 
 export type UpdateContactRequest = {
@@ -21,6 +27,9 @@ export type UpdateContactRequest = {
     last_name?: string;
     email?: string;
     phone?: string;
+    dateofbirth?: Date;
+    ofcNo?:String;
+    nationalId?:BigInt;
 }
 
 export type SearchContactRequest = {
@@ -37,6 +46,9 @@ export function toContactResponse(contact: Contact): ContactResponse {
         first_name: contact.first_name,
         last_name: contact.last_name,
         email: contact.email,
-        phone: contact.phone
+        phone: contact.phone,
+        dateofbirth: contact.dateofbirth,
+        ofcNo:contact.ofcNo,
+        nationalId:contact.nationalId
     }
 }

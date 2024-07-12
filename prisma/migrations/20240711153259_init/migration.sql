@@ -40,9 +40,9 @@ CREATE TABLE `addresses` (
 CREATE TABLE `shows` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
-    `Description` VARCHAR(255) NULL,
-    `Duration` VARCHAR(50) NULL,
-    `Rating` VARCHAR(20) NULL,
+    `description` VARCHAR(255) NULL,
+    `duration` VARCHAR(50) NULL,
+    `rating` VARCHAR(20) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
