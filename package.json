@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --runInBand",
     "build": "tsc",
+    "start-dev" : "node main.ts",
     "start": "node dist/main.js"
   },
   "jest": {

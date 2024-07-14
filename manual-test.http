@@ -22,7 +22,7 @@ Accept: application/json
 ### Get User
 GET http://localhost:3000/api/users/current
 Accept: application/json
-X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
+X-API-TOKEN: 3c5fdde4-a72f-4a3e-935a-4d094df6c8ea
 
 ### Logout User
 DELETE http://localhost:3000/api/users/current
@@ -132,3 +132,20 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 DELETE http://localhost:3000/api/contacts/41/addresses/59
 Accept: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
+
+### Create Theater
+POST http://localhost:3000/api/theater
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: 018894b5-935a-4303-b797-697a110bf143
+
+{
+  "name" : "Theater 1",
+  "location" : "Test",
+  "capacity" : "250 Orang"
+}
+
+### get theater
+GET http://localhost:3000/api/theater/current
+Accept: application/json
+X-API-TOKEN: 018894b5-935a-4303-b797-697a110bf143

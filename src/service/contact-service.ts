@@ -27,7 +27,7 @@ export class ContactService {
             data: record
         });
 
-        logger.debug("record : " + JSON.stringify(contact));
+        // logger.debug("record : " + JSON.stringify(contact));
         return toContactResponse(contact);
     }
 

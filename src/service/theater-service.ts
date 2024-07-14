@@ -3,6 +3,7 @@ import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
 import { CreateTheaterRequest, TheaterResponse, toTheaterResponse, UpdateTheaterRequest } from "../model/theater-model";
 import { TheaterValidation } from "../validation/theater-valiidation";
+import { logger } from "../application/logging";
 
 
 export class TheaterService {
@@ -12,7 +13,7 @@ export class TheaterService {
         const theater = await prismaClient.theater.create({
             data: createRequest
         });
-
+        logger.debug("record : " + JSON.stringify(theater));
         return toTheaterResponse(theater);
     }
 
@@ -30,6 +31,7 @@ export class TheaterService {
             data: theater
         });
 
+        logger.debug("record : " + JSON.stringify(theater));
         return toTheaterResponse(result);
     }
 }
