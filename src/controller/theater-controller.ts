@@ -17,12 +17,28 @@ export class TheaterController {
         }
     }
 
-    static async get(req: TheaterRequest, res: Response, next: NextFunction) {
+    static async get(req: Request, res: Response, next: NextFunction) {
         try {
-            const response = await TheaterService.get(req.theater!);
+            const response = await TheaterService.get();
             res.status(200).json({
-               data: response
-            })
+                data: response,
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async getById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const theaterId : any= Number(req.params.theaterId);
+            if (isNaN(theaterId)) {
+                return res.status(400).json({ error: 'Invalid theater ID' });
+            }
+
+            const response = await TheaterService.getById(theaterId);
+            res.status(200).json({
+                data: response,
+            });
         } catch (e) {
             next(e);
         }
@@ -35,6 +51,20 @@ export class TheaterController {
             res.status(200).json({
                 data: response
             })
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async remove(req: Request, res: Response, next: NextFunction) {
+        try {
+            const theaterId = Number(req.params.theaterId);
+            if (isNaN(theaterId)) {
+                return res.status(400).json({ error: 'Invalid theater ID' });
+            }
+
+            await TheaterService.remove(theaterId);
+            res.status(200).send(); // Mengembalikan status 204 No Content untuk penghapusan yang berhasil
         } catch (e) {
             next(e);
         }

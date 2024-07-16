@@ -16,17 +16,20 @@ apiRouter.delete("/api/users/current", UserController.logout);
 // Contact API
 apiRouter.post("/api/contacts", ContactController.create);
 apiRouter.get("/api/contacts/:contactId(\\d+)", ContactController.get);
-apiRouter.put("/api/contacts/:contactId(\\d+)", ContactController.update);
+apiRouter.patch("/api/contacts/:contactId(\\d+)", ContactController.update);
 apiRouter.delete("/api/contacts/:contactId(\\d+)", ContactController.remove);
 apiRouter.get("/api/contacts", ContactController.search);
 
 // Address API
 apiRouter.post("/api/contacts/:contactId(\\d+)/addresses", AddressController.create);
 apiRouter.get("/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)", AddressController.get);
-apiRouter.put("/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)", AddressController.update);
+apiRouter.patch("/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)", AddressController.update);
 apiRouter.delete("/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)", AddressController.remove);
 apiRouter.get("/api/contacts/:contactId(\\d+)/addresses", AddressController.list);
 
 // Theater Api
-apiRouter.post("/api/theater", TheaterController.create);
-apiRouter.get("/api/theater/current", TheaterController.get);
+apiRouter.post("/api/theaters", TheaterController.create);
+apiRouter.get("/api/theaters/current", TheaterController.get);
+apiRouter.get('/api/theaters/:theaterId(\\d+)', TheaterController.getById);
+apiRouter.patch('/api/theaters/:theaterId(\\d+)', TheaterController.update)
+apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);

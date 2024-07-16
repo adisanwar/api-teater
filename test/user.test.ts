@@ -19,7 +19,7 @@ describe('POST /api/users', () => {
                 name: ""
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -33,7 +33,7 @@ describe('POST /api/users', () => {
                 name: "test"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.username).toBe("test");
         expect(response.body.data.name).toBe("test");
@@ -59,7 +59,7 @@ describe('POST /api/users/login', () => {
                 password: "test"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.username).toBe("test");
         expect(response.body.data.name).toBe("test");
@@ -74,7 +74,7 @@ describe('POST /api/users/login', () => {
                 password: "test"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });
@@ -87,7 +87,7 @@ describe('POST /api/users/login', () => {
                 password: "salah"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });
@@ -108,7 +108,7 @@ describe('GET /api/users/current', () => {
             .get("/api/users/current")
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.username).toBe("test");
         expect(response.body.data.name).toBe("test");
@@ -119,7 +119,7 @@ describe('GET /api/users/current', () => {
             .get("/api/users/current")
             .set("X-API-TOKEN", "salah");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });
@@ -143,7 +143,7 @@ describe('PATCH /api/users/current', () => {
                 name: ""
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -157,7 +157,7 @@ describe('PATCH /api/users/current', () => {
                 name: "benar"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });
@@ -170,7 +170,7 @@ describe('PATCH /api/users/current', () => {
                 name: "benar"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.name).toBe("benar");
     });
@@ -183,7 +183,7 @@ describe('PATCH /api/users/current', () => {
                 password: "benar"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
 
         const user = await UserTest.get();
@@ -205,7 +205,7 @@ describe('DELETE /api/users/current', () => {
             .delete("/api/users/current")
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data).toBe("OK");
 
@@ -218,7 +218,7 @@ describe('DELETE /api/users/current', () => {
             .delete("/api/users/current")
             .set("X-API-TOKEN", "salah");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(401);
         expect(response.body.errors).toBeDefined();
     });

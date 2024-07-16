@@ -126,7 +126,7 @@ export class TheaterTest {
     static async deleteAll() {
         await prismaClient.theater.deleteMany({
             where: {
-                name: "Test"
+                name: "test"
             }
         })
     }
@@ -135,13 +135,15 @@ export class TheaterTest {
         // const theater = await TheaterTest.create();y
         await prismaClient.theater.create({
             data: {
-                name: "Test",
-                location: "Test",
-                capacity: "250 Orang"
+
+                name: "test",
+                location: "test",
+                capacity: "test"
             }
         })
 
     }
+
     static async get(): Promise<Theater[]> {
         const theaters = await prismaClient.theater.findMany();
         if (!theaters.length) {
@@ -149,17 +151,13 @@ export class TheaterTest {
         }
         return theaters;
     }
-    // static async get(): Promise<Theater> {
-    //     const theater = await prismaClient.theater.findFirst({
-    //         where: {
-    //             id:
-    //         }
-    //     });
 
-    //     if (!theater) {
-    //         throw new Error("Theater is not found");
-    //     }
+    static async getById(): Promise<Theater> {
+        const theater = await prismaClient.theater.findFirst();
 
-    //     return theater;
-    // }
+        if (!theater) {
+            throw new Error("Theater is not found");
+        }
+        return theater;
+    }
 }

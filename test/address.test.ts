@@ -28,7 +28,7 @@ describe('POST /api/contacts/:contactId/addresses', () => {
                 postal_code: "11111"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
         expect(response.body.data.street).toBe("Jalan belum ada")
@@ -51,7 +51,7 @@ describe('POST /api/contacts/:contactId/addresses', () => {
                 postal_code: ""
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -69,7 +69,7 @@ describe('POST /api/contacts/:contactId/addresses', () => {
                 postal_code: "11111"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -95,7 +95,7 @@ describe('GET /api/contacts/:contactId/addresses/:addressId', () => {
             .get(`/api/contacts/${contact.id}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined()
         expect(response.body.data.street).toBe(address.street);
@@ -113,7 +113,7 @@ describe('GET /api/contacts/:contactId/addresses/:addressId', () => {
             .get(`/api/contacts/${contact.id}/addresses/${address.id + 1}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined()
     });
@@ -126,13 +126,13 @@ describe('GET /api/contacts/:contactId/addresses/:addressId', () => {
             .get(`/api/contacts/${contact.id + 1}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined()
     });
 });
 
-describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
+describe('PATCH /api/contacts/:contactId/addresses/:addressId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await ContactTest.create();
@@ -149,7 +149,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
         const address = await AddressTest.get();
 
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id}/addresses/${address.id}`)
+            .patch(`/api/contacts/${contact.id}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test")
             .send({
                 street: "Jalan belum ada",
@@ -159,7 +159,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
                 postal_code: "11111"
             })
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBe(address.id);
         expect(response.body.data.street).toBe("Jalan belum ada")
@@ -174,7 +174,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
         const address = await AddressTest.get();
 
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id}/addresses/${address.id}`)
+            .patch(`/api/contacts/${contact.id}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test")
             .send({
                 street: "Jalan belum ada",
@@ -184,7 +184,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
                 postal_code: ""
             })
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -194,7 +194,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
         const address = await AddressTest.get();
 
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id}/addresses/${address.id + 1}`)
+            .patch(`/api/contacts/${contact.id}/addresses/${address.id + 1}`)
             .set("X-API-TOKEN", "test")
             .send({
                 street: "Jalan belum ada",
@@ -204,7 +204,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
                 postal_code: "1111"
             })
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -214,7 +214,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
         const address = await AddressTest.get();
 
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id + 1}/addresses/${address.id}`)
+            .patch(`/api/contacts/${contact.id + 1}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test")
             .send({
                 street: "Jalan belum ada",
@@ -224,7 +224,7 @@ describe('PUT /api/contacts/:contactId/addresses/:addressId', () => {
                 postal_code: "1111"
             })
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -250,7 +250,7 @@ describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
             .delete(`/api/contacts/${contact.id}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data).toBe("OK");
     });
@@ -263,7 +263,7 @@ describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
             .delete(`/api/contacts/${contact.id}/addresses/${address.id + 1}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -276,7 +276,7 @@ describe('DELETE /api/contacts/:contactId/addresses/:addressId', () => {
             .delete(`/api/contacts/${contact.id + 1}/addresses/${address.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -301,7 +301,7 @@ describe('GET /api/contacts/:contactId/addresses', () => {
             .get(`/api/contacts/${contact.id}/addresses`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
     });
@@ -313,7 +313,7 @@ describe('GET /api/contacts/:contactId/addresses', () => {
             .get(`/api/contacts/${contact.id + 1}/addresses`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });

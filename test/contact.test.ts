@@ -24,7 +24,7 @@ describe('POST /api/contacts', () => {
                 phone: "0899999"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
         expect(response.body.data.first_name).toBe("eko");
@@ -44,7 +44,7 @@ describe('POST /api/contacts', () => {
                 phone: "08999990899999089999908999990899999"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -68,7 +68,7 @@ describe('GET /api/contacts/:contactId', () => {
             .get(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
         expect(response.body.data.first_name).toBe(contact.first_name);
@@ -83,14 +83,14 @@ describe('GET /api/contacts/:contactId', () => {
             .get(`/api/contacts/${contact.id + 1}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
 
 });
 
-describe('PUT /api/contacts/:contactId', () => {
+describe('PATCH /api/contacts/:contactId', () => {
     beforeEach(async () => {
         await UserTest.create()
         await ContactTest.create();
@@ -104,7 +104,7 @@ describe('PUT /api/contacts/:contactId', () => {
     it('should be able to update contact', async () => {
         const contact = await ContactTest.get();
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id}`)
+            .patch(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 first_name: "eko",
@@ -113,7 +113,7 @@ describe('PUT /api/contacts/:contactId', () => {
                 phone: "9999"
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBe(contact.id);
         expect(response.body.data.first_name).toBe("eko");
@@ -125,7 +125,7 @@ describe('PUT /api/contacts/:contactId', () => {
     it('should reject update contact if request is invalid', async () => {
         const contact = await ContactTest.get();
         const response = await supertest(web)
-            .put(`/api/contacts/${contact.id}`)
+            .patch(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 first_name: "",
@@ -134,7 +134,7 @@ describe('PUT /api/contacts/:contactId', () => {
                 phone: ""
             });
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(400);
         expect(response.body.errors).toBeDefined();
     });
@@ -157,7 +157,7 @@ describe('DELETE /api/contacts/:contactId', () => {
             .delete(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data).toBe("OK");
     });
@@ -168,7 +168,7 @@ describe('DELETE /api/contacts/:contactId', () => {
             .delete(`/api/contacts/${contact.id + 1}`)
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(404);
         expect(response.body.errors).toBeDefined();
     });
@@ -190,7 +190,7 @@ describe('GET /api/contacts', () => {
             .get("/api/contacts")
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
         expect(response.body.paging.current_page).toBe(1);
@@ -206,7 +206,7 @@ describe('GET /api/contacts', () => {
             })
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
         expect(response.body.paging.current_page).toBe(1);
@@ -222,7 +222,7 @@ describe('GET /api/contacts', () => {
             })
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
         expect(response.body.paging.current_page).toBe(1);
@@ -238,7 +238,7 @@ describe('GET /api/contacts', () => {
             })
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(1);
         expect(response.body.paging.current_page).toBe(1);
@@ -254,7 +254,7 @@ describe('GET /api/contacts', () => {
             })
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(0);
         expect(response.body.paging.current_page).toBe(1);
@@ -271,7 +271,7 @@ describe('GET /api/contacts', () => {
             })
             .set("X-API-TOKEN", "test");
 
-        logger.debug(response.body);
+        // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.length).toBe(0);
         expect(response.body.paging.current_page).toBe(2);
