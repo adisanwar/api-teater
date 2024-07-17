@@ -135,7 +135,6 @@ export class TheaterTest {
         // const theater = await TheaterTest.create();y
         await prismaClient.theater.create({
             data: {
-
                 name: "test",
                 location: "test",
                 capacity: "test"
@@ -159,5 +158,5 @@ export class TheaterTest {
             throw new Error("Theater is not found");
         }
         return theater;
-    }
+    } 
 }

@@ -1,7 +1,7 @@
 import { Theater } from "@prisma/client";
 import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
-import { CreateTheaterRequest, TheaterResponse, toTheaterResponse, UpdateTheaterRequest } from "../model/theater-model";
+import { CreateTheaterRequest, RemoveTheaterRequest, TheaterResponse, toTheaterResponse, UpdateTheaterRequest } from "../model/theater-model";
 import { TheaterValidation } from "../validation/theater-valiidation";
 import { logger } from "../application/logging";
 
@@ -26,32 +26,28 @@ export class TheaterService {
         return toTheaterResponse(theater);
     }
 
-    static async update(theater: Theater, request: UpdateTheaterRequest): Promise<TheaterResponse> {
-        const updateRequest :any = Validation.validate(TheaterValidation.UPDATE, request);
 
-        if (updateRequest.name) {
-            theater.name = updateRequest.name;
-        }
-
-        if (updateRequest.location) {
-            theater.location = updateRequest.location;
-        }
-
+    static async update(request: UpdateTheaterRequest): Promise<TheaterResponse> {
+        const updateRequest : any  = Validation.validate(TheaterValidation.UPDATE, request);
+        
         const result = await prismaClient.theater.update({
             where: {
-                id: theater.id
-            },
-            data: theater
+                 id: updateRequest.id },
+            data: updateRequest
         });
 
-        logger.debug("record : " + JSON.stringify(theater));
         return toTheaterResponse(result);
     }
 
-    static async remove(theaterId: number): Promise<void> {
-        await prismaClient.theater.delete({
-            where: { id: theaterId },
+    static async remove(request: RemoveTheaterRequest): Promise<TheaterResponse> {
+        const removeRequest = Validation.validate(TheaterValidation.GET, request); 
+        const theater = await prismaClient.theater.delete({
+            where: { 
+                id: removeRequest.id 
+            },
         });
+
+        return toTheaterResponse(theater);
     }
-    
+   
 }

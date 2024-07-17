@@ -13,8 +13,14 @@ export type CreateTheaterRequest = {
     capacity?: String;
 }
 
+export type GetTheaterRequest = {
+    id: number;
+}
+
+export type RemoveTheaterRequest = GetTheaterRequest
+
 export type UpdateTheaterRequest = {
-    id: Number;
+    id:Number;
     name: String;
     location?: String;
     capacity?: String;
