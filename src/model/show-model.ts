@@ -25,6 +25,7 @@ export type RemoveShowRequest = GetShowRequest
 
 export type UpdateShowRequest = {
     id: number;
+    theaterId: number;
     title: string;
     description?: string;
     duration?: string;

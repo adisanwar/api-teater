@@ -17,6 +17,7 @@ describe(`POST /api/shows/`, () => {
     })
 
     it(`should be able to create shows`, async () => {
+        const contact = await ShowTest.getById();
         const response = await supertest(web)
             .post(`/api/shows/`)
             .set("X-API-TOKEN", "test")
@@ -39,6 +40,7 @@ describe(`POST /api/shows/`, () => {
     });
 
     it('should reject create new theater if data is invalid', async () => {
+        const contact = await ShowTest.getById();
         const response = await supertest(web)
             .post("/api/shows")
             .set("X-API-TOKEN", "test")

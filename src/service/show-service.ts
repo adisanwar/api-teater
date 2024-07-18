@@ -1,9 +1,10 @@
 import {Show, Theater} from "@prisma/client";
-import { CreateShowRequest, GetShowRequest, ShowResponse, toShowResponse, UpdateShowRequest } from "../model/show-model";
+import { CreateShowRequest, GetShowRequest, RemoveShowRequest, ShowResponse, toShowResponse, UpdateShowRequest } from "../model/show-model";
 import {Validation} from "../validation/validation";
 import {prismaClient} from "../application/database";
 import { ShowValidation } from "../validation/show-valiidation";
 import { ResponseError } from "../error/response-error";
+import { request } from "express";
 
 
 
@@ -24,7 +25,7 @@ export class ShowService {
     }
 
     static async checkTheaterMustExist(theaterId: number, id: number): Promise <Show>{
-        const theater = await prismaClient.theater.findUnique({ 
+        const theater = await prismaClient.theater.findFirst({ 
             where: { 
                 id: theaterId } 
         });
@@ -33,9 +34,10 @@ export class ShowService {
         }
     }
 
-    static async getById(theater: Theater, id: number): Promise<ShowResponse> {
-        const contact = await this.checkTheaterMustExist(theater.id, id);
-        return toShowResponse(contact);
+    static async getById(theater: Theater, request: GetShowRequest): Promise<ShowResponse> {
+        const getRequest = Validation.validate(ShowValidation.GET, request);
+        const show = await this.checkTheaterMustExist(getRequest.theaterId, getRequest.id );
+        return toShowResponse(show);
     }
 
     static async get(): Promise<Show[]> {
@@ -45,6 +47,7 @@ export class ShowService {
 
     static async update(theater: Theater, request: UpdateShowRequest): Promise<ShowResponse> {
         const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
+        await this.checkTheaterMustExist(updateRequest.theaterId, updateRequest.id);
 
         const show = await prismaClient.show.update({
             where: {
@@ -57,13 +60,13 @@ export class ShowService {
         return toShowResponse(show);
     }
 
-    static async remove(theater: Theater, id: number) : Promise<ShowResponse> {
-        await this.checkTheaterMustExist(theater.id, id);
+    static async remove(theater: Theater, request: RemoveShowRequest) : Promise<ShowResponse> {
+        const removeRequest = Validation.validate(ShowValidation.GET, request);
+        await this.checkTheaterMustExist(removeRequest.theaterId, removeRequest.id);
 
         const show = await prismaClient.show.delete({
             where: {
-                id: id,
-                theaterId: theater.id
+                id: removeRequest.id,
             }
         });
 

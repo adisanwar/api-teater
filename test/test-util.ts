@@ -164,20 +164,25 @@ export class TheaterTest {
 export class ShowTest {
 
     static async deleteAll() {
-        await prismaClient.show.deleteMany();
+        await prismaClient.show.deleteMany({
+            where: {
+                title: "test"
+            }
+        });
     }
 
     static async create() {
-        const theater : any = await TheaterTest.create();
+        const theater = await TheaterTest.getById();
         await prismaClient.show.create({
             data: {
+                theaterId : theater.id,
                 title: "test",
                 description: "test",
                 duration: "test",
                 rating: "test",
-                theaterId : theater.id
+                
             }
-        });
+        })
     }
 
     static async get(): Promise<Show> {

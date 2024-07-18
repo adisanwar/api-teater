@@ -35,9 +35,12 @@ export class ShowController {
 
     static async getById(req: TheaterRequest, res: Response, next: NextFunction) {
         try {
-            const theaterId = Number(req.params.theaterId);
-            const response = await ShowService.getById(req.theater!, theaterId);
-            logger.debug("response : " + JSON.stringify(response));
+            const request: GetShowRequest = {
+                id: Number(req.params.addressId),
+                theaterId: Number(req.params.theaterId),
+            }
+
+            const response = await ShowService.getById(req.theater!, request);
             res.status(200).json({
                 data: response
             });
@@ -62,14 +65,15 @@ export class ShowController {
 
     static async remove(req: TheaterRequest, res: Response, next: NextFunction) {
         try {
-            const showId = Number(req.params.showId);
-            await ShowService.remove(req.theater!, showId);
+            const request: RemoveShowRequest = {
+                id: Number(req.params.addressId),
+                theaterId: Number(req.params.theaterId),
+            }
+
+            await ShowService.remove(req.theater!, request);
             res.status(200).json({
                 data: "OK"
             });
-            
-
-            
         } catch (e) {
             next(e);
         }
