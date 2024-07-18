@@ -137,7 +137,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 
 {
   "name" : "Theater 1",
@@ -148,19 +148,53 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 ### get theater
 GET http://localhost:3000/api/theaters/current
 Accept: application/json
-X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 
 ###
 PATCH http://localhost:3000/api/theaters/211
 Content-Type: application/json
-X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
 
 {
   "name" : "FX Sudirman"
 }
 
 
-### Remove Contact
+### Remove Theater
 DELETE http://localhost:3000/api/theaters/128
+Accept: application/json
+X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+
+
+### Create Theater
+POST http://localhost:3000/api/shows
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
+
+{
+  "title": "test",
+                "description": "test",
+                "duration": "25 test",
+                "rating":"test"
+}
+
+### get theater
+GET http://localhost:3000/api/shows/current
+Accept: application/json
+X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
+
+###
+PATCH http://localhost:3000/api/shows/211
+Content-Type: application/json
+X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
+
+{
+   "title": "coba",
+}
+
+
+### Remove Contact
+DELETE http://localhost:3000/api/shows/128
 Accept: application/json
 X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59

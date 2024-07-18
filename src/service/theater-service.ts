@@ -4,6 +4,7 @@ import { prismaClient } from "../application/database";
 import { CreateTheaterRequest, RemoveTheaterRequest, TheaterResponse, toTheaterResponse, UpdateTheaterRequest } from "../model/theater-model";
 import { TheaterValidation } from "../validation/theater-valiidation";
 import { logger } from "../application/logging";
+import { ResponseError } from "../error/response-error";
 
 
 export class TheaterService {
@@ -15,6 +16,20 @@ export class TheaterService {
         });
         logger.debug("record : " + JSON.stringify(theater));
         return toTheaterResponse(theater);
+    }
+
+    static async checkTheaterMustExists(theaterId: number): Promise<Theater> {
+        const theater = await prismaClient.theater.findFirst({
+            where: {
+                id: theaterId
+            }
+        });
+
+        if (!theater) {
+            throw new ResponseError(404, "Theater is not found");
+        }
+
+        return theater;
     }
 
     static async get(): Promise<Theater[]> {

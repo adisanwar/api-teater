@@ -26,11 +26,6 @@ export type UpdateTheaterRequest = {
     capacity?: String;
 }
 
-// export type GetTheaterRequest = {
-//     theterId: number;
-//     id: number;
-// }
-
 // export type SearchTheaterRequest = {
 //     name?: string;
 //     phone?: string;

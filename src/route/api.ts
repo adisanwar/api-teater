@@ -4,6 +4,7 @@ import {UserController} from "../controller/user-controller";
 import {ContactController} from "../controller/contact-controller";
 import {AddressController} from "../controller/address-controller";
 import { TheaterController } from "../controller/theater-controller";
+import { ShowController } from "../controller/show-controller";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -33,3 +34,10 @@ apiRouter.get("/api/theaters/current", TheaterController.get);
 apiRouter.get('/api/theaters/:theaterId(\\d+)', TheaterController.getById);
 apiRouter.patch('/api/theaters/:theaterId(\\d+)', TheaterController.update)
 apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
+
+// Show Api
+apiRouter.post("/api/shows", ShowController.create);
+apiRouter.get("/api/shows/current", ShowController.get);
+apiRouter.get('/api/shows/:showId(\\d+)', ShowController.getById);
+apiRouter.patch('/api/shows/:showId(\\d+)', ShowController.update)
+apiRouter.delete('/api/shows/:showId(\\d+)', ShowController.remove);

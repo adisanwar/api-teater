@@ -45,22 +45,6 @@ export class TheaterController {
         }
     }
 
-    // static async update(req: Request, res: Response, next: NextFunction) {
-    //     try {
-    //         const theaterId = Number(req.params.theaterId);
-    //         if (isNaN(theaterId)) {
-    //             return res.status(400).json({ error: 'Invalid theater ID' });
-    //         }
-
-    //         const request: UpdateTheaterRequest = req.body;
-    //         const response = await TheaterService.update(theaterId, request);
-    //         res.status(200).json({
-    //             data: response,
-    //         });
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // }
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {

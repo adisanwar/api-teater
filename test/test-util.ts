@@ -1,6 +1,6 @@
-import {prismaClient} from "../src/application/database";
+import { prismaClient } from "../src/application/database";
 import bcrypt from "bcrypt";
-import {Address, Contact, User, Theater} from "@prisma/client";
+import { Address, Contact, User, Theater, Show } from "@prisma/client";
 
 export class UserTest {
 
@@ -158,5 +158,49 @@ export class TheaterTest {
             throw new Error("Theater is not found");
         }
         return theater;
-    } 
+    }
+}
+
+export class ShowTest {
+
+    static async deleteAll() {
+        await prismaClient.show.deleteMany();
+    }
+
+    static async create() {
+        const theater : any = await TheaterTest.create();
+        await prismaClient.show.create({
+            data: {
+                title: "test",
+                description: "test",
+                duration: "test",
+                rating: "test",
+                theaterId : theater.id
+            }
+        });
+    }
+
+    static async get(): Promise<Show> {
+        const show = await prismaClient.show.findFirst({
+            where: {
+                title: "test"
+            }
+        });
+
+        if (!show) {
+            throw new Error("Show is not found");
+        }
+
+        return show;
+    }
+
+    static async getById(): Promise<Show> {
+        const show = await prismaClient.show.findFirst();
+
+        if (!show) {
+            throw new Error("Theater is not found");
+        }
+        return show;
+    }
+
 }
