@@ -7,8 +7,8 @@ describe(`POST /api/shows/`, () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
-        await ShowTest.create();
     })
+
     afterEach(async () => {
         await ShowTest.deleteAll();
         await TheaterTest.deleteAll();
@@ -17,38 +17,38 @@ describe(`POST /api/shows/`, () => {
     })
 
     it(`should be able to create shows`, async () => {
-        const contact = await ShowTest.getById();
+        const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .post(`/api/shows/`)
+            .post(`/api/shows/${theater.id}`)
             .set("X-API-TOKEN", "test")
             .send({
                 title: "test",
                 description: "test",
-                duration: "25 test",
-                rating:"test"
-
+                duration: "test",
+                rating:"test",
             })
         logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
         expect(response.body.data.title).toBe("test");
         expect(response.body.data.description).toBe("test");
-        expect(response.body.data.duration).toBe("25 test");
+        expect(response.body.data.duration).toBe("test");
         expect(response.body.data.rating).toBe("test");
 
 
     });
 
     it('should reject create new theater if data is invalid', async () => {
-        const contact = await ShowTest.getById();
+        const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .post("/api/shows")
+            .post(`/api/shows/${theater.id}`)
             .set("X-API-TOKEN", "test")
             .send({
                 title: "",
                 description: "",
                 duration: "",
-                rating:""
+                rating:"",
+                theaterId : ""
             });
 
         logger.debug(response.body);
@@ -81,20 +81,9 @@ describe('GET /api/shows/current', () => {
         expect(response.status).toBe(200);
     });
 
-    it('should be able to get shows by id', async () => {
-        const show = await ShowTest.getById();
-        const response = await supertest(web)
-            .get(`/api/shows/${show.id}`)
-            .set("X-API-TOKEN", "test");
-
-        logger.debug(response.body);
-        expect(response.status).toBe(200);
-    });
-
-
 });
 
-describe('GET /api/shows/:showId', () => {
+describe('GET /api/shows/:theaterId/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -108,9 +97,10 @@ describe('GET /api/shows/:showId', () => {
     })
 
     it('should be able to get shows by id', async () => {
-        const theater = await ShowTest.getById();
+        const show = await ShowTest.getById();
+        const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .get(`/api/shows/${theater.id}`)
+            .get(`/api/shows/${theater.id}/shows/${show.id}`)
             .set("X-API-TOKEN", "test");
 
         logger.debug(response.body);
@@ -120,7 +110,7 @@ describe('GET /api/shows/:showId', () => {
 
 });
 
-describe('PATCH /api/shows/:showId', () => {
+describe('PATCH /api/shows/:theaterId/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -135,8 +125,9 @@ describe('PATCH /api/shows/:showId', () => {
 
     it('should be able to update show', async () => {
         const show = await ShowTest.getById();
+        const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .patch(`/api/shows/${show.id}`)
+            .get(`/api/shows/${theater.id}/shows/${show.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 title: "Seifuku No Me",
@@ -156,8 +147,9 @@ describe('PATCH /api/shows/:showId', () => {
 
     it('should reject update show if request is invalid', async () => {
         const show = await ShowTest.getById();
+        const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .patch(`/api/shows/${show.id}`)
+            .get(`/api/shows/${theater.id}/shows/${show.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 title: "",

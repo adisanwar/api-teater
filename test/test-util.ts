@@ -175,12 +175,11 @@ export class ShowTest {
         const theater = await TheaterTest.getById();
         await prismaClient.show.create({
             data: {
-                theaterId : theater.id,
                 title: "test",
                 description: "test",
                 duration: "test",
                 rating: "test",
-                
+                theaterId: theater.id               
             }
         })
     }

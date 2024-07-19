@@ -9,11 +9,11 @@ export type ShowResponse = {
 }
 
 export type CreateShowRequest = {
-    theaterId: number;
     title: string;
     description?: string;
     duration?: string;
     rating?: string;
+    theaterId: number;
 }
 
 export type GetShowRequest = {

@@ -36,8 +36,9 @@ apiRouter.patch('/api/theaters/:theaterId(\\d+)', TheaterController.update)
 apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
 
 // Show Api
-apiRouter.post("/api/shows", ShowController.create);
+apiRouter.post("/api/shows/:theaterId(\\d+)", ShowController.create);
+apiRouter.get("/api/shows/:theaterId(\\d+)/shows/:showId(\\d+)", ShowController.getById);
 apiRouter.get("/api/shows/current", ShowController.get);
-apiRouter.get('/api/shows/:showId(\\d+)', ShowController.getById);
-apiRouter.patch('/api/shows/:showId(\\d+)', ShowController.update)
-apiRouter.delete('/api/shows/:showId(\\d+)', ShowController.remove);
+apiRouter.patch("/api/shows/:theaterId(\\d+)/shows/:showId(\\d+)", ShowController.update);
+apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
+// apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);

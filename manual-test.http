@@ -137,7 +137,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
+X-API-TOKEN: 87d44d48-6712-4216-bd77-448f6c0842f0
 
 {
   "name" : "Theater 1",
@@ -148,12 +148,12 @@ X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 ### get theater
 GET http://localhost:3000/api/theaters/current
 Accept: application/json
-X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
 ###
-PATCH http://localhost:3000/api/theaters/211
+PATCH http://localhost:3000/api/theaters/305
 Content-Type: application/json
-X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
+X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 
 {
   "name" : "FX Sudirman"
@@ -166,28 +166,34 @@ Accept: application/json
 X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
-### Create Theater
-POST http://localhost:3000/api/shows
+### Create Shows
+POST http://localhost:3000/api/shows/533
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
+X-API-TOKEN: bdce7cd2-60f1-4539-96ce-371d3c708ee7
 
 {
-  "title": "test",
-                "description": "test",
-                "duration": "25 test",
-                "rating":"test"
+    "title": "test",
+    "description": "test",
+    "duration": "25 test",
+    "rating":"test",
+    "theaterId" : 533          
 }
 
 ### get theater
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
+
+### get by Id
+GET http://localhost:3000/api/shows/533/shows/114
+Accept: application/json
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
 ###
-PATCH http://localhost:3000/api/shows/211
+PATCH http://localhost:3000/api/shows/114
 Content-Type: application/json
-X-API-TOKEN: 69361c3d-4be3-4d8b-bba1-d25e2bd0fd30
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
 {
    "title": "coba",

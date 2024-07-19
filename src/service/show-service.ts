@@ -5,38 +5,54 @@ import {prismaClient} from "../application/database";
 import { ShowValidation } from "../validation/show-valiidation";
 import { ResponseError } from "../error/response-error";
 import { request } from "express";
+import { logger } from "../application/logging";
+import { TheaterService } from "./theater-service";
+import { toTheaterResponse } from "../model/theater-model";
 
 
 
 export class ShowService {
 
-    static async create(theater: Theater, request: CreateShowRequest): Promise<ShowResponse> {
-        const createRequest : any  = Validation.validate(ShowValidation.CREATE, request);
+   static async create(request: CreateShowRequest): Promise<ShowResponse> {
+        const createRequest = Validation.validate(ShowValidation.CREATE, request);
+        await this.checkTheaterMustExists(createRequest.theaterId);
 
-        const record = {
-            ...createRequest,
-            ...{theater:theater.id}
-        }
         const show = await prismaClient.show.create({
-            data: record
+            data: createRequest
         });
-
+        logger.debug("record : " + JSON.stringify(show));
         return toShowResponse(show);
     }
 
-    static async checkTheaterMustExist(theaterId: number, id: number): Promise <Show>{
-        const theater = await prismaClient.theater.findFirst({ 
-            where: { 
-                id: theaterId } 
+    static async checkTheaterMustExists(theaterId: number): Promise<Theater> {
+        const theater = await prismaClient.theater.findFirst({
+            where: {
+                id: theaterId
+            }
         });
-        if (!theater) {
-            throw new ResponseError(404, "Theater Not Found");
-        }
-    }
 
-    static async getById(theater: Theater, request: GetShowRequest): Promise<ShowResponse> {
+        if (!theater) {
+            throw new ResponseError(404, "Theater is not found");
+        }
+
+        return theater;
+    } 
+
+    static async getById(request: GetShowRequest): Promise<ShowResponse> {
         const getRequest = Validation.validate(ShowValidation.GET, request);
-        const show = await this.checkTheaterMustExist(getRequest.theaterId, getRequest.id );
+        await this.checkTheaterMustExists(getRequest.theaterId);
+
+        const show = await prismaClient.show.findFirst({
+            where: {
+                id: getRequest.id,
+                theaterId: getRequest.theaterId,
+            },
+        });
+
+        if (!show) {
+            throw new ResponseError(404, `Show with ID ${getRequest.id} does not exist in theater ${getRequest.theaterId}.`);
+        }
+
         return toShowResponse(show);
     }
 
@@ -45,14 +61,14 @@ export class ShowService {
         return show;
     }
 
-    static async update(theater: Theater, request: UpdateShowRequest): Promise<ShowResponse> {
+    static async update(request: UpdateShowRequest): Promise<ShowResponse> {
         const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
-        await this.checkTheaterMustExist(updateRequest.theaterId, updateRequest.id);
+        await this.checkTheaterMustExists(updateRequest.theaterId);
 
         const show = await prismaClient.show.update({
             where: {
-               id: updateRequest.id,
-               theaterId: theater.id
+                id: updateRequest.id,
+                theaterId: updateRequest.theaterId
             },
             data: updateRequest
         });
@@ -60,9 +76,8 @@ export class ShowService {
         return toShowResponse(show);
     }
 
-    static async remove(theater: Theater, request: RemoveShowRequest) : Promise<ShowResponse> {
+    static async remove(request: RemoveShowRequest) : Promise<ShowResponse> {
         const removeRequest = Validation.validate(ShowValidation.GET, request);
-        await this.checkTheaterMustExist(removeRequest.theaterId, removeRequest.id);
 
         const show = await prismaClient.show.delete({
             where: {
