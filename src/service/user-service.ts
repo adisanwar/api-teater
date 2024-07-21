@@ -18,6 +18,11 @@ export class UserService {
     static async register(request: CreateUserRequest): Promise<UserResponse> {
         const registerRequest = Validation.validate(UserValidation.REGISTER, request);
 
+        // Set default value for isAdmin
+        if (registerRequest.isAdmin === undefined) {
+            registerRequest.isAdmin = false;
+        }
+
         const totalUserWithSameUsername = await prismaClient.user.count({
             where: {
                 username: registerRequest.username

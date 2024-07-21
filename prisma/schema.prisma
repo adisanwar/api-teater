@@ -18,6 +18,7 @@ model User {
   password String  @db.VarChar(100)
   name     String  @db.VarChar(100)
   token    String? @db.VarChar(100)
+  isAdmin  Boolean
 
 
   ticket Ticket[]
@@ -30,6 +31,7 @@ model Contact {
   id          Int     @id @default(autoincrement())
   first_name  String  @db.VarChar(100)
   last_name   String? @db.VarChar(100)
+  photo       String? @db.VarChar(100)
   email       String? @db.VarChar(100)
   phone       String? @db.VarChar(20)
   dateofbirth DateTime?
@@ -42,6 +44,7 @@ model Contact {
 
   @@map("contacts")
 }
+
 
 model Address {
   id          Int     @id @default(autoincrement())
@@ -60,6 +63,7 @@ model Address {
 model Show {
   id          Int     @id @default(autoincrement())
   title       String  @db.VarChar(255)
+  photo       String? @db.VarChar(100)
   description String? @db.VarChar(255)
   duration    String? @db.VarChar(50)
   rating      String? @db.VarChar(20)
@@ -87,6 +91,7 @@ model Showtime {
 model Theater {
   id          Int     @id @default(autoincrement())
   name       String  @db.VarChar(255)
+  photo        String? @db.VarChar(100)
   location    String? @db.VarChar(255)
   capacity    String? @db.VarChar(50)
 
@@ -99,6 +104,7 @@ model Ticket {
   id           Int     @id @default(autoincrement())
   seatNumber   String  @db.VarChar(255)
   price        String? @db.VarChar(255)
+  photo        String? @db.VarChar(100)
   purchaseDate DateTime?
   showtimeId   Int
   username     String  @db.VarChar(100) 
@@ -114,6 +120,7 @@ model Ticket {
 model Payment {
   id            Int     @id @default(autoincrement())
   amount        String  @db.VarChar(255)
+  photo         String? @db.VarChar(100)
   paymentDate   DateTime?
   metodePayment String? @db.VarChar(50)
   status        String? @db.VarChar(50)

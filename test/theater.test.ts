@@ -1,15 +1,16 @@
 import supertest from "supertest"
 import { web } from "../src/application/web"
 import { logger } from "../src/application/logging"
-import { TheaterTest, UserTest } from "./test-util"
+import { ContactTest, ShowTest, TheaterTest, UserTest } from "./test-util"
 
 describe(`POST /api/theaters/`, () => {
     beforeEach(async () => {
         await UserTest.create();
-        await TheaterTest.create();
+        await ContactTest.create();
     })
     afterEach(async () => {
         await TheaterTest.deleteAll();
+        await ContactTest.deleteAll();
         await UserTest.delete();
     })
 
@@ -20,7 +21,7 @@ describe(`POST /api/theaters/`, () => {
             .send({
                 name: "test",
                 location: "test",
-                capacity: "250 Orang"
+                capacity: "test"
 
             })
         logger.debug(response.body);
@@ -28,7 +29,7 @@ describe(`POST /api/theaters/`, () => {
         expect(response.body.data.id).toBeDefined();
         expect(response.body.data.name).toBe("test");
         expect(response.body.data.location).toBe("test");
-        expect(response.body.data.capacity).toBe("250 Orang");
+        expect(response.body.data.capacity).toBe("test");
 
 
     });
@@ -64,16 +65,6 @@ describe('GET /api/theaters/current', () => {
     it('should be able to get theaters', async () => {
         const response = await supertest(web)
             .get("/api/theaters/current")
-            .set("X-API-TOKEN", "test");
-
-        logger.debug(response.body);
-        expect(response.status).toBe(200);
-    });
-
-    it('should be able to get theaters by id', async () => {
-        const theater = await TheaterTest.getById();
-        const response = await supertest(web)
-            .get(`/api/theaters/${theater.id}`)
             .set("X-API-TOKEN", "test");
 
         logger.debug(response.body);

@@ -4,6 +4,7 @@ export class TheaterValidation {
 
     static readonly CREATE: ZodType = z.object({
         name: z.string().min(1).max(255),
+        photo: z.string().min(1).max(255).optional(),
         location: z.string().min(1).max(100).optional(),
         capacity: z.string().min(1).max(100).optional(),
     });
@@ -19,6 +20,7 @@ export class TheaterValidation {
     static readonly UPDATE: ZodType = z.object({
         id: z.number().positive(),
         name: z.string().min(1).max(255).optional(),
+        photo: z.string().min(1).max(255).optional(),
         location: z.string().min(1).max(100).optional(),
         capacity: z.string().min(1).max(100).optional(),
     });

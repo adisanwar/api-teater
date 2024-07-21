@@ -4,9 +4,10 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "eko",
-  "password" : "eko123",
-  "name" : "Eko"
+  "username": "adi",
+  "password" : "adi123",
+  "name" : "adi",
+  "isAdmin": true
 }
 
 ### Login User
@@ -15,8 +16,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "eko",
-  "password" : "eko123"
+  "username": "adi",
+  "password" : "adi123"
 }
 
 ### Get User
@@ -36,7 +37,7 @@ Content-Type: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
-  "name" : "Eko Kurniawan"
+  "name" : "adi Kurniawan"
 }
 
 ### Update User Password
@@ -58,7 +59,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 {
   "first_name" : "Budi Kurniawan",
   "last_name" : "Khannedy",
-  "email": "eko@example.com",
+  "email": "adi@example.com",
   "phone" : "099123123213"
 }
 
@@ -69,9 +70,9 @@ Content-Type: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
-  "first_name" : "Eko",
+  "first_name" : "adi",
   "last_name" : "Khannedy",
-  "email": "eko@example.com",
+  "email": "adi@example.com",
   "phone" : "099123123213"
 }
 
@@ -81,9 +82,9 @@ Accept: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Remove Contact
-DELETE http://localhost:3000/api/contacts/128
+DELETE http://localhost:3000/api/contacts/102
 Accept: application/json
-X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
+X-API-TOKEN: a2e9736b-2d9b-4b41-a091-b404bf3d622c
 
 ### Search Contact
 GET http://localhost:3000/api/contacts
@@ -137,7 +138,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 87d44d48-6712-4216-bd77-448f6c0842f0
+X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
 
 {
   "name" : "Theater 1",
@@ -148,12 +149,17 @@ X-API-TOKEN: 87d44d48-6712-4216-bd77-448f6c0842f0
 ### get theater
 GET http://localhost:3000/api/theaters/current
 Accept: application/json
-X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
+X-API-TOKEN: 22185906-7ad0-4335-971e-9fa661e0e77d
+
+### get theater id
+GET http://localhost:3000/api/theaters/173
+Accept: application/json
+X-API-TOKEN: 22185906-7ad0-4335-971e-9fa661e0e77d
 
 ###
-PATCH http://localhost:3000/api/theaters/305
+PATCH http://localhost:3000/api/theaters/170
 Content-Type: application/json
-X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
+X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
 
 {
   "name" : "FX Sudirman"
@@ -161,16 +167,16 @@ X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 
 
 ### Remove Theater
-DELETE http://localhost:3000/api/theaters/128
+DELETE http://localhost:3000/api/theaters/170
 Accept: application/json
-X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
 
 
 ### Create Shows
-POST http://localhost:3000/api/shows/533
+POST http://localhost:3000/api/shows/170
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: bdce7cd2-60f1-4539-96ce-371d3c708ee7
+X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
 
 {
     "title": "test",
@@ -180,7 +186,7 @@ X-API-TOKEN: bdce7cd2-60f1-4539-96ce-371d3c708ee7
     "theaterId" : 533          
 }
 
-### get theater
+### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
 X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898

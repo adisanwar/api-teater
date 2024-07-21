@@ -9,10 +9,19 @@ export type ShowtimeResponse = {
 export type CreateShowtimeRequest = {
   showDate?: Date;
   showTime?: string;
+  showId: number;
 };
+
+export type GetShowtimeRequest = {
+  showId: number;
+  id: number;
+}
+
+export type RemoveShowtimeRequest = GetShowtimeRequest
 
 export type UpdateShowtimeRequest = {
   id: number;
+  showId:number;
   showDate?: Date;
   showTime?: string;
 };
@@ -29,6 +38,6 @@ export function toShowtimeResponse(showtime: Showtime): ShowtimeResponse {
   return {
     id: showtime.id,
     showDate: showtime.showDate,
-    showTime: showtime.showTime,
+    showTime: showtime.showTime
   };
 }

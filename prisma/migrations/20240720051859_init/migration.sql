@@ -4,6 +4,7 @@ CREATE TABLE `users` (
     `password` VARCHAR(100) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
     `token` VARCHAR(100) NULL,
+    `isAdmin` BOOLEAN NOT NULL,
 
     PRIMARY KEY (`username`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -13,6 +14,7 @@ CREATE TABLE `contacts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `first_name` VARCHAR(100) NOT NULL,
     `last_name` VARCHAR(100) NULL,
+    `photo` VARCHAR(100) NULL,
     `email` VARCHAR(100) NULL,
     `phone` VARCHAR(20) NULL,
     `dateofbirth` DATETIME(3) NULL,
@@ -40,6 +42,7 @@ CREATE TABLE `addresses` (
 CREATE TABLE `shows` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
+    `photo` VARCHAR(100) NULL,
     `description` VARCHAR(255) NULL,
     `duration` VARCHAR(50) NULL,
     `rating` VARCHAR(20) NULL,
@@ -62,6 +65,7 @@ CREATE TABLE `showtimes` (
 CREATE TABLE `theaters` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
+    `photo` VARCHAR(100) NULL,
     `location` VARCHAR(255) NULL,
     `capacity` VARCHAR(50) NULL,
 
@@ -73,6 +77,7 @@ CREATE TABLE `tickets` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `seatNumber` VARCHAR(255) NOT NULL,
     `price` VARCHAR(255) NULL,
+    `photo` VARCHAR(100) NULL,
     `purchaseDate` DATETIME(3) NULL,
     `showtimeId` INTEGER NOT NULL,
     `username` VARCHAR(100) NOT NULL,
@@ -84,6 +89,7 @@ CREATE TABLE `tickets` (
 CREATE TABLE `payments` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `amount` VARCHAR(255) NOT NULL,
+    `photo` VARCHAR(100) NULL,
     `paymentDate` DATETIME(3) NULL,
     `metodePayment` VARCHAR(50) NULL,
     `status` VARCHAR(50) NULL,

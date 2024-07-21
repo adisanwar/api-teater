@@ -1,6 +1,8 @@
 import { Theater } from "@prisma/client";
 import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
+import fs from "fs";
+import path from "path";
 import { CreateTheaterRequest, RemoveTheaterRequest, TheaterResponse, toTheaterResponse, UpdateTheaterRequest } from "../model/theater-model";
 import { TheaterValidation } from "../validation/theater-valiidation";
 import { logger } from "../application/logging";
@@ -37,7 +39,8 @@ export class TheaterService {
         return theater;
     }
 
-    static async getById(theater: Theater): Promise<TheaterResponse> {
+    static async getById(theaterId: number): Promise<TheaterResponse> {
+        const theater = await this.checkTheaterMustExists(theaterId);
         return toTheaterResponse(theater);
     }
 
@@ -56,6 +59,10 @@ export class TheaterService {
 
     static async remove(request: RemoveTheaterRequest): Promise<TheaterResponse> {
         const removeRequest = Validation.validate(TheaterValidation.GET, request); 
+        const theaterFile = await this.checkTheaterMustExists(removeRequest.id);
+        if (theaterFile.photo) {
+            fs.unlinkSync(path.resolve(theaterFile.photo)); // Remove the photo file if it exists
+        }
         const theater = await prismaClient.theater.delete({
             where: { 
                 id: removeRequest.id 

@@ -5,6 +5,8 @@ import {ContactController} from "../controller/contact-controller";
 import {AddressController} from "../controller/address-controller";
 import { TheaterController } from "../controller/theater-controller";
 import { ShowController } from "../controller/show-controller";
+import { uploadMiddleware } from "../middleware/upload-middleware";
+import {ShowtimeController} from "../controller/showtime-controller";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -15,9 +17,9 @@ apiRouter.patch("/api/users/current", UserController.update);
 apiRouter.delete("/api/users/current", UserController.logout);
 
 // Contact API
-apiRouter.post("/api/contacts", ContactController.create);
+apiRouter.post("/api/contacts",uploadMiddleware, ContactController.create);
 apiRouter.get("/api/contacts/:contactId(\\d+)", ContactController.get);
-apiRouter.patch("/api/contacts/:contactId(\\d+)", ContactController.update);
+apiRouter.patch("/api/contacts/:contactId(\\d+)",uploadMiddleware, ContactController.update);
 apiRouter.delete("/api/contacts/:contactId(\\d+)", ContactController.remove);
 apiRouter.get("/api/contacts", ContactController.search);
 
@@ -29,16 +31,23 @@ apiRouter.delete("/api/contacts/:contactId(\\d+)/addresses/:addressId(\\d+)", Ad
 apiRouter.get("/api/contacts/:contactId(\\d+)/addresses", AddressController.list);
 
 // Theater Api
-apiRouter.post("/api/theaters", TheaterController.create);
+apiRouter.post("/api/theaters", uploadMiddleware, TheaterController.create);
 apiRouter.get("/api/theaters/current", TheaterController.get);
 apiRouter.get('/api/theaters/:theaterId(\\d+)', TheaterController.getById);
-apiRouter.patch('/api/theaters/:theaterId(\\d+)', TheaterController.update)
+apiRouter.patch('/api/theaters/:theaterId(\\d+)',uploadMiddleware,  TheaterController.update)
 apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
 
 // Show Api
 apiRouter.post("/api/shows/:theaterId(\\d+)", ShowController.create);
-apiRouter.get("/api/shows/:theaterId(\\d+)/shows/:showId(\\d+)", ShowController.getById);
+apiRouter.get("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.getById);
 apiRouter.get("/api/shows/current", ShowController.get);
-apiRouter.patch("/api/shows/:theaterId(\\d+)/shows/:showId(\\d+)", ShowController.update);
+apiRouter.patch("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.update);
 apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 // apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);
+
+// Showtime Api
+apiRouter.post("/api/showtimes/:showtimesId(\\d+)", ShowtimeController.create);
+apiRouter.get("/api/showtimes/:showtimesId(\\d+)/shows/:showId(\\d+)", ShowtimeController.getById);
+apiRouter.get("/api/showtimes/current", ShowtimeController.get);
+apiRouter.patch("/api/showtimes/:showtimeId(\\d+)/shows/:showId(\\d+)", ShowController.update);
+apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);

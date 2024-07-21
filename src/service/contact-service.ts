@@ -1,45 +1,38 @@
-import {
-    ContactResponse,
-    CreateContactRequest,
-    SearchContactRequest,
-    toContactResponse,
-    UpdateContactRequest
-} from "../model/contact-model";
-import {Validation} from "../validation/validation";
-import {ContactValidation} from "../validation/contact-validation";
-import {Contact, User} from "@prisma/client";
-import {prismaClient} from "../application/database";
-import {logger} from "../application/logging";
-import {ResponseError} from "../error/response-error";
-import {Pageable} from "../model/page";
+import { prismaClient } from "../application/database";
+import { CreateContactRequest, UpdateContactRequest, ContactResponse, toContactResponse, SearchContactRequest } from "../model/contact-model";
+import { Validation } from "../validation/validation";
+import { ContactValidation } from "../validation/contact-validation";
+import { Contact, User } from "@prisma/client";
+import { ResponseError } from "../error/response-error";
+import { Pageable } from "../model/page";
+import fs from "fs";
+import path from "path";
 
 export class ContactService {
-
     static async create(user: User, request: CreateContactRequest): Promise<ContactResponse> {
         const createRequest = Validation.validate(ContactValidation.CREATE, request);
 
-        const record : any = {
+        const record: any = {
             ...createRequest,
-            ...{username: user.username}
+            ...{ username: user.username }
         };
 
         const contact = await prismaClient.contact.create({
             data: record
         });
 
-        // logger.debug("record : " + JSON.stringify(contact));
         return toContactResponse(contact);
     }
 
     static async checkContactMustExists(username: string, contactId: number): Promise<Contact> {
         const contact = await prismaClient.contact.findFirst({
-            where:{
+            where: {
                 id: contactId,
                 username: username
             }
         });
 
-        if(!contact){
+        if (!contact) {
             throw new ResponseError(404, "Contact not found");
         }
 
@@ -51,8 +44,8 @@ export class ContactService {
         return toContactResponse(contact);
     }
 
-    static async update(user: User, request: UpdateContactRequest) : Promise<ContactResponse> {
-        const updateRequest : any  = Validation.validate(ContactValidation.UPDATE, request);
+    static async update(user: User, request: UpdateContactRequest): Promise<ContactResponse> {
+        const updateRequest: any = Validation.validate(ContactValidation.UPDATE, request);
         await this.checkContactMustExists(user.username, updateRequest.id);
 
         const contact = await prismaClient.contact.update({
@@ -66,26 +59,29 @@ export class ContactService {
         return toContactResponse(contact);
     }
 
-    static async remove(user: User, id: number) : Promise<ContactResponse> {
-        await this.checkContactMustExists(user.username, id);
+    static async remove(user: User, id: number): Promise<ContactResponse> {
+        const contact = await this.checkContactMustExists(user.username, id);
 
-        const contact = await prismaClient.contact.delete({
+        if (contact.photo) {
+            fs.unlinkSync(path.resolve(contact.photo)); // Remove the photo file if it exists
+        }
+
+        const deletedContact = await prismaClient.contact.delete({
             where: {
                 id: id,
                 username: user.username
             }
         });
 
-        return toContactResponse(contact);
+        return toContactResponse(deletedContact);
     }
 
-    static async search(user: User, request: SearchContactRequest) : Promise<Pageable<ContactResponse>> {
+    static async search(user: User, request: SearchContactRequest): Promise<Pageable<ContactResponse>> {
         const searchRequest = Validation.validate(ContactValidation.SEARCH, request);
         const skip = (searchRequest.page - 1) * searchRequest.size;
 
         const filters = [];
-        // check if name exists
-        if(searchRequest.name){
+        if (searchRequest.name) {
             filters.push({
                 OR: [
                     {
@@ -99,23 +95,21 @@ export class ContactService {
                         }
                     }
                 ]
-            })
+            });
         }
-        // check if email exists
-        if(searchRequest.email){
+        if (searchRequest.email) {
             filters.push({
                 email: {
                     contains: searchRequest.email
                 }
-            })
+            });
         }
-        // check if phone exists
-        if(searchRequest.phone){
+        if (searchRequest.phone) {
             filters.push({
                 phone: {
                     contains: searchRequest.phone
                 }
-            })
+            });
         }
 
         const contacts = await prismaClient.contact.findMany({
@@ -132,7 +126,7 @@ export class ContactService {
                 username: user.username,
                 AND: filters
             },
-        })
+        });
 
         return {
             data: contacts.map(contact => toContactResponse(contact)),
@@ -141,7 +135,6 @@ export class ContactService {
                 total_page: Math.ceil(total / searchRequest.size),
                 size: searchRequest.size
             }
-        }
+        };
     }
-
 }

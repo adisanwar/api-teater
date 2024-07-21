@@ -1,6 +1,6 @@
 import { prismaClient } from "../src/application/database";
 import bcrypt from "bcrypt";
-import { Address, Contact, User, Theater, Show } from "@prisma/client";
+import {Address, Contact, User, Theater, Show, Showtime} from "@prisma/client";
 
 export class UserTest {
 
@@ -18,7 +18,8 @@ export class UserTest {
                 username: "test",
                 name: "test",
                 password: await bcrypt.hash("test", 10),
-                token: "test"
+                token: "test",
+                isAdmin: true
             }
         })
     }
@@ -124,6 +125,14 @@ export class AddressTest {
 export class TheaterTest {
 
     static async deleteAll() {
+        await prismaClient.show.deleteMany({
+            where: {
+                theater: {
+                    name: "test"
+                }
+            }
+        });
+        
         await prismaClient.theater.deleteMany({
             where: {
                 name: "test"
@@ -184,18 +193,14 @@ export class ShowTest {
         })
     }
 
-    static async get(): Promise<Show> {
-        const show = await prismaClient.show.findFirst({
-            where: {
-                title: "test"
-            }
-        });
+    static async get(): Promise<Show[]> { // Change the return type to Show[]
+        const shows = await prismaClient.show.findMany();
 
-        if (!show) {
-            throw new Error("Show is not found");
+        if (!shows.length) {
+            throw new Error("Shows not found");
         }
 
-        return show;
+        return shows;
     }
 
     static async getById(): Promise<Show> {
@@ -207,4 +212,45 @@ export class ShowTest {
         return show;
     }
 
+}
+
+export class ShowtimeTest {
+
+    static async deleteAll() {
+        await prismaClient.showtime.deleteMany({
+            where: {
+                showTime: "test" // Assuming you want to delete based on showTime being "test"
+            }
+        });
+    }
+
+    static async create() {
+        const show = await ShowTest.getById();
+        await prismaClient.showtime.create({
+            data: {
+                showDate: new Date(), // Assign a valid date
+                showTime: "test", // Assign a string value for showTime
+                showId: show.id
+            }
+        });
+    }
+
+    static async get(): Promise<Showtime[]> {
+        const showtimes = await prismaClient.showtime.findMany();
+
+        if (!showtimes.length) {
+            throw new Error("Shows not found");
+        }
+
+        return showtimes;
+    }
+
+    static async getById(): Promise<Showtime> {
+        const showtime = await prismaClient.showtime.findFirst();
+
+        if (!showtime) {
+            throw new Error("Showtime not found");
+        }
+        return showtime;
+    }
 }

@@ -1,14 +1,18 @@
-import {UserRequest} from "../type/user-request";
-import {Response, NextFunction} from "express";
-import {CreateContactRequest, SearchContactRequest, UpdateContactRequest} from "../model/contact-model";
-import {ContactService} from "../service/contact-service";
-import {logger} from "../application/logging";
+import { Request, Response, NextFunction } from "express";
+import { CreateContactRequest, UpdateContactRequest, SearchContactRequest } from "../model/contact-model";
+import { ContactService } from "../service/contact-service";
+import { UserRequest } from "../type/user-request";
+import { logger } from "../application/logging";
+import path from "path";
+import { deleteOldFile, getDestinationFolder, handleFileUpload } from "../middleware/upload-middleware";
 
 export class ContactController {
 
     static async create(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request: CreateContactRequest = req.body as CreateContactRequest;
+            getDestinationFolder('contact');
+            handleFileUpload(req, request);
             const response = await ContactService.create(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json({
@@ -34,9 +38,13 @@ export class ContactController {
 
     static async update(req: UserRequest, res: Response, next: NextFunction) {
         try {
+            const contact = await ContactService.get(req.user!, Number(req.params.contactId));
             const request: UpdateContactRequest = req.body as UpdateContactRequest;
             request.id = Number(req.params.contactId);
-
+            if (contact.photo) {
+                deleteOldFile(path.join(__dirname, '..', '..', contact.photo));
+              }
+            handleFileUpload(req, request);
             const response = await ContactService.update(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json({
@@ -68,7 +76,7 @@ export class ContactController {
                 phone: req.query.phone as string,
                 page: req.query.page ? Number(req.query.page) : 1,
                 size: req.query.size ? Number(req.query.size) : 10,
-            }
+            };
             const response = await ContactService.search(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json(response);
@@ -76,5 +84,4 @@ export class ContactController {
             next(e);
         }
     }
-
 }

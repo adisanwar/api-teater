@@ -8,6 +8,8 @@ import { request } from "express";
 import { logger } from "../application/logging";
 import { TheaterService } from "./theater-service";
 import { toTheaterResponse } from "../model/theater-model";
+import fs from "fs";
+import path from "path";
 
 
 
@@ -76,17 +78,28 @@ export class ShowService {
         return toShowResponse(show);
     }
 
-    static async remove(request: RemoveShowRequest) : Promise<ShowResponse> {
-        const removeRequest = Validation.validate(ShowValidation.GET, request);
-
-        const show = await prismaClient.show.delete({
+    static async remove(showId: number): Promise<ShowResponse> {
+        const show = await prismaClient.show.findUnique({
             where: {
-                id: removeRequest.id,
+                id: showId
+            }
+        });
+
+        if (!show) {
+            throw new ResponseError(404, "Show not found");
+        }
+
+        if (show.photo) {
+            fs.unlinkSync(path.resolve(show.photo)); // Remove the photo file if it exists
+        }
+
+        await prismaClient.show.delete({
+            where: {
+                id: showId
             }
         });
 
         return toShowResponse(show);
     }
-
 
 }

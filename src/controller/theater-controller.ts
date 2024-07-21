@@ -3,12 +3,16 @@ import { CreateTheaterRequest, RemoveTheaterRequest, UpdateTheaterRequest } from
 import { TheaterService } from "../service/theater-service";
 import { TheaterRequest } from "../type/theater-request";
 import { logger } from "../application/logging";
+import path from "path";
+import { deleteOldFile, getDestinationFolder, handleFileUpload } from "../middleware/upload-middleware";
 
 export class TheaterController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const request: CreateTheaterRequest = req.body as CreateTheaterRequest;
+            getDestinationFolder('theater');
+            handleFileUpload(req, request);
             const response = await TheaterService.create(request);
             res.status(200).json({
                 data: response
@@ -48,10 +52,8 @@ export class TheaterController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            // const request: UpdateTheaterRequest = req.body as UpdateTheaterRequest;
-            // request.id = Number(req.params.theaterId)
-
             const theaterId = Number(req.params.theaterId);
+            const theater : any = await TheaterService.getById(theaterId);
             if (isNaN(theaterId)) {
                 return res.status(400).json({ error: 'Invalid theater ID' });
             }
@@ -61,6 +63,10 @@ export class TheaterController {
                 ...req.body
             };
 
+            if (theater.photo) {
+                deleteOldFile(path.join(__dirname, '..', '..', theater.photo));
+              }
+            handleFileUpload(req, request);
             const response = await TheaterService.update(request);
             res.status(200).json({
                 data: response

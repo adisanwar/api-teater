@@ -4,19 +4,21 @@ import { TheaterRequest } from "../type/theater-request";
 import { CreateShowRequest, GetShowRequest, RemoveShowRequest, UpdateShowRequest } from "../model/show-model";
 import { TheaterService } from "../service/theater-service";
 import { logger } from "../application/logging";
+import path from "path";
 import { ShowService } from "../service/show-service";
+import { deleteOldFile, getDestinationFolder, handleFileUpload } from "../middleware/upload-middleware";
 
 export class ShowController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const theaterId = Number(req.params.theaterId);
-
+            getDestinationFolder('show');
+            handleFileUpload(req, theaterId);
             const request: CreateShowRequest = {
                 ...req.body,
                 theaterId: theaterId
             };
-
             const response = await ShowService.create(request);
             res.status(200).json({
                 data: response
@@ -61,13 +63,18 @@ export class ShowController {
         try {
             const theaterId = Number(req.params.theaterId);
             const showId = Number(req.params.showId);
-
+            const show = await ShowService.getById({ theaterId, id: showId });
+            
             const request: UpdateShowRequest = {
                 id: showId,
                 theaterId: theaterId,
                 ...req.body
             };
 
+            if (show.photo) {
+                deleteOldFile(path.join(__dirname, '..', '..', show.photo));
+              }
+            handleFileUpload(req, request);
             const response = await ShowService.update(request);
             res.status(200).json({
                 data: response
@@ -77,31 +84,16 @@ export class ShowController {
         }
     }
     
-    // static async update(req: TheaterRequest, res: Response, next: NextFunction) {
-    //     try {
-    //         const request: UpdateShowRequest = req.body as UpdateShowRequest;
-    //         request.id = Number(req.params.theaterId);
-
-    //         const response = await ShowService.update(req.theater!, request);
-    //         res.status(200).json({
-    //             data: response
-    //         });
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // }
 
     static async remove(req: Request, res: Response, next: NextFunction) {
         try {
-            const theaterId = Number(req.params.theaterId);
             const showId = Number(req.params.showId);
 
-            const request: RemoveShowRequest = {
-                id: showId,
-                theaterId: theaterId,
-            };
+            if (isNaN(showId)) {
+                return res.status(400).json({ error: 'Invalid show ID' });
+            }
 
-            const response = await ShowService.remove(request);
+            const response = await ShowService.remove(showId);
             res.status(200).json({
                 data: "OK"
             });
@@ -109,17 +101,5 @@ export class ShowController {
             next(e);
         }
     }
-
-    // static async list(req: UserRequest, res: Response, next: NextFunction) {
-    //     try {
-    //         const contactId = Number(req.params.contactId);
-    //         const response = await ShowService.list(req.theater!, contactId);
-    //         res.status(200).json({
-    //             data: response
-    //         });
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // }
 
 }
