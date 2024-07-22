@@ -19,21 +19,47 @@ describe(`POST /api/showtimes/`, () => {
     })
 
     it('should be able to create showtimes', async () => {
-        const show = await ShowTest.getById(); // Assuming this fetches a valid show
+        const show = await ShowTest.getById();
+      
+        // Generate a valid datetime string
+        const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      
         const response = await supertest(web)
-            .post(`/api/showtimes/${show.id}`)
-            .set("X-API-TOKEN", "test")
-            .send({
-                showDate: new Date(), // Ensure date is in a valid format
-                showTime: "test"
-            });
-
-        logger.debug(response.body);
+          .post(`/api/showtimes/${show.id}`)
+          .set("X-API-TOKEN", "test")
+          .send({
+            showDate: validDatetime,
+            showTime: "18:00:00" // Use a valid time format
+          });
+      
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
-        expect(new Date(response.body.data.showDate).toISOString()).toBe(new Date().toISOString()); // Validate date
-        expect(response.body.data.showTime).toBe("test");
-    });
+        expect(response.body.data.showDate).toBe(validDatetime);
+        expect(response.body.data.showTime).toBe("18:00:00");
+      
+        // Consider adding error handling checks here
+        if (response.status !== 200) {
+          console.error(`Error: ${response.body.message}`);
+        }
+      });
+
+      
+    // it('should be able to create showtimes', async () => {
+    //     const show = await ShowTest.getById(); // Assuming this fetches a valid show
+    //     const response = await supertest(web)
+    //         .post(`/api/showtimes/${show.id}`)
+    //         .set("X-API-TOKEN", "test")
+    //         .send({
+    //             showDate: new Date(), // Ensure date is in a valid format
+    //             showTime: "test"
+    //         });
+
+    //     logger.debug(response.body);
+    //     expect(response.status).toBe(200);
+    //     expect(response.body.data.id).toBeDefined();
+    //     expect(new Date(response.body.data.showDate).toISOString()).toBe(new Date().toISOString()); // Validate date
+    //     expect(response.body.data.showTime).toBe("test");
+    // });
 
     it('should reject create new showtime if data is invalid', async () => {
         const show = await ShowTest.getById();
