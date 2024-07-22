@@ -87,7 +87,7 @@ export class ShowController {
 
     static async remove(req: Request, res: Response, next: NextFunction) {
         try {
-            const showId = Number(req.params.showId);
+            const showId : any = Number(req.params.showId);
 
             if (isNaN(showId)) {
                 return res.status(400).json({ error: 'Invalid show ID' });

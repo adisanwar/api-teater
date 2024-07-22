@@ -1,6 +1,6 @@
 import { prismaClient } from "../src/application/database";
 import bcrypt from "bcrypt";
-import {Address, Contact, User, Theater, Show, Showtime} from "@prisma/client";
+import {Address, Contact, User, Theater, Show, Showtime, Ticket} from "@prisma/client";
 
 export class UserTest {
 
@@ -226,10 +226,10 @@ export class ShowtimeTest {
 
     static async create() {
         const show = await ShowTest.getById();
-        const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        // const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
         await prismaClient.showtime.create({
             data: {
-                showDate: validDatetime,
+                // showDate: validDatetime,
                 showTime: "test", // Assign a string value for showTime
                 showId: show.id
             }
@@ -253,5 +253,50 @@ export class ShowtimeTest {
             throw new Error("Showtime not found");
         }
         return showtime;
+    }
+}
+
+
+export class TicketTest {
+    static async deleteAll() {
+        await prismaClient.ticket.deleteMany({
+            where: {
+                seatNumber : "test" // Assuming you want to delete based on ticket being "test"
+            }
+        });
+    }
+
+    static async create() {
+        const show = await ShowTest.getById();
+        const contact = await ContactTest.get();
+        // const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        await prismaClient.ticket.create({
+            data: {
+                seatNumber: "test",
+                price: "10000",
+                photo: "test",
+                showId: show.id,
+                contactId: contact.id
+            }
+        });
+    }
+
+    static async get(): Promise<Ticket[]> {
+        const tickets = await prismaClient.ticket.findMany();
+
+        if (!tickets.length) {
+            throw new Error("Shows not found");
+        }
+
+        return tickets;
+    }
+
+    static async getById(): Promise<Ticket> {
+        const ticket = await prismaClient.ticket.findFirst();
+
+        if (!ticket) {
+            throw new Error("ticket not found");
+        }
+        return ticket;
     }
 }

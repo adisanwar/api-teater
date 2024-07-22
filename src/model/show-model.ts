@@ -1,4 +1,5 @@
-import { Show } from "@prisma/client";
+import { Show, Theater } from "@prisma/client";
+import { TheaterResponse } from "./theater-model";
 
 export type ShowResponse = {
     id: number;
@@ -7,6 +8,7 @@ export type ShowResponse = {
     description?: string | null;
     duration?: string | null;
     rating?: string | null;
+    theater?: TheaterResponse;
 }
 
 export type CreateShowRequest = {
@@ -43,13 +45,19 @@ export type UpdateShowRequest = {
 //     size: number;
 // }
 
-export function toShowResponse(show: Show): ShowResponse {
+export function toShowResponse(show: Show & {theater : Theater}): ShowResponse {
     return {
         id: show.id,
         title: show.title,
         photo: show.photo,
         description: show.description,
         duration: show.duration,
-        rating: show.rating
+        rating: show.rating,
+        theater: show.theater ? {
+            id: show.theater.id,
+            name: show.theater.name,
+            location: show.theater.location,
+            capacity: show.theater.capacity,
+        } : undefined,
     }
 }

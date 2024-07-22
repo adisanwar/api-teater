@@ -7,6 +7,7 @@ import { TheaterController } from "../controller/theater-controller";
 import { ShowController } from "../controller/show-controller";
 import { uploadMiddleware } from "../middleware/upload-middleware";
 import {ShowtimeController} from "../controller/showtime-controller";
+import { TicketController } from "../controller/ticket-controller";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -45,9 +46,16 @@ apiRouter.patch("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowContro
 apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 // apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);
 
+// ticket Api
+apiRouter.post("/api/tickets/:showId(\\d+)", TicketController.create);
+apiRouter.get("/api/tickets/:ticketId(\\d+)/shows/:showId(\\d+)", TicketController.getById);
+apiRouter.get("/api/tickets/current", TicketController.get);
+apiRouter.patch("/api/tickets/:ticketId(\\d+)/shows/:showId(\\d+)", ShowController.update);
+apiRouter.delete("/api/tickets/:ticketId(\\d+)", TicketController.remove);
+
 // Showtime Api
-apiRouter.post("/api/showtimes/:showtimesId(\\d+)", ShowtimeController.create);
-apiRouter.get("/api/showtimes/:showtimesId(\\d+)/shows/:showId(\\d+)", ShowtimeController.getById);
+apiRouter.post("/api/showtimes/:showId(\\d+)", ShowtimeController.create);
+apiRouter.get("/api/showtimes/:showtimeId(\\d+)/shows/:showId(\\d+)", ShowtimeController.getById);
 apiRouter.get("/api/showtimes/current", ShowtimeController.get);
 apiRouter.patch("/api/showtimes/:showtimeId(\\d+)/shows/:showId(\\d+)", ShowController.update);
 apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);

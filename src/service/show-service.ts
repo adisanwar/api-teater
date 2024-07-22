@@ -1,13 +1,10 @@
-import {Show, Theater} from "@prisma/client";
+import {Contact, Show, Theater} from "@prisma/client";
 import { CreateShowRequest, GetShowRequest, RemoveShowRequest, ShowResponse, toShowResponse, UpdateShowRequest } from "../model/show-model";
 import {Validation} from "../validation/validation";
 import {prismaClient} from "../application/database";
 import { ShowValidation } from "../validation/show-valiidation";
 import { ResponseError } from "../error/response-error";
-import { request } from "express";
 import { logger } from "../application/logging";
-import { TheaterService } from "./theater-service";
-import { toTheaterResponse } from "../model/theater-model";
 import fs from "fs";
 import path from "path";
 
@@ -19,7 +16,7 @@ export class ShowService {
         const createRequest = Validation.validate(ShowValidation.CREATE, request);
         await this.checkTheaterMustExists(createRequest.theaterId);
 
-        const show = await prismaClient.show.create({
+        const show :any = await prismaClient.show.create({
             data: createRequest
         });
         logger.debug("record : " + JSON.stringify(show));
@@ -30,7 +27,7 @@ export class ShowService {
         const theater = await prismaClient.theater.findFirst({
             where: {
                 id: theaterId
-            }
+            },
         });
 
         if (!theater) {
@@ -39,12 +36,12 @@ export class ShowService {
 
         return theater;
     } 
-
-    static async checkShowMustExists(contactId: number, ticketId: number): Promise<Show> {
+    
+    static async checkShowMustExists(contact: Contact, ticketId: number): Promise<Show> {
         const ticket : any = await prismaClient.ticket.findFirst({
             where: {
                 id: ticketId,
-                contactId: contactId
+                contactId: contact.id
             }
         });
 
@@ -55,6 +52,7 @@ export class ShowService {
         return ticket;
     }
 
+
     static async getById(request: GetShowRequest): Promise<ShowResponse> {
         const getRequest = Validation.validate(ShowValidation.GET, request);
         await this.checkTheaterMustExists(getRequest.theaterId);
@@ -64,6 +62,9 @@ export class ShowService {
                 id: getRequest.id,
                 theaterId: getRequest.theaterId,
             },
+            include : {
+                theater: true,
+            }
         });
 
         if (!show) {
@@ -74,7 +75,13 @@ export class ShowService {
     }
 
     static async get(): Promise<Show[]> {
-        const show = await prismaClient.show.findMany();
+        const show = await prismaClient.show.findMany(
+            {
+                include : {
+                    theater: true,
+                }
+            }
+        );
         return show;
     }
 
@@ -82,7 +89,7 @@ export class ShowService {
         const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
         await this.checkTheaterMustExists(updateRequest.theaterId);
 
-        const show = await prismaClient.show.update({
+        const show : any= await prismaClient.show.update({
             where: {
                 id: updateRequest.id,
                 theaterId: updateRequest.theaterId
@@ -93,10 +100,10 @@ export class ShowService {
         return toShowResponse(show);
     }
 
-    static async remove(showId: number): Promise<ShowResponse> {
-        const show = await prismaClient.show.findUnique({
+    static async remove(showId: RemoveShowRequest): Promise<ShowResponse> {
+        const show : any = await prismaClient.show.findUnique({
             where: {
-                id: showId
+                id: showId.id,
             }
         });
 
@@ -110,7 +117,7 @@ export class ShowService {
 
         await prismaClient.show.delete({
             where: {
-                id: showId
+                id: showId.id,
             }
         });
 
