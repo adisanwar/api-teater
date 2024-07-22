@@ -20,8 +20,6 @@ model User {
   token    String? @db.VarChar(100)
   isAdmin  Boolean
 
-
-  ticket Ticket[]
   contacts Contact[]
 
   @@map("users")
@@ -37,10 +35,11 @@ model Contact {
   dateofbirth DateTime?
   ofcNo       String?  @db.VarChar(20)
   nationalId  BigInt?   @db.BigInt
- username   String  @db.VarChar(100)
+  username   String  @db.VarChar(100)
 
   user      User      @relation(fields: [username], references: [username])
   addresses Address[]
+  ticket Ticket[]
 
   @@map("contacts")
 }
@@ -53,9 +52,9 @@ model Address {
   province    String? @db.VarChar(100)
   country     String  @db.VarChar(100)
   postal_code String  @db.VarChar(10)
-  contact_id  Int
+  contactId  Int
 
-  contact Contact @relation(fields: [contact_id], references: [id])
+  contact Contact @relation(fields: [contactId], references: [id])
 
   @@map("addresses")
 }
@@ -71,6 +70,7 @@ model Show {
   
   theater     Theater @relation(fields: [theaterId], references: [id])
 
+  ticket Ticket []
   showtime Showtime []
 
   @@map("shows")
@@ -83,7 +83,7 @@ model Showtime {
   showId      Int
 
   show Show @relation(fields: [showId], references: [id])
-  ticket Ticket []
+  
 
   @@map("showtimes")
 }
@@ -106,11 +106,11 @@ model Ticket {
   price        String? @db.VarChar(255)
   photo        String? @db.VarChar(100)
   purchaseDate DateTime?
-  showtimeId   Int
-  username     String  @db.VarChar(100) 
+  showId       Int
+  contactId   Int
 
-  showtime Showtime @relation(fields: [showtimeId], references: [id])
-  user User @relation(fields: [username], references: [username])
+  show Show @relation(fields: [showId], references: [id])
+  contact Contact @relation(fields: [contactId], references: [id])
 
   payment Payment[]   
 

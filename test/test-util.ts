@@ -94,7 +94,7 @@ export class AddressTest {
         const contact = await ContactTest.get();
         await prismaClient.address.create({
             data: {
-                contact_id: contact.id,
+                contactId: contact.id,
                 street: "Jalan test",
                 city: "Kota test",
                 province: "Provinsi test",
@@ -226,9 +226,10 @@ export class ShowtimeTest {
 
     static async create() {
         const show = await ShowTest.getById();
+        const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
         await prismaClient.showtime.create({
             data: {
-                showDate: new Date(), // Assign a valid date
+                showDate: validDatetime,
                 showTime: "test", // Assign a string value for showTime
                 showId: show.id
             }

@@ -10,7 +10,7 @@ export type AddressResponse = {
 }
 
 export type CreateAddressRequest = {
-    contact_id: number;
+    contactId: number;
     street?: string;
     city?: string;
     province?: string;
@@ -19,13 +19,13 @@ export type CreateAddressRequest = {
 }
 
 export type GetAddressRequest = {
-    contact_id: number;
+    contactId: number;
     id: number;
 }
 
 export type UpdateAddressRequest = {
     id: number;
-    contact_id: number;
+    contactId: number;
     street?: string;
     city?: string;
     province?: string;

@@ -33,7 +33,7 @@ CREATE TABLE `addresses` (
     `province` VARCHAR(100) NULL,
     `country` VARCHAR(100) NOT NULL,
     `postal_code` VARCHAR(10) NOT NULL,
-    `contact_id` INTEGER NOT NULL,
+    `contactId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -79,8 +79,8 @@ CREATE TABLE `tickets` (
     `price` VARCHAR(255) NULL,
     `photo` VARCHAR(100) NULL,
     `purchaseDate` DATETIME(3) NULL,
-    `showtimeId` INTEGER NOT NULL,
-    `username` VARCHAR(100) NOT NULL,
+    `showId` INTEGER NOT NULL,
+    `contactId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -102,7 +102,7 @@ CREATE TABLE `payments` (
 ALTER TABLE `contacts` ADD CONSTRAINT `contacts_username_fkey` FOREIGN KEY (`username`) REFERENCES `users`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `addresses` ADD CONSTRAINT `addresses_contact_id_fkey` FOREIGN KEY (`contact_id`) REFERENCES `contacts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `addresses` ADD CONSTRAINT `addresses_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `contacts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `shows` ADD CONSTRAINT `shows_theaterId_fkey` FOREIGN KEY (`theaterId`) REFERENCES `theaters`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -111,10 +111,10 @@ ALTER TABLE `shows` ADD CONSTRAINT `shows_theaterId_fkey` FOREIGN KEY (`theaterI
 ALTER TABLE `showtimes` ADD CONSTRAINT `showtimes_showId_fkey` FOREIGN KEY (`showId`) REFERENCES `shows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tickets` ADD CONSTRAINT `tickets_showtimeId_fkey` FOREIGN KEY (`showtimeId`) REFERENCES `showtimes`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `tickets` ADD CONSTRAINT `tickets_showId_fkey` FOREIGN KEY (`showId`) REFERENCES `shows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tickets` ADD CONSTRAINT `tickets_username_fkey` FOREIGN KEY (`username`) REFERENCES `users`(`username`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `tickets` ADD CONSTRAINT `tickets_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `contacts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `payments` ADD CONSTRAINT `payments_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `tickets`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

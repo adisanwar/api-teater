@@ -40,6 +40,21 @@ export class ShowService {
         return theater;
     } 
 
+    static async checkShowMustExists(contactId: number, ticketId: number): Promise<Show> {
+        const ticket : any = await prismaClient.ticket.findFirst({
+            where: {
+                id: ticketId,
+                contactId: contactId
+            }
+        });
+
+        if (!ticket) {
+            throw new ResponseError(404, "Contact not found");
+        }
+
+        return ticket;
+    }
+
     static async getById(request: GetShowRequest): Promise<ShowResponse> {
         const getRequest = Validation.validate(ShowValidation.GET, request);
         await this.checkTheaterMustExists(getRequest.theaterId);
