@@ -4,10 +4,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "jamal",
-  "password" : "adi123",
-  "name" : "adi",
-  "isAdmin": true
+  "username": "eko",
+  "password" : "eko123",
+  "name" : "Eko"
 }
 
 ### Login User
@@ -16,14 +15,14 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "adi",
-  "password" : "adi123"
+  "username": "eko",
+  "password" : "eko123"
 }
 
 ### Get User
 GET http://localhost:3000/api/users/current
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 7f0b672b-fbbc-42eb-8402-7fb7f0965c8e
 
 ### Logout User
 DELETE http://localhost:3000/api/users/current
@@ -37,7 +36,7 @@ Content-Type: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
-  "name" : "adi Kurniawan"
+  "name" : "Eko Kurniawan"
 }
 
 ### Update User Password
@@ -54,37 +53,37 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "first_name" : "Budi Kurniawan",
   "last_name" : "Khannedy",
-  "email": "adi@example.com",
+  "email": "eko@example.com",
   "phone" : "099123123213"
 }
 
 ### Update Contact
-PATCH http://localhost:3000/api/contacts/35
+PUT http://localhost:3000/api/contacts/48
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
-  "first_name" : "adi",
+  "first_name" : "Eko",
   "last_name" : "Khannedy",
-  "email": "adi@example.com",
+  "email": "eko@example.com",
   "phone" : "099123123213"
 }
 
 ### Get Contact
-GET http://localhost:3000/api/contacts
+GET http://localhost:3000/api/contacts/128
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Remove Contact
-DELETE http://localhost:3000/api/contacts/102
+DELETE http://localhost:3000/api/contacts/128
 Accept: application/json
-X-API-TOKEN: a2e9736b-2d9b-4b41-a091-b404bf3d622c
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Search Contact
 GET http://localhost:3000/api/contacts
@@ -92,10 +91,10 @@ Accept: application/json
 X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Add Address
-POST http://localhost:3000/api/contacts/35/addresses
+POST http://localhost:3000/api/contacts/41/addresses
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "street" : "Jalan B",
@@ -106,9 +105,9 @@ X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
 }
 
 ### Get Address
-GET http://localhost:3000/api/contacts/35/addresses/29
+GET http://localhost:3000/api/contacts/41/addresses/59
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Update Address
 PUT http://localhost:3000/api/contacts/41/addresses/41
@@ -125,9 +124,9 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 }
 
 ### List Address
-GET http://localhost:3000/api/contacts/35/addresses
+GET http://localhost:3000/api/contacts/41/addresses
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 ### Remove Address
 DELETE http://localhost:3000/api/contacts/41/addresses/59
@@ -138,7 +137,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 {
   "name" : "Theater 1",
@@ -149,17 +148,12 @@ X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
 ### get theater
 GET http://localhost:3000/api/theaters/current
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-### get theater id
-GET http://localhost:3000/api/theaters/173
-Accept: application/json
-X-API-TOKEN: 22185906-7ad0-4335-971e-9fa661e0e77d
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 ###
-PATCH http://localhost:3000/api/theaters/170
+PATCH http://localhost:3000/api/theaters/305
 Content-Type: application/json
-X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
+X-API-TOKEN: bdb4498c-191b-414c-a622-c9ab811e7458
 
 {
   "name" : "FX Sudirman"
@@ -167,16 +161,16 @@ X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
 
 
 ### Remove Theater
-DELETE http://localhost:3000/api/theaters/170
+DELETE http://localhost:3000/api/theaters/128
 Accept: application/json
-X-API-TOKEN: 34814627-2c5c-4c5c-922d-31d5c1165095
+X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
 ### Create Shows
-POST http://localhost:3000/api/shows/16
+POST http://localhost:3000/api/shows/1
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 {
     "title": "test",
@@ -189,15 +183,15 @@ X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 ### get by Id
-GET http://localhost:3000/api/shows/1/theaters/1
+GET http://localhost:3000/api/shows/533/shows/114
 Accept: application/json
-X-API-TOKEN: 019eb74b-4181-42a8-b6f0-e35541ec67a5
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
 ###
-PATCH http://localhost:3000/api/shows
+PATCH http://localhost:3000/api/shows/533/shows/133
 Content-Type: application/json
 X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
@@ -205,79 +199,42 @@ X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
    "title": "coba",
 }
 
-### Remove Shows
+### Remove shows
 DELETE http://localhost:3000/api/shows/128
 Accept: application/json
 X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
-### Create showtime
-POST http://localhost:3000/api/showtimes/16
+### Create Showstime
+POST http://localhost:3000/api/showtimes/1
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 {
-    "showTime" : "test"   
+    "showTime" : "test"     
 }
 
-### get showtime
+### get shows
 GET http://localhost:3000/api/showtimes/current
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 ### get by Id
-GET http://localhost:3000/api/showtimes/1/shows/35
+GET http://localhost:3000/api/shows/1/showtimes/1
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 
 ###
-PATCH http://localhost:3000/api/showtimes/1/shows/35
+PATCH http://localhost:3000/api/shows/533/shows/133
 Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: d023724f-7e6e-439a-bf77-a09214c30898
 
 {
-   "seatNumber": "coba",
+   "title": "coba",
 }
 
-### Remove showtime
-DELETE http://localhost:3000/api/showtimes/1
+### Remove Contact
+DELETE http://localhost:3000/api/shows/128
 Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-
-### Create Ticket
-POST http://localhost:3000/api/tickets/17
-Accept: application/json
-Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-{
-    "seatNumber": "test",
-    "price": "10000",
-    "photo": "test",     
-}
-
-### get tickets
-GET http://localhost:3000/api/tickets/current
-Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-### get by Id
-GET http://localhost:3000/api/tickets/1/theaters/1
-Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-###
-PATCH http://localhost:3000/api/tickets/114
-Content-Type: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
-
-{
-   "seatNumber": "coba",
-}
-
-### Remove tickets
-DELETE http://localhost:3000/api/tickets/128
-Accept: application/json
-X-API-TOKEN: 512dcd08-f9c6-42fb-a0a7-3d1576c04591
+X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59

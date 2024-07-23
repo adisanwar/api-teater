@@ -14,7 +14,7 @@ import {ShowtimeValidation} from "../validation/showtime-valiidation";
 export class ShowtimeService {
 
     static async create(request: CreateShowtimeRequest): Promise<ShowtimeResponse> {
-        const createRequest  = Validation.validate(ShowtimeValidation.CREATE, request);
+        const createRequest : any = Validation.validate(ShowtimeValidation.CREATE, request);
         await this.checkShowMustExists(createRequest.showId);
 
         const showtime = await prismaClient.showtime.create({
@@ -25,57 +25,63 @@ export class ShowtimeService {
     }
 
     static async checkShowMustExists(showId: number): Promise<Show> {
-        const show = await prismaClient.show.findFirst({
+        const show = await prismaClient.show.findUnique({
             where: {
-                id: showId,
-
-            }
+                id: showId
+            },
+            
         });
 
         if (!show) {
-            throw new ResponseError(404, "Contact not found");
+            throw new ResponseError(404, "Show not found");
         }
 
         return show;
     }
 
-    static async getById(request: GetShowtimeRequest): Promise<ShowtimeResponse> {
-        const getRequest = Validation.validate(ShowtimeValidation.GET, request);
-        await this.checkShowMustExists(getRequest.showId)
 
-        const showtime = await prismaClient.showtime.findFirst({
-            where: {
-                id: getRequest.id,
-                showId : getRequest.showId
-            },
-        });
-
-        if (!showtime) {
-            throw new ResponseError(404, `Show with ID ${getRequest.id} does not exist in theater ${getRequest.showId}.`);
-        }
-
+    static async getById(show: Show): Promise<ShowtimeResponse> {
+        const showtime : any= await this.checkShowMustExists(show.id);
         return toShowtimeResponse(showtime);
     }
+
+    // static async getById(request: GetShowtimeRequest): Promise<ShowtimeResponse> {
+    //     const getRequest = Validation.validate(ShowtimeValidation.GET, request);
+    //     // await this.checkShowMustExists(getRequest.showId)
+
+    //     const showtime = await prismaClient.showtime.findFirst({
+    //         where: {
+    //             id: getRequest.id,
+    //             showId : getRequest.showId
+    //         },
+    //     });
+
+    //     if (!showtime) {
+    //         throw new ResponseError(404, `Show with ID ${getRequest.id} does not exist in theater ${getRequest.showId}.`);
+    //     }
+
+    //     return toShowtimeResponse(showtime);
+    // }
 
     static async get(): Promise<Showtime[]> {
         const showtime = await prismaClient.showtime.findMany();
         return showtime;
     }
 
-    static async update(request: UpdateShowtimeRequest): Promise<ShowtimeResponse> {
-        const updateRequest = Validation.validate(ShowtimeValidation.UPDATE, request);
-        await this.checkShowMustExists(updateRequest.showId);
+    // static async update(request: UpdateShowtimeRequest): Promise<ShowtimeResponse> {
+    //     const updateRequest : any = Validation.validate(ShowtimeValidation.UPDATE, request);
+    //     await this.checkShowMustExists(updateRequest.showId);
 
-        const showtime = await prismaClient.showtime.update({
-            where: {
-                id: updateRequest.id,
-                showId: updateRequest.showId
-            },
-            data: updateRequest
-        });
+    //     const showtime = await prismaClient.showtime.update({
+    //         where: {
+    //             id: updateRequest.id,
+    //             showId: updateRequest.showId
+    //         },
+    //         data: updateRequest
+    //     });
 
-        return toShowtimeResponse(showtime);
-    }
+    //     return toShowtimeResponse(showtime);
+    // }
 
     static async remove(showtimeId: number): Promise<ShowtimeResponse> {
         const showtime = await prismaClient.showtime.findUnique({

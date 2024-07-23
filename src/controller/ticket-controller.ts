@@ -4,35 +4,26 @@ import path from "path";
 import { deleteOldFile, getDestinationFolder, handleFileUpload } from "../middleware/upload-middleware";
 import { CreateTicketRequest, GetTicketRequest, UpdateTicketRequest } from "../model/ticket-model";
 import { TicketService } from "../service/ticket-service";
+import { TicketRequest } from "../type/ticket-request";
 
 export class TicketController {
 
-    static async create(req: Request, res: Response, next: NextFunction) {
-        try {
-            const request: CreateTicketRequest = req.body as CreateTicketRequest;
-            const showId = Number(req.params.showId);
-            const contactId = Number(req.params.contactId);
+    // static async create(req: TicketRequest, res: Response, next: NextFunction) {
+    //     try {
+    //         const request: CreateTicketRequest = req.body as CreateTicketRequest;
+        
+    //         getDestinationFolder('ticket');
+    //         handleFileUpload(req, request);
 
-            // Check if showId and contactId are valid numbers
-            if (isNaN(showId) || isNaN(contactId)) {
-                return res.status(400).json({ error: 'Invalid show ID or contact ID' });
-            }
-
-            request.showId = showId;
-            request.contactId = contactId;
-
-            getDestinationFolder('ticket');
-            handleFileUpload(req, request);
-
-            const response = await TicketService.create(contactId, request);
-            logger.debug("response : " + JSON.stringify(response));
-            res.status(200).json({
-                data: response
-            });
-        } catch (e) {
-            next(e);
-        }
-    }
+    //         const response = await TicketService.create(req.ticket!,request);
+    //         logger.debug("response : " + JSON.stringify(response));
+    //         res.status(200).json({
+    //             data: response
+    //         });
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // }
 
     static async get(req: Request, res: Response, next: NextFunction) {
         try {

@@ -11,17 +11,17 @@ import fs from 'fs';
 
 export class TicketService {
 
-    static async create(contactId: number, request: CreateTicketRequest): Promise<TicketResponse> {
+    static async create(contactId: Contact, request: CreateTicketRequest): Promise<TicketResponse> {
         const createRequest: any = Validation.validate(TicketValidation.CREATE, request);
         await ShowService.checkShowMustExists(contactId, request.showId);
 
         const ticketData = {
             ...createRequest,
-            contactId: contactId,
+            contactId: contactId.id,
             showId: request.showId
         };
 
-        const ticket = await prismaClient.ticket.create({
+        const ticket : any = await prismaClient.ticket.create({
             data: ticketData
         });
 
@@ -86,7 +86,7 @@ export class TicketService {
         const updateRequest: any = Validation.validate(TicketValidation.UPDATE, request);
         await this.checkShowMustExists(updateRequest.showId, updateRequest.id);
 
-        const ticket = await prismaClient.ticket.update({
+        const ticket : any = await prismaClient.ticket.update({
             where: {
                 id: updateRequest.id
             },
@@ -113,7 +113,7 @@ export class TicketService {
             fs.unlinkSync(path.resolve(ticket.photo)); // Remove the photo file if it exists
         }
 
-        const respon = await prismaClient.ticket.delete({
+        const respon : any= await prismaClient.ticket.delete({
             where: {
                 id: removeRequest.id
             }

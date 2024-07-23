@@ -5,7 +5,7 @@ export class ShowtimeValidation {
     static readonly CREATE : ZodType = z.object({
         showId: z.number().positive(),
         showDate: z.date().optional(),
-        ShowTime: z.string().min(1).max(255).optional(),
+        showTime: z.string().min(1).max(255).optional(),
 
         
     })
