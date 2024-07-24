@@ -1,6 +1,5 @@
-import { Contact, Show, Ticket, User } from "@prisma/client";
+import { Contact, Show, Ticket } from "@prisma/client";
 import { Validation } from "../validation/validation";
-import { AddressValidation } from "../validation/address-validation";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";
 import { CreateTicketRequest, GetTicketRequest, RemoveTicketRequest, TicketResponse, toTicketResponse, UpdateTicketRequest } from "../model/ticket-model";
@@ -11,54 +10,42 @@ import fs from 'fs';
 
 export class TicketService {
 
-    static async create(contactId: Contact, request: CreateTicketRequest): Promise<TicketResponse> {
+    static async create(request: CreateTicketRequest): Promise<TicketResponse> {
         const createRequest: any = Validation.validate(TicketValidation.CREATE, request);
-        await ShowService.checkShowMustExists(contactId, request.showId);
+        // await ShowService.checkShowMustExists(request.showId);
 
-        const ticketData = {
-            ...createRequest,
-            contactId: contactId.id,
-            showId: request.showId
-        };
+        // const ticketData = {
+        //     ...createRequest,
+        //     contactId: contactId,
+        //     showId: request.showId
+        // };
 
         const ticket : any = await prismaClient.ticket.create({
-            data: ticketData
+            data: createRequest
         });
 
         return toTicketResponse(ticket);
     }
 
-    static async checkShowMustExists(showId: number, ticketId: number): Promise<Ticket> {
-        const ticket = await prismaClient.ticket.findFirst({
-            where: {
-                id: ticketId,
-                show: {
-                    id: showId
-                }
-            },
-            include: {
-                show: true
-            }
+    static async checkShowMustExists(showId: number): Promise<void> {
+        const show = await prismaClient.show.findUnique({
+            where: { id: showId }
         });
 
-        if (!ticket) {
-            throw new ResponseError(404, "Ticket not found");
+        if (!show) {
+            throw new ResponseError(404, "Show not found");
         }
-
-        return ticket;
     }
 
     static async getById(request: GetTicketRequest): Promise<TicketResponse> {
-        const getRequest = Validation.validate(AddressValidation.GET, request);
-        await this.checkShowMustExists(getRequest.showId, getRequest.id);
-        
+        const getRequest = Validation.validate(TicketValidation.GET, request);
+
         const ticket = await prismaClient.ticket.findFirst({
             where: {
                 id: getRequest.id,
-                show: {
-                    id: getRequest.showId
-                }
-            }, 
+                showId: getRequest.showId,
+                contactId: getRequest.contactId
+            },
             include: {
                 contact: true,
                 show: true,
@@ -73,18 +60,17 @@ export class TicketService {
     }
 
     static async get(): Promise<Ticket[]> {
-        const tickets = await prismaClient.ticket.findMany({
+        return await prismaClient.ticket.findMany({
             include: {
                 contact: true,
                 show: true,
             }
         });
-        return tickets;
     }
 
     static async update(request: UpdateTicketRequest): Promise<TicketResponse> {
         const updateRequest: any = Validation.validate(TicketValidation.UPDATE, request);
-        await this.checkShowMustExists(updateRequest.showId, updateRequest.id);
+        await this.checkShowMustExists(updateRequest.showId);
 
         const ticket : any = await prismaClient.ticket.update({
             where: {
@@ -97,7 +83,7 @@ export class TicketService {
     }
 
     static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
-        const removeRequest = Validation.validate(TicketValidation.GET, request);
+        const removeRequest = Validation.validate(TicketValidation.REMOVE, request);
 
         const ticket = await prismaClient.ticket.findUnique({
             where: {
@@ -113,12 +99,12 @@ export class TicketService {
             fs.unlinkSync(path.resolve(ticket.photo)); // Remove the photo file if it exists
         }
 
-        const respon : any= await prismaClient.ticket.delete({
+        const deletedTicket : any = await prismaClient.ticket.delete({
             where: {
                 id: removeRequest.id
             }
         });
 
-        return toTicketResponse(respon);
+        return toTicketResponse(deletedTicket);
     }
 }

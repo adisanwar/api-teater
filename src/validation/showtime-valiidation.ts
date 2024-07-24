@@ -9,7 +9,6 @@ export class ShowtimeValidation {
 
         
     })
-
     static readonly GET : ZodType = z.object({
         showId: z.number().positive(),
         id: z.number().positive(),
@@ -20,11 +19,10 @@ export class ShowtimeValidation {
         id: z.number().positive(),
     })
 
-    static readonly UPDATE : ZodType = z.object({
+    static readonly UPDATE: ZodType = z.object({
         id: z.number().positive(),
         showId: z.number().positive(),
         showDate: z.date().optional(),
-        ShowTime: z.string().min(1).max(255).optional(),
-    })
-
+        showTime: z.string().min(1).max(255).optional(), // Correct field name
+    });
 }

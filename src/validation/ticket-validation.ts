@@ -3,6 +3,7 @@ import {z, ZodType} from "zod";
 export class TicketValidation {
 
     static readonly CREATE : ZodType = z.object({
+        contactId: z.number().positive(),
         showId: z.number().positive(),
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),

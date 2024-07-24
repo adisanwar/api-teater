@@ -101,27 +101,40 @@ export class ShowService {
     }
 
     static async remove(showId: RemoveShowRequest): Promise<ShowResponse> {
-        const show : any = await prismaClient.show.findUnique({
+        const show: any = await prismaClient.show.findUnique({
             where: {
                 id: showId.id,
-            }
+            },
         });
 
         if (!show) {
             throw new ResponseError(404, "Show not found");
         }
 
-        if (show.photo) {
+        if (show.photo !== null) {
             fs.unlinkSync(path.resolve(show.photo)); // Remove the photo file if it exists
         }
 
+        // Delete related records first (e.g., tickets, showtimes)
+        await prismaClient.ticket.deleteMany({
+            where: {
+                showId: showId.id,
+            },
+        });
+
+        await prismaClient.showtime.deleteMany({
+            where: {
+                showId: showId.id,
+            },
+        });
+
+        // Now delete the show
         await prismaClient.show.delete({
             where: {
                 id: showId.id,
-            }
+            },
         });
 
         return toShowResponse(show);
     }
-
 }

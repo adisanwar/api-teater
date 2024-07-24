@@ -54,7 +54,6 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
     photo: ticket.photo,
     price: ticket.price,
     purchaseDate: ticket.purchaseDate,
-    contactId: ticket.contactId,
     contact: ticket.contact ? {
             id: ticket.contact.id,
             first_name: ticket.contact.first_name,

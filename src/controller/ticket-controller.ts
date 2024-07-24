@@ -8,22 +8,23 @@ import { TicketRequest } from "../type/ticket-request";
 
 export class TicketController {
 
-    // static async create(req: TicketRequest, res: Response, next: NextFunction) {
-    //     try {
-    //         const request: CreateTicketRequest = req.body as CreateTicketRequest;
+    static async create(req: TicketRequest, res: Response, next: NextFunction) {
+        try {
+            const request: CreateTicketRequest = req.body as CreateTicketRequest;
         
-    //         getDestinationFolder('ticket');
-    //         handleFileUpload(req, request);
+            getDestinationFolder('ticket');
+            handleFileUpload(req, request);
 
-    //         const response = await TicketService.create(req.ticket!,request);
-    //         logger.debug("response : " + JSON.stringify(response));
-    //         res.status(200).json({
-    //             data: response
-    //         });
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // }
+            console.log(request)
+            const response = await TicketService.create(request);
+            logger.debug("response : " + JSON.stringify(response));
+            res.status(200).json({
+                data: response
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
 
     static async get(req: Request, res: Response, next: NextFunction) {
         try {

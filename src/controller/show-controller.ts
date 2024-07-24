@@ -73,7 +73,8 @@ export class ShowController {
 
             if (show.photo) {
                 deleteOldFile(path.join(__dirname, '..', '..', show.photo));
-              }
+            }
+            
             handleFileUpload(req, request);
             const response = await ShowService.update(request);
             res.status(200).json({
@@ -87,13 +88,15 @@ export class ShowController {
 
     static async remove(req: Request, res: Response, next: NextFunction) {
         try {
-            const showId : any = Number(req.params.showId);
+            const showId: RemoveShowRequest = { 
+                id: Number(req.params.showId),
+            };
 
-            if (isNaN(showId)) {
-                return res.status(400).json({ error: 'Invalid show ID' });
+            if (isNaN(showId.id) ) {
+                return res.status(400).json({ error: 'Invalid show or theater ID' });
             }
 
-            const response = await ShowService.remove(showId);
+            await ShowService.remove(showId);
             res.status(200).json({
                 data: "OK"
             });

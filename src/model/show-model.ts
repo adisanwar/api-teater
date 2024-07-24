@@ -25,7 +25,9 @@ export type GetShowRequest = {
     id: number;
 }
 
-export type RemoveShowRequest = GetShowRequest
+export type RemoveShowRequest ={
+    id:number
+} 
 
 export type UpdateShowRequest = {
     id: number;

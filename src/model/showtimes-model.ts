@@ -13,7 +13,6 @@ export type CreateShowtimeRequest = {
 };
 
 export type GetShowtimeRequest = {
-  showId: number;
   id: number;
 }
 
