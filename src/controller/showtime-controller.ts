@@ -41,17 +41,15 @@ export class ShowtimeController{
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const showtimeId = Number(req.params.showtimeId);
-            // const showId = Number(req.params.showId);
-            
-            console.log(showtimeId);
+    
             if (isNaN(showtimeId)) {
-                return res.status(400).json({ error: 'Invalid showtime ID or show ID' });
+                return res.status(400).json({ error: 'Invalid showtime ID' });
             }
-
+    
             const request: GetShowtimeRequest = {
                 id: showtimeId,
             };
-
+    
             const response = await ShowtimeService.getById(request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json({
@@ -61,25 +59,29 @@ export class ShowtimeController{
             next(e);
         }
     }
+    
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            const showId = Number(req.params.showId);
             const showtimeId = Number(req.params.showtimeId);
     
-            if (isNaN(showId) || isNaN(showtimeId)) {
-                return res.status(400).json({ error: 'Invalid show or showtime ID' });
+            if (isNaN(showtimeId)) {
+                return res.status(400).json({ error: 'Invalid showtime ID' });
+            }
+    
+            const { showId } = req.body;
+    
+            if (typeof showId !== 'number') {
+                return res.status(400).json({ error: 'Invalid show ID' });
             }
     
             const request: UpdateShowtimeRequest = {
                 id: showtimeId,
                 showId: showId,
-                ...req.body
             };
     
-            console.log(showId, showtimeId);
             console.log(request);
-            const response = await ShowtimeService.update(request);
+            const response = await ShowtimeService.update(request.showId, request);
             res.status(200).json({
                 data: response
             });
@@ -88,7 +90,6 @@ export class ShowtimeController{
             next(e);
         }
     }
-    
     
 
     static async remove(req: Request, res: Response, next: NextFunction) {

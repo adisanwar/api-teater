@@ -170,7 +170,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 POST http://localhost:3000/api/shows/1
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 {
     "title": "test",
@@ -183,7 +183,7 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 ### get by Id
 GET http://localhost:3000/api/shows/1/theaters/1
@@ -193,7 +193,7 @@ X-API-TOKEN: 77e9bb62-bbf2-423d-a865-e8575f660bde
 ###
 PATCH http://localhost:3000/api/shows/1/theaters/1
 Content-Type: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 {
    "title": "coba"
@@ -206,10 +206,10 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 
 
 ### Create Showtime
-POST http://localhost:3000/api/showtimes/2
+POST http://localhost:3000/api/showtimes/16
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 {
     "showTime" : "test"     
@@ -218,19 +218,20 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 ### get showstime
 GET http://localhost:3000/api/showtimes/current
 Accept: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 ### get by Id
-GET http://localhost:3000/api/showtimes/9
+GET http://localhost:3000/api/showtimes/13
 Accept: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 ### Update Showtime
-PATCH http://localhost:3000/api/showtimes/9
+PATCH http://localhost:3000/api/showtimes/12
 Content-Type: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 {
+  "showId": 16,
    "showTime": "coba"
 }
 
@@ -244,7 +245,7 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: c9c8870a-0906-4211-b0fb-bb090e11a937
+X-API-TOKEN: 18a14c66-38f5-41a5-bfac-1c94fb1debda
 
 {
   "seatNumber": "test",

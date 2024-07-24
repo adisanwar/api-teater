@@ -61,21 +61,25 @@ export class ShowtimeService {
         return showtime;
     }
 
-    static async update(request: UpdateShowtimeRequest): Promise<ShowtimeResponse> {
-        const updateRequest: any = Validation.validate(ShowtimeValidation.UPDATE, request);
-        await this.checkShowMustExists(updateRequest.showId);
-    
+    static async update(showId: number, request: UpdateShowtimeRequest): Promise<ShowtimeResponse> {
+        const updateRequest = Validation.validate(ShowtimeValidation.UPDATE, request);
+        const cekshow = await this.checkShowMustExists(updateRequest.showId);
+        
+        console.log(cekshow);
         const showtime = await prismaClient.showtime.update({
             where: {
                 id: updateRequest.id,
                 showId: updateRequest.showId
             },
-            data: updateRequest
+            data: {
+                showTime: updateRequest.showTime,
+                showDate: updateRequest.showDate
+            }
         });
     
         return toShowtimeResponse(showtime);
     }
-    
+   
 
     static async remove(showtimeId: number): Promise<ShowtimeResponse> {
         const showtime = await prismaClient.showtime.findUnique({
