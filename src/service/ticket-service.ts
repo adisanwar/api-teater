@@ -1,4 +1,4 @@
-import { Contact, Show, Ticket } from "@prisma/client";
+import { Contact, Show, Ticket, User } from "@prisma/client";
 import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";
@@ -7,21 +7,24 @@ import { ShowService } from "./show-service";
 import { TicketValidation } from "../validation/ticket-validation";
 import path from 'path';
 import fs from 'fs';
+import { logger } from "../application/logging";
 
 export class TicketService {
 
     static async create(request: CreateTicketRequest): Promise<TicketResponse> {
         const createRequest: any = Validation.validate(TicketValidation.CREATE, request);
-        // await ShowService.checkShowMustExists(request.showId);
+        await this.checkShowMustExists(createRequest.showId);
 
-        // const ticketData = {
-        //     ...createRequest,
-        //     contactId: contactId,
-        //     showId: request.showId
-        // };
+        const record = {
+            ...createRequest,
+            showId: createRequest.showId,
+            contactId: createRequest.contactId,
+        };
 
+        logger.debug("response : " + JSON.stringify(record));
+        console.log(record)
         const ticket : any = await prismaClient.ticket.create({
-            data: createRequest
+            data: record
         });
 
         return toTicketResponse(ticket);
@@ -29,7 +32,9 @@ export class TicketService {
 
     static async checkShowMustExists(showId: number): Promise<void> {
         const show = await prismaClient.show.findUnique({
-            where: { id: showId }
+            where: { 
+                id: showId 
+            }
         });
 
         if (!show) {
@@ -37,14 +42,24 @@ export class TicketService {
         }
     }
 
+
+//     HTTP/1.1 400 Bad Request
+// X-Powered-By: Express
+// Content-Type: application/json; charset=utf-8
+// Content-Length: 209
+// ETag: W/"d1-a3dP1y6deJnG53sVWEbmaI5GXMo"
+// Date: Thu, 25 Jul 2024 08:17:17 GMT
+// Connection: close
+
+// {
+//   "errors": "Validation Error : {\"issues\":[{\"code\":\"invalid_type\",\"expected\":\"number\",\"received\":\"nan\",\"path\":[\"showId\"],\"message\":\"Expected number, received nan\"}],\"name\":\"ZodError\"}"
+// }
     static async getById(request: GetTicketRequest): Promise<TicketResponse> {
         const getRequest = Validation.validate(TicketValidation.GET, request);
 
         const ticket = await prismaClient.ticket.findFirst({
             where: {
                 id: getRequest.id,
-                showId: getRequest.showId,
-                contactId: getRequest.contactId
             },
             include: {
                 contact: true,

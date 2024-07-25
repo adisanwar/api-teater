@@ -64,32 +64,29 @@ export class ShowtimeController{
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
             const showtimeId = Number(req.params.showtimeId);
-    
-            if (isNaN(showtimeId)) {
-                return res.status(400).json({ error: 'Invalid showtime ID' });
-            }
-    
-            const { showId } = req.body;
-    
-            if (typeof showId !== 'number') {
-                return res.status(400).json({ error: 'Invalid show ID' });
-            }
-    
+
+            // Log the parameters and request body for debugging
+            console.log("Request params:", req.params);
+            console.log("Request body:", req.body);
+            console.log("Parsed showtimeId:", showtimeId);
+
             const request: UpdateShowtimeRequest = {
                 id: showtimeId,
-                showId: showId,
+                ...req.body
             };
-    
-            console.log(request);
-            const response = await ShowtimeService.update(request.showId, request);
+
+            // Log the constructed request object
+            console.log("Constructed request object:", request);
+
+            const response = await ShowtimeService.update(request);
             res.status(200).json({
                 data: response
             });
-            logger.debug("response : " + JSON.stringify(response));
         } catch (e) {
             next(e);
         }
     }
+    
     
 
     static async remove(req: Request, res: Response, next: NextFunction) {

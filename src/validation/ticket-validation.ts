@@ -8,12 +8,11 @@ export class TicketValidation {
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),
         price: z.string().min(1).max(100).optional(),
-        country: z.string().min(1).max(100),
+        country: z.string().min(1).max(100).optional(),
         purchaseDate: z.date().optional(),
     })
 
     static readonly GET : ZodType = z.object({
-        showId: z.number().positive(),
         id: z.number().positive(),
     })
 
