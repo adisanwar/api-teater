@@ -16,7 +16,6 @@ export function getDestinationFolder(entityType: string): string {
   }
 }
 
-// Konfigurasi multer untuk penyimpanan file
 const storage = multer.diskStorage({
   destination: (
       req: Request,
@@ -35,7 +34,6 @@ const storage = multer.diskStorage({
   },
 });
 
-// Filter file untuk menerima hanya file gambar
 const fileFilter = (
     req: Request,
     file: Express.Multer.File,
@@ -48,7 +46,6 @@ const fileFilter = (
   }
 };
 
-// Buat instance multer dengan konfigurasi di atas
 const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
@@ -64,13 +61,10 @@ export function uploadMiddleware(
 ) {
   upload.single("photo")(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      // Kesalahan yang terjadi saat upload file oleh multer
       return res.status(400).json({ error: err.message });
     } else if (err) {
-      // Kesalahan lainnya
       return res.status(400).json({ error: err.message });
     }
-    // Jika tidak ada kesalahan, lanjutkan ke middleware berikutnya
     next();
   });
 }
@@ -82,16 +76,34 @@ export function handleFileUpload(req: Request, requestBody: any) {
         getDestinationFolder(entityType),
         req.file.filename
     );
-    requestBody.photo = path.normalize(imagePath); // Tambahkan path gambar ke request
+    requestBody.photo = path.normalize(imagePath);
   }
 }
 
 export function deleteOldFile(filePath: string) {
-  if (filePath && fs.existsSync(filePath)) {
+  console.log(`Attempting to delete file at path: ${filePath}`);
+
+  if (!filePath || !fs.existsSync(filePath)) {
+    console.warn(`File not found or cannot be accessed: ${filePath}`);
+    return;
+  }
+
+  try {
+    const stat = fs.lstatSync(filePath);
+
+    if (stat.isDirectory()) {
+      console.error(`Attempted to delete a directory instead of a file: ${filePath}`);
+      return;
+    }
+
     fs.unlink(filePath, (err) => {
       if (err) {
-        console.error("Error deleting old file: ", err);
+        console.error(`Error deleting file: ${filePath}`, err);
+      } else {
+        console.log(`Successfully deleted file: ${filePath}`);
       }
     });
+  } catch (err) {
+    console.error(`Error accessing file: ${filePath}`, err);
   }
 }

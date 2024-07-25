@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 5ad4ba37-f078-406a-aaa4-be0dec11d417
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
   "first_name" : "Budi Kurniawan",
@@ -76,9 +76,9 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 }
 
 ### Get Contact
-GET http://localhost:3000/api/contacts/1
+GET http://localhost:3000/api/contacts
 Accept: application/json
-X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 ### Remove Contact
 DELETE http://localhost:3000/api/contacts/128
@@ -170,7 +170,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 POST http://localhost:3000/api/shows/1
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
     "title": "test",
@@ -245,36 +245,38 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 278371ec-ef6d-4061-bd3e-7602c6361ec3
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
   "seatNumber": "test",
   "photo": "test",
   "price": "test",
-  "showId": 2,
-  "contactId": 1
+  "photo" : "test",
+  "showId": 21,
+  "contactId": 37
 }
 
 ### get Ticket
 GET http://localhost:3000/api/tickets/
 Accept: application/json
-X-API-TOKEN: 278371ec-ef6d-4061-bd3e-7602c6361ec3
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 ### get ticket by Id
-GET http://localhost:3000/api/tickets/1
+GET http://localhost:3000/api/tickets/2
 Accept: application/json
-X-API-TOKEN: 278371ec-ef6d-4061-bd3e-7602c6361ec3
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 ### Update Ticket
-PATCH http://localhost:3000/api/tickets/9
+PATCH http://localhost:3000/api/tickets/2
 Content-Type: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
-   "showTime": "coba"
+   "seatNumber": "ROW A2",
+   "showId" : 21
 }
 
 ### Remove Tickets
-DELETE http://localhost:3000/api/tickets/8
+DELETE http://localhost:3000/api/tickets/2
 Accept: application/json
-X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed

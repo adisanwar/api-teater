@@ -50,8 +50,8 @@ apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 apiRouter.post("/api/tickets/", TicketController.create);
 apiRouter.get("/api/tickets/:ticketId(\\d+)", TicketController.getById);
 apiRouter.get("/api/tickets/", TicketController.get);
-apiRouter.patch("/api/tickets/:ticketId(\\d+)/shows/:showId(\\d+)", ShowController.update);
-// apiRouter.delete("/api/tickets/:ticketId(\\d+)", TicketController.remove);
+apiRouter.patch("/api/tickets/:ticketId(\\d+)", TicketController.update);
+apiRouter.delete("/api/tickets/:ticketId(\\d+)", TicketController.remove);
 
 // Showtime Api
 apiRouter.post("/api/showtimes/:showId(\\d+)", ShowtimeController.create);
