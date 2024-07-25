@@ -262,21 +262,21 @@ Accept: application/json
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 ### get ticket by Id
-GET http://localhost:3000/api/tickets/2
+GET http://localhost:3000/api/tickets/3
 Accept: application/json
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 ### Update Ticket
-PATCH http://localhost:3000/api/tickets/2
+PATCH http://localhost:3000/api/tickets/3
 Content-Type: application/json
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
-   "seatNumber": "ROW A2",
+   "seatNumber": "ROW J",
    "showId" : 21
 }
 
 ### Remove Tickets
-DELETE http://localhost:3000/api/tickets/2
+DELETE http://localhost:3000/api/tickets/3
 Accept: application/json
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
