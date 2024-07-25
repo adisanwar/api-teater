@@ -76,9 +76,6 @@ await this.checkShowMustExists(updateRequest.showId);
         return toShowtimeResponse(showtime);
     }
 
-
-   
-
     static async remove(showtimeId: number): Promise<ShowtimeResponse> {
         const showtime = await prismaClient.showtime.findUnique({
             where: {
