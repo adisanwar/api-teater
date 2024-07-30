@@ -39,7 +39,7 @@ apiRouter.patch('/api/theaters/:theaterId(\\d+)',uploadMiddleware,  TheaterContr
 apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
 
 // Show Api
-apiRouter.post("/api/shows/:theaterId(\\d+)", ShowController.create);
+apiRouter.post("/api/shows/:theaterId(\\d+)",uploadMiddleware, ShowController.create);
 apiRouter.get("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.getById);
 apiRouter.get("/api/shows/current", ShowController.get);
 apiRouter.patch("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.update);

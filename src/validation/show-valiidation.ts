@@ -4,7 +4,7 @@ export class ShowValidation {
 
     static readonly CREATE : ZodType = z.object({
         theaterId: z.number().positive(),
-        title: z.string().min(1).max(255).optional(),
+        title: z.string().min(1).max(255),
         photo: z.string().min(1).max(255).optional(),
         description: z.string().min(1).max(100).optional(),
         duration: z.string().min(1).max(100).optional(),

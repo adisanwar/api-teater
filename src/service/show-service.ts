@@ -12,16 +12,17 @@ import path from "path";
 
 export class ShowService {
 
-   static async create(request: CreateShowRequest): Promise<ShowResponse> {
+    static async create(request: CreateShowRequest): Promise<ShowResponse> {
         const createRequest = Validation.validate(ShowValidation.CREATE, request);
         await this.checkTheaterMustExists(createRequest.theaterId);
-
-        const show :any = await prismaClient.show.create({
-            data: createRequest
+    
+        const show : any = await prismaClient.show.create({
+          data: createRequest,
         });
-        logger.debug("record : " + JSON.stringify(show));
+    
+        logger.debug('record : ' + JSON.stringify(show));
         return toShowResponse(show);
-    }
+      }
 
     static async checkTheaterMustExists(theaterId: number): Promise<Theater> {
         const theater = await prismaClient.theater.findFirst({
