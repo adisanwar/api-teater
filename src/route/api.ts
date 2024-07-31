@@ -47,10 +47,10 @@ apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 // apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);
 
 // // ticket Api
-apiRouter.post("/api/tickets/", TicketController.create);
+apiRouter.post("/api/tickets/",uploadMiddleware, TicketController.create);
 apiRouter.get("/api/tickets/:ticketId(\\d+)", TicketController.getById);
 apiRouter.get("/api/tickets/", TicketController.get);
-apiRouter.patch("/api/tickets/:ticketId(\\d+)", TicketController.update);
+apiRouter.patch("/api/tickets/:ticketId(\\d+)",uploadMiddleware, TicketController.update);
 apiRouter.delete("/api/tickets/:ticketId(\\d+)", TicketController.remove);
 
 // Showtime Api

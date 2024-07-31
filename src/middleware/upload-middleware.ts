@@ -4,16 +4,33 @@ import fs from "fs";
 import { Request, Response, NextFunction } from "express";
 
 export function getDestinationFolder(entityType: string): string {
+  const baseDir = path.join(__dirname, '..', 'img');
+  let folder = '';
+
   switch (entityType) {
-    case "contact":
-      return "img/contact/";
-    case "theater":
-      return "img/theater/";
-    case "ticket":
-      return "img/ticket/";
+    case 'contact':
+      folder = 'contact';
+      break;
+    case 'theater':
+      folder = 'theater';
+      break;
+    case 'ticket':
+      folder = 'ticket';
+      break;
     default:
-      return "img/";
+      folder = 'default';
+      break;
   }
+
+  const destination = path.join(baseDir, folder);
+
+  // Ensure the directory exists
+  if (!fs.existsSync(destination)) {
+    fs.mkdirSync(destination, { recursive: true });
+  }
+
+  return destination;
+
 }
 
 const storage = multer.diskStorage({

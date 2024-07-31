@@ -4,9 +4,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "eko",
-  "password" : "eko123",
-  "name" : "Eko"
+  "username": "adi",
+  "password" : "adi123",
+  "name" : "adi"
 }
 
 ### Login User
@@ -15,14 +15,14 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "username": "eko",
-  "password" : "eko123"
+  "username": "adi",
+  "password" : "adi123"
 }
 
 ### Get User
 GET http://localhost:3000/api/users/current
 Accept: application/json
-X-API-TOKEN: 7974eb4f-615d-4f26-a8eb-a82f1440fbf0
+X-API-TOKEN: 5ad4ba37-f078-406a-aaa4-be0dec11d417
 
 ### Logout User
 DELETE http://localhost:3000/api/users/current
@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
+X-API-TOKEN: 62189aa1-72fb-4088-9188-91885a7ec566
 
 {
   "first_name" : "Budi Kurniawan",
@@ -66,7 +66,7 @@ X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 PUT http://localhost:3000/api/contacts/48
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 8809de3e-7912-470e-af4c-ba4588e563d6
+X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 
 {
   "first_name" : "Eko",
@@ -78,7 +78,7 @@ X-API-TOKEN: 8809de3e-7912-470e-af4c-ba4588e563d6
 ### Get Contact
 GET http://localhost:3000/api/contacts
 Accept: application/json
-X-API-TOKEN: 998b74bf-fc34-495d-b31c-fbddf3505df0
+X-API-TOKEN: 62189aa1-72fb-4088-9188-91885a7ec566
 
 ### Remove Contact
 DELETE http://localhost:3000/api/contacts/128
@@ -148,7 +148,7 @@ X-API-TOKEN: 0d3d00ce-3185-47db-8626-6f6fad0a715f
 ### get theater
 GET http://localhost:3000/api/theaters/current
 Accept: application/json
-X-API-TOKEN: 3dbe8211-3ee6-411b-9b5d-7e781a0b5cdf
+X-API-TOKEN: 4e605860-fc81-4c63-94bb-7503af8dc594
 
 ###
 PATCH http://localhost:3000/api/theaters/305
@@ -167,23 +167,24 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
 ### Create Shows
-POST http://localhost:3000/api/shows/1
+POST http://localhost:3000/api/shows/2
 Accept: application/json
-Content-Type: application/json
-X-API-TOKEN: 3dbe8211-3ee6-411b-9b5d-7e781a0b5cdf
+Content-Type: multipart/form-data
+X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
     "title": "test",
     "description": "test",
     "duration": "25 test",
+    "photo": "E:\\Project\\api-teater\\src\\img\\default\\1722416387341-wp2168910.jpg",
     "rating":"test",
-    "theaterId" : 1         
+    "theaterId" : 2        
 }
 
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 3dbe8211-3ee6-411b-9b5d-7e781a0b5cdf
+X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 ### get by Id
 GET http://localhost:3000/api/shows/2/theaters/1
@@ -200,9 +201,9 @@ X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 }
 
 ### Remove shows
-DELETE http://localhost:3000/api/shows/24
+DELETE http://localhost:3000/api/shows/1
 Accept: application/json
-X-API-TOKEN: 3dbe8211-3ee6-411b-9b5d-7e781a0b5cdf
+X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 
 
 ### Create Showtime

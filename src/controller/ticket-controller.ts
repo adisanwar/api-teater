@@ -17,12 +17,22 @@ import { TicketService } from "../service/ticket-service";
 export class TicketController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const request: CreateTicketRequest = req.body as CreateTicketRequest;
+      const request: CreateTicketRequest = {
+        ...req.body,
+        contactId: Number(req.body.contactId),
+        showId: Number(req.body.showId),
+      };
 
-      getDestinationFolder("ticket");
+      // Ensure required fields are present
+      if (!request.contactId || !request.showId) {
+        return res.status(400).json({ error: "contactId and showId are required" });
+      }
+      
+      getDestinationFolder('ticket');
       handleFileUpload(req, request);
 
       logger.debug("request : " + JSON.stringify(request));
+
       const response = await TicketService.create(request);
       logger.debug("response : " + JSON.stringify(response));
       console.log(response);

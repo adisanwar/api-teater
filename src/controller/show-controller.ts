@@ -12,28 +12,28 @@ export class ShowController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-          const theaterId = Number(req.params.theaterId);
-          const showId = Number(req.body.theaterId);
-            getDestinationFolder('show');
-            handleFileUpload(req, showId);
-          const request: CreateShowRequest = {
-            ...req.body,
-            theaterId: theaterId,
-          };
-            
-          console.log(request);
+            const theaterId = Number(req.params.theaterId);
     
-          const response = await ShowService.create(request);
-          res.status(200).json({
-            data: response,
-          });
-
-          console.log(response);
-          logger.debug('response : ' + JSON.stringify(response));
-        } catch (e) {
-          next(e);
+            const request: CreateShowRequest = {
+              ...req.body,
+              theaterId: theaterId,
+            };
+    
+            handleFileUpload(req, request);
+    
+            console.log(request);
+    
+            const response = await ShowService.create(request);
+            res.status(200).json({
+              data: response,
+            });
+    
+            console.log(response);
+            logger.debug('response : ' + JSON.stringify(response));
+          } catch (e) {
+            next(e);
+          }
         }
-      }
     
     static async get(req: Request, res: Response, next: NextFunction) {
         try {
