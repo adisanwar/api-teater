@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 62189aa1-72fb-4088-9188-91885a7ec566
+X-API-TOKEN: 931a9050-ece8-4a06-9f8c-d1be3d10636c
 
 {
   "first_name" : "Budi Kurniawan",
@@ -81,9 +81,9 @@ Accept: application/json
 X-API-TOKEN: 62189aa1-72fb-4088-9188-91885a7ec566
 
 ### Remove Contact
-DELETE http://localhost:3000/api/contacts/128
+DELETE http://localhost:3000/api/contacts/67
 Accept: application/json
-X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
+X-API-TOKEN: 931a9050-ece8-4a06-9f8c-d1be3d10636c
 
 ### Search Contact
 GET http://localhost:3000/api/contacts

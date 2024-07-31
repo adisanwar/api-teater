@@ -3,8 +3,10 @@ import path from "path";
 import fs from "fs";
 import { Request, Response, NextFunction } from "express";
 
+const projectRoot = path.join(__dirname, '..', '..'); // Adjust to your project structure
+
 export function getDestinationFolder(entityType: string): string {
-  const baseDir = path.join(__dirname, '..', 'img');
+  const baseDir = path.join(projectRoot, 'src', 'img');
   let folder = '';
 
   switch (entityType) {
@@ -30,97 +32,70 @@ export function getDestinationFolder(entityType: string): string {
   }
 
   return destination;
-
 }
 
+
 const storage = multer.diskStorage({
-  destination: (
-      req: Request,
-      file: Express.Multer.File,
-      cb: (error: Error | null, destination: string) => void
-  ) => {
-    const entityType = req.body.entityType || "default";
+  destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
+    const entityType = req.body.entityType || 'default';
     cb(null, getDestinationFolder(entityType));
   },
-  filename: (
-      req: Request,
-      file: Express.Multer.File,
-      cb: (error: Error | null, filename: string) => void
-  ) => {
+  filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
     cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
-const fileFilter = (
-    req: Request,
-    file: Express.Multer.File,
-    cb: FileFilterCallback
-) => {
-  if (file.mimetype.startsWith("image/")) {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  if (file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
     cb(null, false);
   }
 };
 
-const upload = multer({
+export const uploadMiddleware = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
-    fileSize: 1024 * 1024 * 5, // Maksimal 5MB
+    fileSize: 1024 * 1024 * 5, // Maximum 5MB
   },
-});
+}).single('photo');
 
-export function uploadMiddleware(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
-  upload.single("photo")(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: err.message });
-    } else if (err) {
-      return res.status(400).json({ error: err.message });
-    }
-    next();
-  });
-}
-
-export function handleFileUpload(req: Request, requestBody: any) {
-  if (req.file) {
-    const entityType = req.body.entityType || "default";
-    const imagePath = path.join(
-        getDestinationFolder(entityType),
-        req.file.filename
-    );
-    requestBody.photo = path.normalize(imagePath);
-  }
-}
 
 export function deleteOldFile(filePath: string) {
-  console.log(`Attempting to delete file at path: ${filePath}`);
+  const absolutePath = path.join(projectRoot, filePath);
+  console.log(`Attempting to delete file at path: ${absolutePath}`);
 
-  if (!filePath || !fs.existsSync(filePath)) {
-    console.warn(`File not found or cannot be accessed: ${filePath}`);
+  if (!fs.existsSync(absolutePath)) {
+    console.warn(`File not found or cannot be accessed: ${absolutePath}`);
     return;
   }
 
   try {
-    const stat = fs.lstatSync(filePath);
+    const stat = fs.lstatSync(absolutePath);
 
     if (stat.isDirectory()) {
-      console.error(`Attempted to delete a directory instead of a file: ${filePath}`);
+      console.error(`Attempted to delete a directory instead of a file: ${absolutePath}`);
       return;
     }
 
-    fs.unlink(filePath, (err) => {
+    fs.unlink(absolutePath, (err) => {
       if (err) {
-        console.error(`Error deleting file: ${filePath}`, err);
+        console.error(`Error deleting file: ${absolutePath}`, err);
       } else {
-        console.log(`Successfully deleted file: ${filePath}`);
+        console.log(`Successfully deleted file: ${absolutePath}`);
       }
     });
   } catch (err) {
-    console.error(`Error accessing file: ${filePath}`, err);
+    console.error(`Error accessing file: ${absolutePath}`, err);
+  }
+}
+
+export function handleFileUpload(req: Request, requestBody: any) {
+  if (req.file) {
+    const entityType = req.body.entityType || 'default';
+    const imagePath = path.join(getDestinationFolder(entityType), req.file.filename);
+    const relativePath = path.relative(projectRoot, imagePath);
+    requestBody.photo = path.normalize(relativePath).replace(/\\/g, '/'); // Replace backslashes with forward slashes for consistency
   }
 }

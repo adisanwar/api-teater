@@ -78,7 +78,7 @@ export class ShowController {
             };
 
             if (show.photo) {
-                deleteOldFile(path.join(__dirname, '..', '..', show.photo));
+                deleteOldFile(show.photo);
             }
             
             handleFileUpload(req, request);
