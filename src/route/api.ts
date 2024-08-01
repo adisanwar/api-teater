@@ -8,6 +8,7 @@ import { ShowController } from "../controller/show-controller";
 import { uploadMiddleware } from "../middleware/upload-middleware";
 import {ShowtimeController} from "../controller/showtime-controller";
 import { TicketController } from "../controller/ticket-controller";
+import  path from "path";
 
 export const apiRouter = express.Router();
 apiRouter.use(authMiddleware);
@@ -59,3 +60,5 @@ apiRouter.get("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.getById);
 apiRouter.get("/api/showtimes/current", ShowtimeController.get);
 apiRouter.patch("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.update);
 apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);
+
+apiRouter.get('/img', express.static(path.join(__dirname, 'src', 'img')));

@@ -41,10 +41,12 @@ export class ContactController {
             const contact = await ContactService.get(req.user!, Number(req.params.contactId));
             const request: UpdateContactRequest = req.body as UpdateContactRequest;
             request.id = Number(req.params.contactId);
+            getDestinationFolder('contact');
             if (contact.photo) {
-                deleteOldFile(path.join(__dirname, '..', '..', contact.photo));
+                deleteOldFile(contact.photo);
               }
             handleFileUpload(req, request);
+
             const response = await ContactService.update(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json({

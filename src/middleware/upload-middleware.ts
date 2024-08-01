@@ -34,7 +34,6 @@ export function getDestinationFolder(entityType: string): string {
   return destination;
 }
 
-
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
     const entityType = req.body.entityType || 'default';
@@ -60,7 +59,6 @@ export const uploadMiddleware = multer({
     fileSize: 1024 * 1024 * 5, // Maximum 5MB
   },
 }).single('photo');
-
 
 export function deleteOldFile(filePath: string) {
   const absolutePath = path.join(projectRoot, filePath);
