@@ -56,12 +56,11 @@ export class ShowService {
 
     static async getById(request: GetShowRequest): Promise<ShowResponse> {
         const getRequest = Validation.validate(ShowValidation.GET, request);
-        await this.checkTheaterMustExists(getRequest.theaterId);
+        // await this.checkTheaterMustExists(getRequest.theaterId);
 
         const show = await prismaClient.show.findFirst({
             where: {
                 id: getRequest.id,
-                theaterId: getRequest.theaterId,
             },
             include : {
                 theater: true,

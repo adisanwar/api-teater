@@ -167,7 +167,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
 ### Create Shows
-POST http://localhost:3000/api/shows/2
+POST http://localhost:3000/api/shows
 Accept: application/json
 Content-Type: multipart/form-data
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
@@ -176,9 +176,8 @@ X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
     "title": "test",
     "description": "test",
     "duration": "25 test",
-    "photo": "E:\\Project\\api-teater\\src\\img\\default\\1722416387341-wp2168910.jpg",
     "rating":"test",
-    "theaterId" : 2        
+    "theaterId" : 1        
 }
 
 ### get shows

@@ -11,8 +11,8 @@ export class ContactController {
     static async create(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const request: CreateContactRequest = req.body as CreateContactRequest;
-            getDestinationFolder('contact');
-            handleFileUpload(req, request);
+            // getDestinationFolder('contact');
+            handleFileUpload(req, request, 'contact');
             const response = await ContactService.create(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));
             res.status(200).json({
@@ -45,7 +45,7 @@ export class ContactController {
             if (contact.photo) {
                 deleteOldFile(contact.photo);
               }
-            handleFileUpload(req, request);
+            handleFileUpload(req, request, 'contact');
 
             const response = await ContactService.update(req.user!, request);
             logger.debug("response : " + JSON.stringify(response));

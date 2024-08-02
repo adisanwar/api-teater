@@ -1,7 +1,7 @@
-import multer, { FileFilterCallback } from "multer";
-import path from "path";
-import fs from "fs";
-import { Request, Response, NextFunction } from "express";
+import { Request } from 'express';
+import path from 'path';
+import multer from 'multer';
+import fs from 'fs';
 
 const projectRoot = path.join(__dirname, '..', '..'); // Adjust to your project structure
 
@@ -9,7 +9,12 @@ export function getDestinationFolder(entityType: string): string {
   const baseDir = path.join(projectRoot, 'src', 'img');
   let folder = '';
 
+  console.log('get destination 2' + entityType);
+
   switch (entityType) {
+    case 'show':
+      folder = 'show';
+      break;
     case 'contact':
       folder = 'contact';
       break;
@@ -36,15 +41,17 @@ export function getDestinationFolder(entityType: string): string {
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) => {
-    const entityType = req.body.entityType || 'default';
+    const entityType = req.body.entityType;
     cb(null, getDestinationFolder(entityType));
   },
   filename: (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    // Replace spaces in the filename with %20 for URL encoding
+    const encodedFilename = `${Date.now()}-${file.originalname}`;
+    cb(null, encodedFilename);
   },
 });
 
-const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
   } else {
@@ -61,7 +68,7 @@ export const uploadMiddleware = multer({
 }).single('photo');
 
 export function deleteOldFile(filePath: string) {
-  const absolutePath = path.join(projectRoot, filePath);
+  const absolutePath = path.resolve(projectRoot, filePath);
   console.log(`Attempting to delete file at path: ${absolutePath}`);
 
   if (!fs.existsSync(absolutePath)) {
@@ -77,21 +84,15 @@ export function deleteOldFile(filePath: string) {
       return;
     }
 
-    fs.unlink(absolutePath, (err) => {
-      if (err) {
-        console.error(`Error deleting file: ${absolutePath}`, err);
-      } else {
-        console.log(`Successfully deleted file: ${absolutePath}`);
-      }
-    });
+    fs.unlinkSync(absolutePath);
+    console.log(`Successfully deleted file: ${absolutePath}`);
   } catch (err) {
     console.error(`Error accessing file: ${absolutePath}`, err);
   }
 }
 
-export function handleFileUpload(req: Request, requestBody: any) {
+export function handleFileUpload(req: Request, requestBody: any, entityType: string) {
   if (req.file) {
-    const entityType = req.body.entityType || 'default';
     const imagePath = path.join(getDestinationFolder(entityType), req.file.filename);
     const relativePath = path.relative(projectRoot, imagePath);
     requestBody.photo = path.normalize(relativePath).replace(/\\/g, '/'); // Replace backslashes with forward slashes for consistency

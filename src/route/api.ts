@@ -11,7 +11,7 @@ import { TicketController } from "../controller/ticket-controller";
 import  path from "path";
 
 export const apiRouter = express.Router();
-apiRouter.use(authMiddleware);
+// apiRouter.use(authMiddleware, uploadMiddleware);
 
 // User APi
 apiRouter.get("/api/users/current", UserController.get);
@@ -40,10 +40,10 @@ apiRouter.patch('/api/theaters/:theaterId(\\d+)',uploadMiddleware,  TheaterContr
 apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
 
 // Show Api
-apiRouter.post("/api/shows/:theaterId(\\d+)",uploadMiddleware, ShowController.create);
-apiRouter.get("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.getById);
+apiRouter.post("/api/shows/",uploadMiddleware, ShowController.create);
+apiRouter.get("/api/shows/:showId(\\d+)", ShowController.getById);
 apiRouter.get("/api/shows/current", ShowController.get);
-apiRouter.patch("/api/shows/:showId(\\d+)/theaters/:theaterId(\\d+)", ShowController.update);
+apiRouter.patch("/api/shows/:showId(\\d+)", ShowController.update);
 apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 // apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);
 

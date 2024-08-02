@@ -12,14 +12,16 @@ export class ShowController {
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const theaterId = Number(req.params.theaterId);
-    
+            const theaterId = Number(req.body.theaterId);
+      if (isNaN(theaterId)) {
+        throw new Error('Invalid theaterId');
+      }
             const request: CreateShowRequest = {
               ...req.body,
-              theaterId: theaterId,
+              theaterId: req.body.theaterId
             };
     
-            handleFileUpload(req, request);
+            handleFileUpload(req, request, 'show');
     
             console.log(request);
     
@@ -67,21 +69,22 @@ export class ShowController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            const theaterId = Number(req.params.theaterId);
-            const showId = Number(req.params.showId);
-            const show = await ShowService.getById({ theaterId, id: showId });
+            const showId : any= Number(req.params.showId);
+            const show = await ShowService.getById(showId);
             
             const request: UpdateShowRequest = {
                 id: showId,
-                theaterId: theaterId,
                 ...req.body
             };
-
+            
+            
             if (show.photo) {
                 deleteOldFile(show.photo);
+                
             }
+            console.log(show.photo);
+            handleFileUpload(req, request , 'show');
             
-            handleFileUpload(req, request);
             const response = await ShowService.update(request);
             res.status(200).json({
                 data: response
