@@ -91,8 +91,9 @@ export function deleteOldFile(filePath: string) {
   }
 }
 
-export function handleFileUpload(req: Request, requestBody: any, entityType: string) {
+export function handleFileUpload(req: Request, requestBody: any) {
   if (req.file) {
+    const entityType = req.body.entityType;
     const imagePath = path.join(getDestinationFolder(entityType), req.file.filename);
     const relativePath = path.relative(projectRoot, imagePath);
     requestBody.photo = path.normalize(relativePath).replace(/\\/g, '/'); // Replace backslashes with forward slashes for consistency

@@ -43,7 +43,7 @@ apiRouter.delete('/api/theaters/:theaterId(\\d+)', TheaterController.remove);
 apiRouter.post("/api/shows/",uploadMiddleware, ShowController.create);
 apiRouter.get("/api/shows/:showId(\\d+)", ShowController.getById);
 apiRouter.get("/api/shows/current", ShowController.get);
-apiRouter.patch("/api/shows/:showId(\\d+)", ShowController.update);
+apiRouter.patch("/api/shows/:showId(\\d+)",uploadMiddleware, ShowController.update);
 apiRouter.delete("/api/shows/:showId(\\d+)", ShowController.remove);
 // apiRouter.get("/api/shows/:theaterId(\\d+)/shows", ShowController.list);
 
@@ -60,5 +60,3 @@ apiRouter.get("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.getById);
 apiRouter.get("/api/showtimes/current", ShowtimeController.get);
 apiRouter.patch("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.update);
 apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);
-
-apiRouter.get('/img', express.static(path.join(__dirname, 'src', 'img')));

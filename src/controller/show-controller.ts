@@ -18,10 +18,10 @@ export class ShowController {
       }
             const request: CreateShowRequest = {
               ...req.body,
-              theaterId: req.body.theaterId
+              theaterId: theaterId
             };
     
-            handleFileUpload(req, request, 'show');
+            handleFileUpload(req, request);
     
             console.log(request);
     
@@ -83,7 +83,7 @@ export class ShowController {
                 
             }
             console.log(show.photo);
-            handleFileUpload(req, request , 'show');
+            handleFileUpload(req, request);
             
             const response = await ShowService.update(request);
             res.status(200).json({

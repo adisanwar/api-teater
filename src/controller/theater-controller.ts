@@ -12,7 +12,7 @@ export class TheaterController {
         try {
             const request: CreateTheaterRequest = req.body as CreateTheaterRequest;
             getDestinationFolder('theater');
-            handleFileUpload(req, request, 'theater');
+            handleFileUpload(req, request);
             const response = await TheaterService.create(request);
             res.status(200).json({
                 data: response
@@ -66,7 +66,7 @@ export class TheaterController {
             if (theater.photo) {
                 deleteOldFile(path.join(__dirname, '..', '..', theater.photo));
               }
-            handleFileUpload(req, request, 'theater');
+            handleFileUpload(req, request);
             const response = await TheaterService.update(request);
             res.status(200).json({
                 data: response

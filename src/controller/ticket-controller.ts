@@ -29,7 +29,7 @@ export class TicketController {
       }
       
       getDestinationFolder('ticket');
-      handleFileUpload(req, request, 'ticket');
+      handleFileUpload(req, request);
 
       logger.debug("request : " + JSON.stringify(request));
 
@@ -91,7 +91,7 @@ export class TicketController {
         );
       }
 
-      handleFileUpload(req, request, 'ticket');
+      handleFileUpload(req, request);
       const response = await TicketService.update(request);
       res.status(200).json({
         data: response,
