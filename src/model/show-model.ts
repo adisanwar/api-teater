@@ -21,7 +21,6 @@ export type CreateShowRequest = {
 }
 
 export type GetShowRequest = {
-    theaterId: number;
     id: number;
 }
 
@@ -31,7 +30,6 @@ export type RemoveShowRequest ={
 
 export type UpdateShowRequest = {
     id: number;
-    theaterId: number;
     title: string;
     photo?: string;
     description?: string;

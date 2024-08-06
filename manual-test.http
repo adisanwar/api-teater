@@ -169,7 +169,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 ### Create Shows
 POST http://localhost:3000/api/shows
 Accept: application/json
-Content-Type: multipart/form-data
+Content-Type: application/json
 X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
 
 {
@@ -177,7 +177,7 @@ X-API-TOKEN: 66aaac37-b1d5-426d-bdad-73e5e1eb88ed
     "description": "test",
     "duration": "25 test",
     "rating":"test",
-    "theaterId" : 1        
+    "theaterId" : 16       
 }
 
 ### get shows
@@ -186,12 +186,12 @@ Accept: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 ### get by Id
-GET http://localhost:3000/api/shows/2/theaters/1
+GET http://localhost:3000/api/shows/40
 Accept: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 ###
-PATCH http://localhost:3000/api/shows/1/theaters/1
+PATCH http://localhost:3000/api/shows/40
 Content-Type: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
@@ -200,7 +200,7 @@ X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 }
 
 ### Remove shows
-DELETE http://localhost:3000/api/shows/1
+DELETE http://localhost:3000/api/shows/39
 Accept: application/json
 X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 

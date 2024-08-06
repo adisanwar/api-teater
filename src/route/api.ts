@@ -11,7 +11,7 @@ import { TicketController } from "../controller/ticket-controller";
 import  path from "path";
 
 export const apiRouter = express.Router();
-// apiRouter.use(authMiddleware, uploadMiddleware);
+// apiRouter.use(authMiddleware);
 
 // User APi
 apiRouter.get("/api/users/current", UserController.get);

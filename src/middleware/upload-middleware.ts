@@ -9,7 +9,7 @@ export function getDestinationFolder(entityType: string): string {
   const baseDir = path.join(projectRoot, 'src', 'img');
   let folder = '';
 
-  console.log('get destination 2' + entityType);
+  // console.log('get destination 2' + entityType);
 
   switch (entityType) {
     case 'show':

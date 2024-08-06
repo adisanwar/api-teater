@@ -50,12 +50,10 @@ export class ShowController {
 
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
-            const theaterId = Number(req.params.theaterId);
             const showId = Number(req.params.showId);
 
             const request: GetShowRequest = {
                 id: showId,
-                theaterId: theaterId,
             };
 
             const response = await ShowService.getById(request);
@@ -69,30 +67,42 @@ export class ShowController {
 
     static async update(req: Request, res: Response, next: NextFunction) {
         try {
-            const showId : any= Number(req.params.showId);
-            const show = await ShowService.getById(showId);
-            
-            const request: UpdateShowRequest = {
-                id: showId,
-                ...req.body
-            };
-            
-            
-            if (show.photo) {
-                deleteOldFile(show.photo);
-                
-            }
-            console.log(show.photo);
-            handleFileUpload(req, request);
-            
-            const response = await ShowService.update(request);
-            res.status(200).json({
-                data: response
-            });
+          console.log(req.body, req.params);
+          const showId : any= parseInt(req.params.showId, 10);
+    
+          if (isNaN(showId)) {
+            throw new Error('Invalid showId');
+          }
+    
+          const show = await ShowService.getById(showId);
+    
+          const request: UpdateShowRequest = {
+            id: showId,
+            title: req.body.title,
+            photo: req.body.photo,
+            description: req.body.description,
+            duration: req.body.duration,
+            rating: req.body.rating
+          };
+    
+          if (show.photo) {
+            deleteOldFile(show.photo);
+          }
+    
+          handleFileUpload(req, request);
+    
+          console.log(request);
+    
+          const response = await ShowService.update(request);
+          res.status(200).json({
+            data: response
+          });
+    
+          console.log(response);
         } catch (e) {
-            next(e);
+          next(e);
         }
-    }
+      }
     
 
     static async remove(req: Request, res: Response, next: NextFunction) {

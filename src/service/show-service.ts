@@ -15,6 +15,8 @@ export class ShowService {
     static async create(request: CreateShowRequest): Promise<ShowResponse> {
         const createRequest = Validation.validate(ShowValidation.CREATE, request);
         await this.checkTheaterMustExists(createRequest.theaterId);
+
+        console.log(createRequest);
     
         const show : any = await prismaClient.show.create({
           data: createRequest,
@@ -55,8 +57,7 @@ export class ShowService {
 
 
     static async getById(request: GetShowRequest): Promise<ShowResponse> {
-        const getRequest = Validation.validate(ShowValidation.GET, request);
-        // await this.checkTheaterMustExists(getRequest.theaterId);
+        const getRequest : any = Validation.validate(ShowValidation.GET, request);
 
         const show = await prismaClient.show.findFirst({
             where: {
@@ -87,12 +88,11 @@ export class ShowService {
 
     static async update(request: UpdateShowRequest): Promise<ShowResponse> {
         const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
-        await this.checkTheaterMustExists(updateRequest.theaterId);
+        // await this.checkTheaterMustExists(updateRequest.theaterId);
 
         const show : any= await prismaClient.show.update({
             where: {
                 id: updateRequest.id,
-                theaterId: updateRequest.theaterId
             },
             data: updateRequest
         });
