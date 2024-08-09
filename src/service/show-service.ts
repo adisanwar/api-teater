@@ -87,18 +87,57 @@ export class ShowService {
     }
 
     static async update(request: UpdateShowRequest): Promise<ShowResponse> {
-        const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
-        // await this.checkTheaterMustExists(updateRequest.theaterId);
-
-        const show : any= await prismaClient.show.update({
-            where: {
-                id: updateRequest.id,
-            },
-            data: updateRequest
-        });
-
-        return toShowResponse(show);
+        try {
+            // Validate the incoming request object against the schema
+            const updateRequest = Validation.validate(ShowValidation.UPDATE, request);
+    
+            // Ensure the show exists before attempting to update it
+            const existingShow = await prismaClient.show.findUnique({
+                where: {
+                    id: updateRequest.id,
+                },
+            });
+    
+            if (!existingShow) {
+                throw new ResponseError(404, `Show with ID ${updateRequest.id} not found.`);
+            }
+    
+            // Proceed with updating the record in the database
+            const updatedShow : any= await prismaClient.show.update({
+                where: {
+                    id: updateRequest.id,
+                },
+                data: updateRequest
+            });
+    
+            // Convert the updated show entity to the response format
+            return toShowResponse(updatedShow);
+        } catch (error) {
+            console.error('Validation or Update Error:', error);
+            throw error; // Re-throw the error to be handled by the controller
+        }
     }
+    
+
+    // static async update(request: UpdateShowRequest): Promise<ShowResponse> {
+    //     try {
+    //         // Validate the entire request object, not just individual fields
+    //         const updateRequest = Validation.validate(ShowValidation.UPDATE.parse, request);
+    
+    //         // Proceed with updating the record
+    //         const show : any = await prismaClient.show.update({
+    //             where: {
+    //                 id: updateRequest.id,
+    //             },
+    //             data: updateRequest
+    //         });
+    
+    //         return toShowResponse(show);
+    //     } catch (error) {
+    //         console.error('Validation Error in Update:', error);
+    //         throw error;
+    //     }
+    // }
 
     static async remove(showId: RemoveShowRequest): Promise<ShowResponse> {
         const show: any = await prismaClient.show.findUnique({

@@ -186,17 +186,21 @@ Accept: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 ### get by Id
-GET http://localhost:3000/api/shows/40
+GET http://localhost:3000/api/shows/2
 Accept: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 ###
-PATCH http://localhost:3000/api/shows/40
+PATCH http://localhost:3000/api/shows/2
 Content-Type: application/json
 X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
 
 {
-   "title": "coba"
+   "title": "coba",
+   "description": "test",
+  "duration": "test",
+  "rating": "test"
+
 }
 
 ### Remove shows
