@@ -53,8 +53,7 @@ export class ContactTest {
     static async create() {
         await prismaClient.contact.create({
             data: {
-                first_name: "test",
-                last_name: "test",
+                fullname: "test",
                 email: "test@example.com",
                 phone: "08999999",
                 username: "test"

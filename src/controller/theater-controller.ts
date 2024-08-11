@@ -66,6 +66,7 @@ export class TheaterController {
             if (theater.photo) {
                 deleteOldFile(path.join(__dirname, '..', '..', theater.photo));
               }
+              
             handleFileUpload(req, request);
             const response = await TheaterService.update(request);
             res.status(200).json({

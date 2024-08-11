@@ -27,11 +27,11 @@ model User {
 
 model Contact {
   id          Int     @id @default(autoincrement())
-  first_name  String  @db.VarChar(100)
-  last_name   String? @db.VarChar(100)
+  fullname    String  @db.VarChar(100)
   photo       String? @db.VarChar(100)
   email       String? @db.VarChar(100)
   phone       String? @db.VarChar(20)
+  amount      Int?
   dateofbirth DateTime?
   ofcNo       String?  @db.VarChar(20)
   nationalId  BigInt?   @db.BigInt
@@ -63,7 +63,7 @@ model Show {
   id          Int     @id @default(autoincrement())
   title       String  @db.VarChar(255)
   photo       String? @db.VarChar(100)
-  description String? @db.VarChar(255)
+  description String? @db.VarChar(2000)
   duration    String? @db.VarChar(50)
   rating      String? @db.VarChar(20)
   theaterId   Int     // Foreign key ke Theater
@@ -90,8 +90,8 @@ model Showtime {
 
 model Theater {
   id          Int     @id @default(autoincrement())
-  name       String  @db.VarChar(255)
-  photo        String? @db.VarChar(100)
+  name        String  @db.VarChar(255)
+  photo       String? @db.VarChar(100)
   location    String? @db.VarChar(255)
   capacity    String? @db.VarChar(50)
 
@@ -103,7 +103,7 @@ model Theater {
 model Ticket {
   id           Int     @id @default(autoincrement())
   seatNumber   String  @db.VarChar(255)
-  price        String? @db.VarChar(255)
+  price        Int
   photo        String? @db.VarChar(100)
   purchaseDate DateTime?
   showId       Int
@@ -112,21 +112,20 @@ model Ticket {
   show Show @relation(fields: [showId], references: [id])
   contact Contact @relation(fields: [contactId], references: [id])
 
-  payment Payment[]   
+  order Order[]   
 
   @@map("tickets")
 }
 
-model Payment {
+model Order {
   id            Int     @id @default(autoincrement())
-  amount        String  @db.VarChar(255)
-  photo         String? @db.VarChar(100)
-  paymentDate   DateTime?
-  metodePayment String? @db.VarChar(50)
-  status        String? @db.VarChar(50)
+  orderId       String   @unique
+  amount        Int
+  status        String  @db.VarChar(255)
+  paymentUrl    String? @db.VarChar(255)
   ticketId      Int    
 
   ticket Ticket @relation(fields: [ticketId], references: [id])
 
-  @@map("payments")
+  @@map("orders")
 }

@@ -2,6 +2,7 @@
   "include": ["src/**/*", "tests/**/*"],
   // "exclude": ["tests/**/*"],
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./src/application"],
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */

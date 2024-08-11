@@ -7,7 +7,7 @@ export class TicketValidation {
         showId: z.number().positive(),
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),
-        price: z.string().min(1).max(100).optional(),
+        price: z.number().positive().optional(),
         country: z.string().min(1).max(100).optional(),
         purchaseDate: z.date().optional(),
     })
@@ -22,10 +22,11 @@ export class TicketValidation {
 
     static readonly UPDATE : ZodType = z.object({
         id: z.number().positive(),
-        showId: z.number().positive(),
+        contactId: z.coerce.number().positive(),  // Automatically converts strings to numbers
+        showId: z.coerce.number().positive(),
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),
-        price: z.string().min(1).max(100).optional(),
+        price: z.number().positive().optional(),
         country: z.string().min(1).max(100).optional(),
         purchaseDate: z.date().optional(),
     })

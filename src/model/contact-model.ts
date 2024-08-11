@@ -2,40 +2,41 @@ import {Contact} from "@prisma/client";
 
 export type ContactResponse = {
     id: number;
-    first_name: string;
-    last_name?: string | null;
+    fullname: string;
     photo?: string | null;
     email?: string | null;
     phone?: string | null;
+    amount?: number | null;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
     nationalId?:BigInt | null;
 }
 
 export type CreateContactRequest = {
-    first_name: string;
-    last_name?: string;
+    fullname: string;
     photo?: string
     email?: string;
     phone?: string;
+    amount?: number;
     dateofbirth?: Date;
-    ofcNo?:String;
+    ofcNo?:string;
     nationalId?:BigInt;
 }
 
 export type UpdateContactRequest = {
     id: number;
-    first_name: string;
-    last_name?: string;
-    photo?: string;
-    email?: string;
-    phone?: string;
-    dateofbirth?: Date;
-    ofcNo?:String;
-    nationalId?:BigInt;
+    fullname: string;
+    photo?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    amount?: number | null;
+    dateofbirth?: Date | null;
+    ofcNo?: string | null;
+    nationalId?:BigInt | null;
 }
 
 export type SearchContactRequest = {
+    fullname?: string;
     name?: string;
     phone?: string;
     email?: string;
@@ -43,13 +44,13 @@ export type SearchContactRequest = {
     size: number;
 }
 
-export function toContactResponse(contact: Contact): ContactResponse {
+export function toContactResponse(contact : Contact): ContactResponse {
     return {
         id: contact.id,
-        first_name: contact.first_name,
-        last_name: contact.last_name,
+        fullname: contact.fullname,
         photo: contact.photo,
         email: contact.email,
+        amount: contact.amount,
         phone: contact.phone,
         dateofbirth: contact.dateofbirth,
         ofcNo:contact.ofcNo,

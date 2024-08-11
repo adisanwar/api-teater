@@ -85,15 +85,10 @@ export class ContactService {
             filters.push({
                 OR: [
                     {
-                        first_name: {
+                        fullname: {
                             contains: searchRequest.name
-                        }
+                        },
                     },
-                    {
-                        last_name: {
-                            contains: searchRequest.name
-                        }
-                    }
                 ]
             });
         }

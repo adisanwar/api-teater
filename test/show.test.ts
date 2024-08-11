@@ -26,6 +26,7 @@ describe(`POST /api/shows/`, () => {
                 description: "test",
                 duration: "test",
                 rating:"test",
+                theaterId: theater.id
             })
         logger.debug(response.body);
         expect(response.status).toBe(200);
@@ -83,7 +84,7 @@ describe('GET /api/shows/current', () => {
 
 });
 
-describe('GET /api/shows/:showId/theaters/:theaterId', () => {
+describe('GET /api/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -98,9 +99,9 @@ describe('GET /api/shows/:showId/theaters/:theaterId', () => {
 
     it('should be able to get shows by id', async () => {
         const show = await ShowTest.getById();
-        const theater = await TheaterTest.getById();
+        // const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .get(`/api/shows/${show.id}/theaters/${theater.id}`)
+            .get(`/api/shows/${show.id}`)
             .set("X-API-TOKEN", "test");
 
         logger.debug(response.body);
@@ -110,7 +111,7 @@ describe('GET /api/shows/:showId/theaters/:theaterId', () => {
 
 });
 
-describe('PATCH /api/shows/:showId/theater/:theaterId', () => {
+describe('PATCH /api/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -127,13 +128,14 @@ describe('PATCH /api/shows/:showId/theater/:theaterId', () => {
         const show = await ShowTest.getById();
         const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .patch(`/api/shows/${show.id}/theaters/${theater.id}`)
+            .patch(`/api/shows/${show.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 title: "Seifuku No Me",
                 description: "Setlist Tunas Dibalik Seragam",
                 duration: "3 Jam",
-                rating:"5/5"
+                rating:"5/5",
+                theaterId: theater.id
             });
 
         logger.debug(response.body);
@@ -149,13 +151,14 @@ describe('PATCH /api/shows/:showId/theater/:theaterId', () => {
         const show = await ShowTest.getById();
         const theater = await TheaterTest.getById();
         const response = await supertest(web)
-            .patch(`/api/shows/${show.id}/theaters/${theater.id}`)
+            .patch(`/api/shows/${show.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
                 title: "",
                 description: "",
                 duration: "",
-                rating:""
+                rating:"",
+                theaterId: ""
             });
 
         logger.debug(response.body);

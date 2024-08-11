@@ -9,7 +9,7 @@ import {
     ShowtimeResponse,
     toShowtimeResponse, UpdateShowtimeRequest
 } from "../model/showtimes-model";
-import {ShowtimeValidation} from "../validation/showtime-valiidation";
+import {ShowtimeValidation} from "../validation/showtime-validation";
 
 export class ShowtimeService {
 
