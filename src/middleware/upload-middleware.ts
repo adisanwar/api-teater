@@ -2,6 +2,7 @@ import { Request } from 'express';
 import path from 'path';
 import multer from 'multer';
 import fs from 'fs';
+import { ResponseError } from '../error/response-error';
 
 const projectRoot = path.join(__dirname, '..', '..'); // Adjust to your project structure
 
@@ -67,7 +68,13 @@ export const uploadMiddleware = multer({
   },
 }).single('photo');
 
-export function deleteOldFile(filePath: string) {
+export function deleteOldFile(filePath: string | undefined | null) {
+  // Check if filePath is empty, null, or undefined
+  if (!filePath) {
+    console.warn('No file path provided, nothing to delete.');
+    return;
+  }
+
   const absolutePath = path.resolve(projectRoot, filePath);
   console.log(`Attempting to delete file at path: ${absolutePath}`);
 
@@ -79,17 +86,19 @@ export function deleteOldFile(filePath: string) {
   try {
     const stat = fs.lstatSync(absolutePath);
 
-    if (stat.isDirectory()) {
-      console.error(`Attempted to delete a directory instead of a file: ${absolutePath}`);
-      return;
+    if (stat.isFile()) {
+      fs.unlinkSync(absolutePath);
+      console.log(`Successfully deleted file: ${absolutePath}`);
+    } else {
+      console.error(`Path is not a file: ${absolutePath}`);
     }
-
-    fs.unlinkSync(absolutePath);
-    console.log(`Successfully deleted file: ${absolutePath}`);
   } catch (err) {
-    console.error(`Error accessing file: ${absolutePath}`, err);
+    console.error(`Error accessing file at path: ${absolutePath}`, err);
+    throw new ResponseError(500, `Failed to delete file at path: ${absolutePath}`);
   }
 }
+
+
 
 export function handleFileUpload(req: Request, requestBody: any) {
   if (req.file) {

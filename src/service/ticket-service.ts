@@ -15,6 +15,7 @@ import { TicketValidation } from "../validation/ticket-validation";
 import path from "path";
 import fs from "fs";
 import { logger } from "../application/logging";
+import { deleteOldFile } from "../middleware/upload-middleware";
 
 export class TicketService {
   static async create(request: CreateTicketRequest): Promise<TicketResponse> {
@@ -99,29 +100,29 @@ export class TicketService {
 
 
 //   "errors": "EPERM: operation not permitted, unlink 'D:\\Programming\\api-teater\\test'"
-  static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
-    const removeRequest = Validation.validate(TicketValidation.REMOVE, request);
+static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
+  const removeRequest = Validation.validate(TicketValidation.REMOVE, request);
 
-    const ticket = await prismaClient.ticket.findUnique({
-      where: {
-        id: removeRequest.id,
-      },
-    });
+  const ticket = await prismaClient.ticket.findUnique({
+    where: {
+      id: removeRequest.id,
+    },
+  });
 
-    if (!ticket) {
-      throw new ResponseError(404, "Show not found");
-    }
-
-    if (ticket.photo) {
-      fs.unlinkSync(path.resolve(ticket.photo)); // Remove the photo file if it exists
-    }
-
-    const response: any = await prismaClient.ticket.delete({
-      where: {
-        id: ticket.id,
-      },
-    });
-
-    return toTicketResponse(response);
+  if (!ticket) {
+    throw new ResponseError(404, "Ticket not found");
   }
+
+  if (ticket.photo) {
+    deleteOldFile(ticket.photo);
+  }
+
+  const response: any = await prismaClient.ticket.delete({
+    where: {
+      id: ticket.id,
+    },
+  });
+
+  return toTicketResponse(response);
+}
 }

@@ -12,11 +12,11 @@ CREATE TABLE `users` (
 -- CreateTable
 CREATE TABLE `contacts` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `first_name` VARCHAR(100) NOT NULL,
-    `last_name` VARCHAR(100) NULL,
+    `fullname` VARCHAR(100) NOT NULL,
     `photo` VARCHAR(100) NULL,
     `email` VARCHAR(100) NULL,
     `phone` VARCHAR(20) NULL,
+    `amount` INTEGER NULL,
     `dateofbirth` DATETIME(3) NULL,
     `ofcNo` VARCHAR(20) NULL,
     `nationalId` BIGINT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE `shows` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(255) NOT NULL,
     `photo` VARCHAR(100) NULL,
-    `description` VARCHAR(255) NULL,
+    `description` VARCHAR(2000) NULL,
     `duration` VARCHAR(50) NULL,
     `rating` VARCHAR(20) NULL,
     `theaterId` INTEGER NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE `theaters` (
 CREATE TABLE `tickets` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `seatNumber` VARCHAR(255) NOT NULL,
-    `price` VARCHAR(255) NULL,
+    `price` INTEGER NOT NULL,
     `photo` VARCHAR(100) NULL,
     `purchaseDate` DATETIME(3) NULL,
     `showId` INTEGER NOT NULL,
@@ -86,15 +86,15 @@ CREATE TABLE `tickets` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `payments` (
+CREATE TABLE `orders` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `amount` VARCHAR(255) NOT NULL,
-    `photo` VARCHAR(100) NULL,
-    `paymentDate` DATETIME(3) NULL,
-    `metodePayment` VARCHAR(50) NULL,
-    `status` VARCHAR(50) NULL,
+    `orderId` VARCHAR(191) NOT NULL,
+    `amount` INTEGER NOT NULL,
+    `status` VARCHAR(255) NOT NULL,
+    `paymentUrl` VARCHAR(255) NULL,
     `ticketId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `orders_orderId_key`(`orderId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -117,4 +117,4 @@ ALTER TABLE `tickets` ADD CONSTRAINT `tickets_showId_fkey` FOREIGN KEY (`showId`
 ALTER TABLE `tickets` ADD CONSTRAINT `tickets_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `contacts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `payments` ADD CONSTRAINT `payments_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `tickets`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `orders` ADD CONSTRAINT `orders_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `tickets`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

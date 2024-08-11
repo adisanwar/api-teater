@@ -20,9 +20,10 @@ export class ShowValidation {
 
   static readonly UPDATE: ZodType = z.object({
     id: z.number().positive(),
+    theaterId: z.number().positive(),
     title: z.string().min(1).max(255).optional(),
     photo: z.string().min(1).max(255).optional(),
-    description: z.string().min(1).max(100).optional(),
+    description: z.string().min(1).max(2000).optional(),
     duration: z.string().min(1).max(100).optional(),
     rating: z.string().min(1).max(100).optional()
   });

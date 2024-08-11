@@ -20,8 +20,7 @@ describe('POST /api/contacts', () => {
             .set("X-API-TOKEN", "test")
             // .attach('photo', path.join(__dirname, 'img', 'photo.jpg'))
             .send({
-                first_name : "adi",
-                last_name: "khannedy",
+                fullname : "adi",
                 email: "adi@example.com",
                 phone: "0899999"
             });
@@ -29,8 +28,7 @@ describe('POST /api/contacts', () => {
         logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
-        expect(response.body.data.first_name).toBe("adi");
-        expect(response.body.data.last_name).toBe("khannedy");
+        expect(response.body.data.fullname).toBe("adi");
         // expect(response.body.data.photo).toBe("test");
         expect(response.body.data.email).toBe("adi@example.com");
         expect(response.body.data.phone).toBe("0899999");
@@ -41,8 +39,7 @@ describe('POST /api/contacts', () => {
             .post("/api/contacts")
             .set("X-API-TOKEN", "test")
             .send({
-                first_name : "",
-                last_name: "",
+                fullname : "",
                 // photo: "test",
                 email: "adi",
                 phone: "08999990899999089999908999990899999"
@@ -75,8 +72,7 @@ describe('GET /api/contacts/:contactId', () => {
         // logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
-        expect(response.body.data.first_name).toBe(contact.first_name);
-        expect(response.body.data.last_name).toBe(contact.last_name);
+        expect(response.body.data.fullname).toBe(contact.fullname);
         expect(response.body.data.email).toBe(contact.email);
         expect(response.body.data.phone).toBe(contact.phone);
     });
@@ -111,8 +107,7 @@ describe('PATCH /api/contacts/:contactId', () => {
             .patch(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
-                first_name: "adi",
-                last_name: "khannedy",
+                fullname: "adi",
                 email: "adi@example.com",
                 phone: "9999"
             });
@@ -120,8 +115,7 @@ describe('PATCH /api/contacts/:contactId', () => {
         logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBe(contact.id);
-        expect(response.body.data.first_name).toBe("adi");
-        expect(response.body.data.last_name).toBe("khannedy");
+        expect(response.body.data.fullname).toBe("adi");
         expect(response.body.data.email).toBe("adi@example.com");
         expect(response.body.data.phone).toBe("9999");
     });
@@ -132,8 +126,7 @@ describe('PATCH /api/contacts/:contactId', () => {
             .patch(`/api/contacts/${contact.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
-                first_name: "",
-                last_name: "",
+                fullname: "",
                 email: "adi",
                 phone: ""
             });

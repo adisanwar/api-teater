@@ -11,10 +11,11 @@ export class ShowtimeController{
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            const showID = Number(req.params.showId);                
+            console.log(req.body);
+            const showId = Number(req.body.showId);                
             const request: CreateShowtimeRequest = {
                 ...req.body,
-                showId: showID
+                showId: showId
             };
             console.log(request);
             const response = await ShowtimeService.create(request);

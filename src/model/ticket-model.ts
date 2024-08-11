@@ -6,7 +6,7 @@ export type TicketResponse = {
   id: number;
   seatNumber?: String | null;
   photo?: String | null,
-  price?: String | null;
+  price?: number | null;
   purchaseDate?: Date | null;
   contactId: number;
   showId: number;
@@ -17,7 +17,7 @@ export type TicketResponse = {
 export type CreateTicketRequest = {
   seatNumber?: String;
   photo?: String;
-  price?: String;
+  price?: number;
   purchaseDate?: Date;
   showId:number;
   contactId:number;
@@ -35,7 +35,7 @@ export type UpdateTicketRequest = {
   showId: number;
   seatNumber?: String;
   photo?: String;
-  price?: String;
+  price?: number;
   purchaseDate?: Date;
 };
 
@@ -58,8 +58,7 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
     showId: ticket.showId,
     contact: ticket.contact ? {
             id: ticket.contact.id,
-            first_name: ticket.contact.first_name,
-            last_name: ticket.contact.last_name,
+            fullname: ticket.contact.fullname,
             photo: ticket.contact.photo,
             email: ticket.contact.email,
             phone: ticket.contact.phone,

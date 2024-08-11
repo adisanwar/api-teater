@@ -17,17 +17,27 @@ import { TicketService } from "../service/ticket-service";
 export class TicketController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
+      // Convert contactId and showId to numbers
+      const contactId = Number(req.body.contactId);
+      const showId = Number(req.body.showId);
+
+      // Check if the conversion was successful and if the numbers are valid
+      if (isNaN(contactId) || isNaN(showId)) {
+        return res.status(400).json({ error: 'Invalid contactId or showId' });
+      }
+
+      // Construct the request object with the properly typed fields
       const request: CreateTicketRequest = {
         ...req.body,
-        contactId: Number(req.body.contactId),
-        showId: Number(req.body.showId),
+        contactId,  // Use the converted number
+        showId,     // Use the converted number
       };
 
       // Ensure required fields are present
       if (!request.contactId || !request.showId) {
         return res.status(400).json({ error: "contactId and showId are required" });
       }
-      
+
       getDestinationFolder('ticket');
       handleFileUpload(req, request);
 
@@ -74,32 +84,40 @@ export class TicketController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const showId = Number(req.params.showId);
-      const ticketId = Number(req.params.ticketId);
+        const contactId = Number(req.body.contactId);
+        const showId = Number(req.body.showId);
+        const ticketId = Number(req.params.ticketId);
 
-      const request: UpdateTicketRequest = {
-        id: ticketId,
-        showId: showId,
-        ...req.body,
-      };
+        // Logging for debugging purposes
+        console.log(`Contact ID: ${contactId}, Show ID: ${showId}, Ticket ID: ${ticketId}`);
 
-      const ticket = await TicketService.getById(request);
+        if (isNaN(contactId) || isNaN(showId) || isNaN(ticketId)) {
+            return res.status(400).json({ error: `Invalid contactId ${contactId}, showId ${showId}, or ticketId ${ticketId}` });
+        }
 
-      if (ticket.photo) {
-        deleteOldFile(
-          path.join(__dirname, "..", "..", ticket.photo.toString())
-        );
-      }
+        const request: UpdateTicketRequest = {
+            id: ticketId,
+            contactId: contactId,
+            showId: showId,
+            ...req.body,
+        };
 
-      handleFileUpload(req, request);
-      const response = await TicketService.update(request);
-      res.status(200).json({
-        data: response,
-      });
+        const ticket = await TicketService.getById(request);
+
+        if (ticket.photo) {
+            deleteOldFile(path.join(__dirname, "..", "..", ticket.photo.toString()));
+        }
+
+        handleFileUpload(req, request);
+        const response = await TicketService.update(request);
+        res.status(200).json({
+            data: response,
+        });
     } catch (e) {
-      next(e);
+        next(e);
     }
-  }
+}
+
 
   static async remove(req: Request, res: Response, next: NextFunction) {
     try {

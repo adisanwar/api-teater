@@ -3,7 +3,7 @@ import { web } from "../src/application/web"
 import { logger } from "../src/application/logging"
 import {ShowtimeTest, ShowTest, UserTest, TheaterTest} from "./test-util"
 
-describe(`POST /api/showtimes/`, async () => {
+describe(`POST /api/showtimes/`, () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -21,20 +21,19 @@ describe(`POST /api/showtimes/`, async () => {
     it('should be able to create showtimes', async () => {
         const show = await ShowTest.getById();
       
-        // Generate a valid datetime string
-        // const validDatetime = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        // Generate a valid datetime string in MySQL format (YYYY-MM-DD)
+        const validDatetime = new Date().toISOString().slice(0, 10); // Slicing to get only the date part
       
         const response = await supertest(web)
           .post(`/api/showtimes/${show.id}`)
           .set("X-API-TOKEN", "test")
           .send({
-            // showDate: validDatetime,
+            showDate: validDatetime,  // Send date in MySQL format
             showTime: "18:00:00" // Use a valid time format
           });
       
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
-        // expect(response.body.data.showDate).toBe(validDatetime);
         expect(response.body.data.showTime).toBe("18:00:00");
       
         // Consider adding error handling checks here
@@ -42,6 +41,7 @@ describe(`POST /api/showtimes/`, async () => {
           console.error(`Error: ${response.body.message}`);
         }
       });
+      
 
     
 
@@ -63,7 +63,7 @@ describe(`POST /api/showtimes/`, async () => {
 
 })
 
-describe('GET /api/showtimes/current', async () => {
+describe('GET /api/showtimes/current', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -90,7 +90,7 @@ describe('GET /api/showtimes/current', async () => {
 
 });
 
-describe('GET /api/showtimes/:showtimeId/shows/:showId', async () => {
+describe('GET /api/showtimes/:showtimeId/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -120,7 +120,7 @@ describe('GET /api/showtimes/:showtimeId/shows/:showId', async () => {
 
 });
 
-describe('PATCH /api/showtimes/:showtimeId/shows/:showId', async () => {
+describe('PATCH /api/showtimes/:showtimeId/shows/:showId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -140,20 +140,20 @@ describe('PATCH /api/showtimes/:showtimeId/shows/:showId', async () => {
         const showtime = await ShowtimeTest.getById();
         const show = await ShowTest.getById();
         // Get yesterday's date
-        // const yesterday = new Date();
-        // yesterday.setDate(yesterday.getDate() - 1);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
         const response = await supertest(web)
             .patch(`/api/showtimes/${showtime.id}/shows/${show.id}`)
             .set("X-API-TOKEN", 'test')
             .send({
-                // showDate: yesterday.toISOString(), // Ensure date is in a valid format
+                showDate: yesterday.toISOString(), // Ensure date is in a valid format
                 showTime: "test"
             });
 
         logger.debug(response.body);
         expect(response.status).toBe(200);
         expect(response.body.data.id).toBeDefined();
-        // expect(new Date(response.body.data.showDate).toISOString()).toBe(yesterday.toISOString()); // Validate date
+        expect(new Date(response.body.data.showDate).toISOString()).toBe(yesterday.toISOString()); // Validate date
         expect(response.body.data.showTime).toBe("test");
     });
 
@@ -174,7 +174,7 @@ describe('PATCH /api/showtimes/:showtimeId/shows/:showId', async () => {
     });
 });
 
-describe('DELETE /api/showtimes/:showtimeId', async () => {
+describe('DELETE /api/showtimes/:showtimeId', () => {
     beforeEach(async () => {
         await UserTest.create();
         await TheaterTest.create();
@@ -201,14 +201,14 @@ describe('DELETE /api/showtimes/:showtimeId', async () => {
         expect(response.body.data).toBe("OK");
     });
 
-    // it('should reject remove show if theater is not found', async () => {
-    //     const theater = await ShowTest.getById();
-    //     const response = await supertest(web)
-    //         .delete(`/api/shows/${theater.id + 1000}`)
-    //         .set("X-API-TOKEN", "test");
+    it('should reject remove show if theater is not found', async () => {
+        const theater = await ShowTest.getById();
+        const response = await supertest(web)
+            .delete(`/api/shows/${theater.id + 1000}`)
+            .set("X-API-TOKEN", "test");
 
-    //     logger.debug(response.body);
-    //     expect(response.status).toBe(404);
-    //     expect(response.body.errors).toBeDefined();
-    // });
+        logger.debug(response.body);
+        expect(response.status).toBe(404);
+        expect(response.body.errors).toBeDefined();
+    });
 });

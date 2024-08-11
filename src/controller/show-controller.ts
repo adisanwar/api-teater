@@ -51,99 +51,48 @@ export class ShowController {
     try {
       const showId = Number(req.params.showId);
 
-      const request: GetShowRequest = {
-        id: showId,
-      };
+      if (isNaN(showId)) {
+        return res.status(400).json({ error: 'Invalid show ID' });
+      }
+
+      const request = { id: showId };  // Create an object as expected by the service
 
       const response = await ShowService.getById(request);
-      res.status(200).json({
-        data: response
-      });
+      res.status(200).json({ data: response });
     } catch (e) {
       next(e);
     }
   }
 
-
-  // static async update(req: Request, res: Response, next: NextFunction) {
-  //     try {
-
-  //       const showId : any= parseInt(req.params.showId);
-  //       const requestBody: UpdateShowRequest = req.body as UpdateShowRequest;
-
-  //       if (isNaN(showId)) {
-  //         throw new Error('Invalid showId');
-  //       }
-  //       console.log("Request body:", requestBody);
-  //       console.log("Show ID:", req.params.showId);
-
-  //       console.log(showId);
-
-  //       const show = await ShowService.getById(showId);
-  //       // const request: UpdateShowRequest = {
-  //       //   id:showId,
-  //       //  ...requestBody
-  //       // };
-
-  //       if (show.photo) {
-  //         deleteOldFile(show.photo);
-  //       }
-
-  //       handleFileUpload(req, requestBody);
-
-  //       console.log(requestBody);
-
-  //       const response = await ShowService.update(requestBody);
-  //       res.status(200).json({
-  //         data: response
-  //       });
-
-  //       console.log(response);
-  //     } catch (e) {
-  //       next(e);
-  //     }
-  //   }
-
-  static async update(req: Request, res: Response, next: NextFunction) {
+  static async update(req: TheaterRequest, res: Response, next: NextFunction) {
     try {
-      // Parse and validate show ID from URL parameters
-      const showId: any = parseInt(req.params.showId);
-      if (isNaN(showId)) {
-        return res.status(400).json({ error: 'Invalid show ID' });
-      }
+        const request: UpdateShowRequest = req.body as UpdateShowRequest;
+        request.theaterId = Number(req.body.theaterId);
+        request.id = Number(req.params.showId);
 
-      // Ensure req.body is a plain object
-      const reqBody = JSON.parse(JSON.stringify(req.body));
+        // Validate IDs
+        if (isNaN(request.theaterId) || isNaN(request.id)) {
+            return res.status(400).json({ error: 'Invalid theater or show ID' });
+        }
 
-      // const show = await ShowService.getById(showId);
+        const show = await ShowService.getById(request);
 
-      // Construct the UpdateShowRequest object
-      const request: UpdateShowRequest = {
-        id: showId,
-        ...reqBody // Spread req.body to ensure all fields are included
-      };
+        // Handle file deletion if a new photo is being uploaded
+        if (show.photo) {
+          deleteOldFile(path.join(__dirname, '..', '..', show.photo));
+        }
+        // Handle file upload
+        handleFileUpload(req, request);
 
-      // if (show.photo) {
-      //   deleteOldFile(show.photo);
-      // }
-
-      // handleFileUpload(req, reqBody);
-
-      // Log the constructed request for debugging
-      console.log("Constructed Update Request:", request);
-
-      // Proceed with updating the show
-      const response = await ShowService.update(request);
-      res.status(200).json({
-        data: response
-      });
-
-      console.log("Update Response:", response);
+        // Proceed with the update
+        const response = await ShowService.update(request);
+        res.status(200).json({
+            data: response
+        });
     } catch (e) {
-      console.error('Error during update:', e);
-      next(e); // Pass the error to the error-handling middleware
+        next(e);
     }
-  }
+}
 
 
   static async remove(req: Request, res: Response, next: NextFunction) {
