@@ -9,7 +9,7 @@ export type ContactResponse = {
     amount?: number | null;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
-    nationalId?:BigInt | null;
+    nationalId?:number | null;
 }
 
 export type CreateContactRequest = {
@@ -20,7 +20,7 @@ export type CreateContactRequest = {
     amount?: number;
     dateofbirth?: Date;
     ofcNo?:string;
-    nationalId?:BigInt;
+    nationalId?:number;
 }
 
 export type UpdateContactRequest = {
@@ -32,7 +32,7 @@ export type UpdateContactRequest = {
     amount?: number | null;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
-    nationalId?:BigInt | null;
+    nationalId?:number | null;
 }
 
 export type SearchContactRequest = {
