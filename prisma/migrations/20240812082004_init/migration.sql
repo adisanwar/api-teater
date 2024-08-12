@@ -19,7 +19,7 @@ CREATE TABLE `contacts` (
     `amount` INTEGER NULL,
     `dateofbirth` DATETIME(3) NULL,
     `ofcNo` VARCHAR(20) NULL,
-    `nationalId` BIGINT NULL,
+    `nationalId` INTEGER NULL,
     `username` VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (`id`)
