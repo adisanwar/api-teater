@@ -47,6 +47,7 @@ CREATE TABLE `shows` (
     `duration` VARCHAR(50) NULL,
     `rating` VARCHAR(20) NULL,
     `theaterId` INTEGER NOT NULL,
+    `showtimeId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -56,7 +57,6 @@ CREATE TABLE `showtimes` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `showDate` DATETIME(3) NULL,
     `showTime` VARCHAR(255) NULL,
-    `showId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -108,7 +108,7 @@ ALTER TABLE `addresses` ADD CONSTRAINT `addresses_contactId_fkey` FOREIGN KEY (`
 ALTER TABLE `shows` ADD CONSTRAINT `shows_theaterId_fkey` FOREIGN KEY (`theaterId`) REFERENCES `theaters`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `showtimes` ADD CONSTRAINT `showtimes_showId_fkey` FOREIGN KEY (`showId`) REFERENCES `shows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `shows` ADD CONSTRAINT `shows_showtimeId_fkey` FOREIGN KEY (`showtimeId`) REFERENCES `showtimes`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `tickets` ADD CONSTRAINT `tickets_showId_fkey` FOREIGN KEY (`showId`) REFERENCES `shows`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

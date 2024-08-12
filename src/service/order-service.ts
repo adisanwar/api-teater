@@ -11,7 +11,7 @@ export class OrderService {
         const createRequest = Validation.validate(OrderValidation.CREATE, request);
         await this.checkTicketMustExists(createRequest.ticketId);
 
-        const order = await prismaClient.order.create({
+        const order : any = await prismaClient.order.create({
             data: createRequest
         });
 
@@ -29,20 +29,36 @@ export class OrderService {
         return ticket;
     }
 
-    static async get(): Promise<Order[]> {
-        const order : any = await prismaClient.order.findMany();
-        return order;
-      }
+    static async get(): Promise<OrderResponse[]> {
+      const orders = await prismaClient.order.findMany({
+          include: {
+              ticket:{
+                include :{
+                  show:true
+                }
+              }
+          },
+      }); // Retrieve all orders with the ticket relationship
+  
+      return orders.map(toOrderResponse); // Map over the array and convert each order to an OrderResponse
+  }
 
    
 
     static async getOrderById(request: GetOrderRequest): Promise<OrderResponse> {
-        const getRequest: any = Validation.validate(OrderValidation.GET, request);
+        const getRequest = Validation.validate(OrderValidation.GET, request);
 
-        const order = await prismaClient.order.findUnique({
+        if (!getRequest || !getRequest.id) {
+          throw new ResponseError(400, "Invalid request: Missing or invalid ID.");
+      }
+  
+        const order : any = await prismaClient.order.findFirst({
             where: { 
                 id: getRequest.id
             },
+            // include: {
+            //   ticket:true
+            // }
         });
 
         if (!order) {
@@ -51,6 +67,7 @@ export class OrderService {
 
         return toOrderResponse(order);
     }
+
 
     static async updateOrderStatus(orderId: string, status: string): Promise<void> {
         await prismaClient.order.update({

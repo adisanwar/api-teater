@@ -9,6 +9,9 @@ declare module 'midtrans-client' {
     class Snap {
         constructor(config: { isProduction: boolean; serverKey: string; clientKey: string });
         createTransaction(parameter: any): Promise<SnapTransaction>;
+        transaction: {
+            status(orderId: string): Promise<TransactionStatusResponse>;
+        };
     }
 
     export { Snap };

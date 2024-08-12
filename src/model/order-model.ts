@@ -1,4 +1,6 @@
-import { Order } from "@prisma/client";
+import { Order, Show, Ticket } from "@prisma/client";
+import { TicketResponse } from "./ticket-model";
+import { ShowResponse } from "./show-model";
 
 export type OrderResponse = {
   id: number;
@@ -6,6 +8,8 @@ export type OrderResponse = {
   amount?: number | null;
   status?: string | null;
   paymentUrl?: string | null;
+  ticket? : TicketResponse;
+  show? : ShowResponse;
 };
 
 export type CreateOrderRequest = {
@@ -31,12 +35,29 @@ export type GetOrderRequest = {
 
 export type RemoveOrderRequest = GetOrderRequest;
 
-export function toOrderResponse(order: Order): OrderResponse {
+export function toOrderResponse(order: Order & {ticket : Ticket & {show : Show}}): OrderResponse {
   return {
     id: order.id,
     orderId: order.orderId,
     amount: order.amount,
     status: order.status,
     paymentUrl: order.paymentUrl,
-  };
+    ticket: order.ticket ? {
+      id: order.ticket.id,
+      seatNumber: order.ticket.seatNumber,
+      // photo: order.ticket.photo,
+      price: order.ticket.price,
+      purchaseDate: order.ticket.purchaseDate,
+      contactId: order.ticket.contactId,
+      showId: order.ticket.showId,
+      show: {
+        id: order.ticket.show.id,
+        title: order.ticket.show.title,
+        // photo: order.ticket.show.photo,
+        description: order.ticket.show.description,
+        duration: order.ticket.show.duration,
+        rating: order.ticket.show.rating,
+      }
+  } : undefined,
+  }
 }

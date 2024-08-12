@@ -18,6 +18,7 @@ export type CreateShowRequest = {
     duration?: string;
     rating?: string;
     theaterId: number;
+    showtimeId:number;
 }
 
 export type GetShowRequest = {
@@ -31,6 +32,7 @@ export type RemoveShowRequest ={
 export type UpdateShowRequest = {
     id: number;
     theaterId: number;
+    showtimeId:number;
     title: string;
     photo?: string;
     description?: string;
