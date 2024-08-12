@@ -63,10 +63,11 @@ apiRouter.get("/api/showtimes/current", ShowtimeController.get);
 apiRouter.patch("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.update);
 apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);
 
-// Showtime Api
+// Orders Api
 apiRouter.post("/api/orders/", OrderController.create);
 apiRouter.get("/api/orders/:id", OrderController.getById);
 apiRouter.get("/api/orders", OrderController.get);
+
 // apiRouter.get("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.getById);
 // apiRouter.get("/api/showtimes/current", ShowtimeController.get);
 // apiRouter.patch("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.update);

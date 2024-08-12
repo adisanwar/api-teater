@@ -68,10 +68,11 @@ export class ShowController {
     try {
         const request: UpdateShowRequest = req.body as UpdateShowRequest;
         request.theaterId = Number(req.body.theaterId);
+        request.showtimeId = Number(req.body.showtimeId);
         request.id = Number(req.params.showId);
 
         // Validate IDs
-        if (isNaN(request.theaterId) || isNaN(request.id)) {
+        if (isNaN(request.theaterId) || isNaN(request.showtimeId) || isNaN(request.id)) {
             return res.status(400).json({ error: 'Invalid theater or show ID' });
         }
 

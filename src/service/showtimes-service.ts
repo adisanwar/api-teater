@@ -15,7 +15,6 @@ export class ShowtimeService {
 
     static async create(request: CreateShowtimeRequest): Promise<ShowtimeResponse> {
         const createRequest : any = Validation.validate(ShowtimeValidation.CREATE, request);
-        await this.checkShowMustExists(createRequest.showId);
 
         const showtime = await prismaClient.showtime.create({
             data: createRequest
@@ -24,24 +23,8 @@ export class ShowtimeService {
         return toShowtimeResponse(showtime);
     }
 
-    static async checkShowMustExists(showId: number): Promise<Show> {
-        const show = await prismaClient.show.findUnique({
-            where: {
-                id: showId
-            },
-            
-        });
-
-        if (!show) {
-            throw new ResponseError(404, "Show not found");
-        }
-
-        return show;
-    }
-
     static async getById(request: GetShowtimeRequest): Promise<ShowtimeResponse> {
         const getRequest = Validation.validate(ShowtimeValidation.GET, request);
-        // const showId = await this.checkShowMustExists(getRequest.showId);
 
         const showtime = await prismaClient.showtime.findFirst({
             where: {
@@ -63,12 +46,10 @@ export class ShowtimeService {
 
     static async update(request: UpdateShowtimeRequest): Promise<ShowtimeResponse> {
         const updateRequest = Validation.validate(ShowtimeValidation.UPDATE, request);
-await this.checkShowMustExists(updateRequest.showId);
-
         const showtime = await prismaClient.showtime.update({
+           
             where: {
                 id: updateRequest.id,
-                showId: updateRequest.showId
             },
             data: updateRequest
         });
@@ -76,20 +57,20 @@ await this.checkShowMustExists(updateRequest.showId);
         return toShowtimeResponse(showtime);
     }
 
-    static async remove(showtimeId: number): Promise<ShowtimeResponse> {
+    static async remove(request: GetShowtimeRequest): Promise<ShowtimeResponse> {
         const showtime = await prismaClient.showtime.findUnique({
             where: {
-                id: showtimeId
+                id: request.id
             }
         });
 
         if (!showtime) {
-            throw new ResponseError(404, "Show not found");
+            throw new ResponseError(404, "Showtime not found");
         }
 
         await prismaClient.showtime.delete({
             where: {
-                id: showtimeId
+                id: request.id
             }
         });
 

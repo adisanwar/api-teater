@@ -24,7 +24,11 @@ export class OrderController {
         paymentUrl: "",
       };
 
-      console.log(request);
+      // const ticket = await prismaClient.ticket.findUnique({
+      //   where : {
+      //     id: ticketId
+      //   }
+      // })
 
       // Prepare parameters for Midtrans Snap API
       const parameter = {
@@ -69,7 +73,9 @@ export class OrderController {
 
     //   console.log(orderId)
 
-      const response = await OrderService.getOrderById(orderId);
+    const request = { id: orderId };
+
+      const response = await OrderService.getOrderById(request);
       res.status(200).json({
         data: response,
       });
@@ -89,43 +95,51 @@ export class OrderController {
     }
   }
 
-//   static async handleMidtransNotification(req: Request, res: Response, next: NextFunction) {
-//     try {
-//       const notification = req.body;
+  static async handleMidtransNotification(req: Request, res: Response, next: NextFunction) {
+    try {
+      const notification = req.body;
 
-//       // Verify the notification
-//       const statusResponse = await midtransClient.transaction.notification(notification);
+      // Extract the order ID from the notification
+      const orderId = notification.order_id;
 
-//       const orderId = statusResponse.order_id;
-//       const transactionStatus = statusResponse.transaction_status;
-//       const fraudStatus = statusResponse.fraud_status;
+      // Get the transaction status from Midtrans
+      const statusResponse = await midtransClient.transaction.status(orderId);
 
-//       let status = 'pending';
+      console.log(statusResponse);
+      const transactionStatus = statusResponse.transaction_status;
+      const fraudStatus = statusResponse.fraud_status;
 
-//       if (transactionStatus === 'capture') {
-//         if (fraudStatus === 'challenge') {
-//           status = 'challenge';
-//         } else if (fraudStatus === 'accept') {
-//           status = 'paid';
-//         }
-//       } else if (transactionStatus === 'settlement') {
-//         status = 'paid';
-//       } else if (transactionStatus === 'deny') {
-//         status = 'deny';
-//       } else if (transactionStatus === 'cancel' || transactionStatus === 'expire') {
-//         status = 'canceled';
-//       } else if (transactionStatus === 'pending') {
-//         status = 'pending';
-//       }
+      let status = 'pending';
 
-//       // Update the order status in your database
-//       await OrderService.updateOrderStatus(orderId, status);
+      switch (transactionStatus) {
+        case 'capture':
+          status = fraudStatus === 'challenge' ? 'challenge' : 'paid';
+          break;
+        case 'settlement':
+          status = 'paid';
+          break;
+        case 'deny':
+          status = 'deny';
+          break;
+        case 'cancel':
+        case 'expire':
+          status = 'canceled';
+          break;
+        case 'pending':
+          status = 'pending';
+          break;
+        default:
+          throw new Error(`Unknown transaction status: ${transactionStatus}`);
+      }
 
-//       res.status(200).json({
-//         message: 'Notification handled successfully',
-//       });
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
+      // Update the order status in your database
+      await OrderService.updateOrderStatus(orderId, status);
+
+      res.status(200).json({
+        message: 'Notification handled successfully',
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

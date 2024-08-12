@@ -1,4 +1,4 @@
-import { Contact, Show, Theater } from "@prisma/client";
+import { Contact, Show, Showtime, Theater } from "@prisma/client";
 import {
   CreateShowRequest,
   GetShowRequest,
@@ -19,6 +19,7 @@ export class ShowService {
   static async create(request: CreateShowRequest): Promise<ShowResponse> {
     const createRequest = Validation.validate(ShowValidation.CREATE, request);
     await this.checkTheaterMustExists(createRequest.theaterId);
+    await this.checkShowtimeMustExists(createRequest.showtimeId);
 
     console.log(createRequest);
 
@@ -41,6 +42,19 @@ export class ShowService {
       throw new ResponseError(404, "Theater is not found");
     }
     return theater;
+  }
+
+  static async checkShowtimeMustExists(showtimeId: number): Promise<Showtime> {
+    const showtime : any= await prismaClient.theater.findFirst({
+      where: {
+        id: showtimeId,
+      },
+    });
+
+    if (!showtime) {
+      throw new ResponseError(404, "Theater is not found");
+    }
+    return showtime;
   }
 
   static async checkShowMustExists(contact: Contact, ticketId: number
@@ -95,6 +109,7 @@ export class ShowService {
     
     // Ensure the theater exists if necessary (depends on your business logic)
     await this.checkTheaterMustExists(updateRequest.theaterId);
+    await this.checkShowtimeMustExists(updateRequest.showtimeId);
 
     // Update the show in the database
     const show : any = await prismaClient.show.update({
@@ -121,12 +136,6 @@ export class ShowService {
     if (show.photo !== null) {
       fs.unlinkSync(path.resolve(show.photo)); // Remove the photo file if it exists
     }
-
-    await prismaClient.showtime.deleteMany({
-      where: {
-        showId: showId.id,
-      },
-    });
 
     // Now delete the show
     await prismaClient.show.delete({

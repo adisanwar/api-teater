@@ -67,11 +67,12 @@ model Show {
   duration    String? @db.VarChar(50)
   rating      String? @db.VarChar(20)
   theaterId   Int     // Foreign key ke Theater
+  showtimeId   Int
   
   theater     Theater @relation(fields: [theaterId], references: [id])
+  showtime    Showtime @relation(fields: [showtimeId], references: [id])
 
   ticket Ticket []
-  showtime Showtime []
 
   @@map("shows")
 }
@@ -80,9 +81,8 @@ model Showtime {
   id          Int     @id @default(autoincrement())
   showDate    DateTime?
   showTime    String? @db.VarChar(255)
-  showId      Int
 
-  show Show @relation(fields: [showId], references: [id])
+  show  Show []
   
 
   @@map("showtimes")

@@ -2,22 +2,14 @@ import {Request, Response, NextFunction} from "express";
 import { logger } from "../application/logging";
 import {CreateShowtimeRequest, GetShowtimeRequest, UpdateShowtimeRequest} from "../model/showtimes-model";
 import {ShowtimeService} from "../service/showtimes-service";
-import { Show } from "@prisma/client";
-import { CreateContactRequest } from "../model/contact-model";
-import { ShowRequest } from "../type/show-request";
-
 
 export class ShowtimeController{
 
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log(req.body);
-            const showId = Number(req.body.showId);                
-            const request: CreateShowtimeRequest = {
-                ...req.body,
-                showId: showId
-            };
-            console.log(request);
+            const request: CreateShowtimeRequest = req.body as CreateShowtimeRequest;       
+            
+            // console.log(request);
             const response = await ShowtimeService.create(request);
             res.status(200).json({
                 data: response
@@ -92,7 +84,7 @@ export class ShowtimeController{
 
     static async remove(req: Request, res: Response, next: NextFunction) {
         try {
-            const showtimeId = Number(req.params.showtimeId);
+            const showtimeId: any= Number(req.params.showtimeId);
 
             if (isNaN(showtimeId)) {
                 return res.status(400).json({ error: 'Invalid show ID' });
