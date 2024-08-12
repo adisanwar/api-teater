@@ -18,7 +18,7 @@ export class ContactValidation {
         amount: z.number().min(1).max(20).optional(),
         dateofbirth: z.date().optional(),
         ofcNo: z.string().min(1).max(20).optional(),
-        nationalId: z.string().min(1).max(20).optional(),
+        nationalId: z.number().min(1).max(20).optional(),
     });
 
     static readonly SEARCH : ZodType = z.object({
