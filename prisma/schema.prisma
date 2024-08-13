@@ -26,27 +26,27 @@ model User {
 }
 
 model Contact {
-  id          Int     @id @default(autoincrement())
-  fullname    String  @db.VarChar(100)
-  photo       String? @db.VarChar(100)
-  email       String? @db.VarChar(100)
-  phone       String? @db.VarChar(20)
-  gender       String? @db.VarChar(20)
+  id          Int         @id @default(autoincrement())
+  fullname    String      @db.VarChar(100)
+  photo       String?     @db.VarChar(100)
+  email       String?     @db.VarChar(100)
+  phone       String?     @db.VarChar(20)
+  gender      String?     @db.VarChar(20)
   amount      Int?
   dateofbirth DateTime?
-  ofcNo       String?  @db.VarChar(20)
-  isGetTicket Boolean
+  ofcNo       String?     @db.VarChar(20)
+  isGetTicket Boolean?    @default(false)
   nationalId  Int?   
-  username   String  @db.VarChar(100)
+  username    String      @db.VarChar(100)
 
-  user      User      @relation(fields: [username], references: [username])
-
-  tmp_shuffle TmpShuffle []
-  addresses Address[]
-  ticket Ticket[]
+  user        User        @relation(fields: [username], references: [username])
+  tmp_shuffle TmpShuffle[]
+  addresses   Address[]
+  tickets     Ticket[]    // Updated plural form for consistency
 
   @@map("contacts")
 }
+
 
 
 model Address {
@@ -139,13 +139,14 @@ model Order {
 
 
 model TmpShuffle {
-  id            Int     @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   isShuffle     Boolean
   contactId     Int
-  ticketId      Int    
-  
+  ticketId      Int
+  shuffledAt    DateTime @default(now()) 
+
   contact Contact @relation(fields: [contactId], references: [id])
-  ticket Ticket @relation(fields: [ticketId], references: [id])
+  ticket  Ticket  @relation(fields: [ticketId], references: [id])
 
   @@map("tmp_shuffle")
 }

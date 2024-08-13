@@ -17,7 +17,6 @@ export class ContactValidation {
         phone: z.string().min(1).max(20).optional(),
         gender: z.string().min(1).max(20).optional(),
         amount: z.number().min(1).max(20).optional(),
-        isGetTicket: z.boolean().optional(),
         dateofbirth: z.date().optional(),
         ofcNo: z.string().min(1).max(20).optional(),
         nationalId: z.number().min(1).max(20).optional(),

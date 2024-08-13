@@ -8,7 +8,7 @@ export type ContactResponse = {
     phone?: string | null;
     amount?: number | null;
     gender?: string | null;
-    isGetTicket: Boolean;
+    isGetTicket: Boolean | null ;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
     nationalId?:number | null;
@@ -35,7 +35,7 @@ export type UpdateContactRequest = {
     phone?: string | null;
     amount?: number | null;
     gender?: string | null;
-    isGetTicket: Boolean;
+    isGetTicket: Boolean | null;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
     nationalId?:number | null;

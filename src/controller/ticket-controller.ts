@@ -12,7 +12,7 @@ import {
   RemoveTicketRequest,
   UpdateTicketRequest,
 } from "../model/ticket-model";
-import { TicketService } from "../service/ticket-service";
+import { ShuffleService, TicketService } from "../service/ticket-service";
 
 export class TicketController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -23,22 +23,24 @@ export class TicketController {
 
       // Check if the conversion was successful and if the numbers are valid
       if (isNaN(contactId) || isNaN(showId)) {
-        return res.status(400).json({ error: 'Invalid contactId or showId' });
+        return res.status(400).json({ error: "Invalid contactId or showId" });
       }
 
       // Construct the request object with the properly typed fields
       const request: CreateTicketRequest = {
         ...req.body,
-        contactId,  // Use the converted number
-        showId,     // Use the converted number
+        contactId, // Use the converted number
+        showId, // Use the converted number
       };
 
       // Ensure required fields are present
       if (!request.contactId || !request.showId) {
-        return res.status(400).json({ error: "contactId and showId are required" });
+        return res
+          .status(400)
+          .json({ error: "contactId and showId are required" });
       }
 
-      getDestinationFolder('ticket');
+      getDestinationFolder("ticket");
       handleFileUpload(req, request);
 
       logger.debug("request : " + JSON.stringify(request));
@@ -84,57 +86,78 @@ export class TicketController {
 
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-        const contactId = Number(req.body.contactId);
-        const showId = Number(req.body.showId);
-        const ticketId = Number(req.params.ticketId);
+      const contactId = Number(req.body.contactId);
+      const showId = Number(req.body.showId);
+      const ticketId = Number(req.params.ticketId);
 
-        // Logging for debugging purposes
-        console.log(`Contact ID: ${contactId}, Show ID: ${showId}, Ticket ID: ${ticketId}`);
+      // Logging for debugging purposes
+      console.log(
+        `Contact ID: ${contactId}, Show ID: ${showId}, Ticket ID: ${ticketId}`
+      );
 
-        if (isNaN(contactId) || isNaN(showId) || isNaN(ticketId)) {
-            return res.status(400).json({ error: `Invalid contactId ${contactId}, showId ${showId}, or ticketId ${ticketId}` });
-        }
+      if (isNaN(contactId) || isNaN(showId) || isNaN(ticketId)) {
+        return res
+          .status(400)
+          .json({
+            error: `Invalid contactId ${contactId}, showId ${showId}, or ticketId ${ticketId}`,
+          });
+      }
 
-        const request: UpdateTicketRequest = {
-            id: ticketId,
-            contactId: contactId,
-            showId: showId,
-            ...req.body,
-        };
+      const request: UpdateTicketRequest = {
+        id: ticketId,
+        contactId: contactId,
+        showId: showId,
+        ...req.body,
+      };
 
-        const ticket = await TicketService.getById(request);
+      const ticket = await TicketService.getById(request);
 
-        if (ticket.photo) {
-            deleteOldFile(path.join(__dirname, "..", "..", ticket.photo.toString()));
-        }
+      if (ticket.photo) {
+        deleteOldFile(
+          path.join(__dirname, "..", "..", ticket.photo.toString())
+        );
+      }
 
-        handleFileUpload(req, request);
-        const response = await TicketService.update(request);
-        res.status(200).json({
-            data: response,
-        });
+      handleFileUpload(req, request);
+      const response = await TicketService.update(request);
+      res.status(200).json({
+        data: response,
+      });
     } catch (e) {
-        next(e);
+      next(e);
     }
-}
-
+  }
 
   static async remove(req: Request, res: Response, next: NextFunction) {
     try {
-        const ticketId: RemoveTicketRequest = { 
-            id: Number(req.params.ticketId),
-        };
+      const ticketId: RemoveTicketRequest = {
+        id: Number(req.params.ticketId),
+      };
 
-        if (isNaN(ticketId.id) ) {
-            return res.status(400).json({ error: 'Invalid ticketId' });
-        }
+      if (isNaN(ticketId.id)) {
+        return res.status(400).json({ error: "Invalid ticketId" });
+      }
 
-        await TicketService.remove(ticketId);
-        res.status(200).json({
-            data: "OK"
-        });
+      await TicketService.remove(ticketId);
+      res.status(200).json({
+        data: "OK",
+      });
     } catch (e) {
-        next(e);
+      next(e);
     }
-}
+  }
+
+  static async shuffleTickets(req: Request, res: Response, next: NextFunction) {
+    try {
+      const ticketsRequired = parseInt(req.params.ticketsRequired);
+
+      const shuffledTickets = await ShuffleService.shuffleTickets(ticketsRequired);
+      res.status(200).json({
+        message: "Tickets shuffled successfully",
+        data: shuffledTickets,
+      });
+    } catch (e) {
+     next(e);
+    }
+  }
 }

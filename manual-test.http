@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 838ea73f-32d6-4d41-9d23-89fda1e01488
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 {
   "fullname" : "Adit Ganteng",
@@ -65,7 +65,7 @@ X-API-TOKEN: 838ea73f-32d6-4d41-9d23-89fda1e01488
 PATCH http://localhost:3000/api/contacts/1
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 431430af-ab05-45c4-bcfe-0b7308cc5c36
+X-API-TOKEN: 26dc44d0-bb3a-49da-b69e-bcaac388b086
 
 {
   "fullname" : "Adi",
@@ -135,7 +135,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 838ea73f-32d6-4d41-9d23-89fda1e01488
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 {
   "name" : "Theater 1",
@@ -168,7 +168,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 POST http://localhost:3000/api/showtimes
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 {
     "showTime" : "test",
@@ -203,7 +203,7 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/shows
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 {
     "title": "test",
@@ -247,7 +247,7 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 {
   "seatNumber": "test",
@@ -261,7 +261,7 @@ X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
 ### get Ticket
 GET http://localhost:3000/api/tickets/
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 
 ### get ticket by Id
 GET http://localhost:3000/api/tickets/1
@@ -322,3 +322,10 @@ X-API-TOKEN: 72743c08-c3b4-4e7e-8f21-3c3afae58357
 DELETE http://localhost:3000/api/orders/9
 Accept: application/json
 X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
+
+
+### Create Ticket
+POST http://localhost:3000/api/tickets/shuffle-tickets
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
