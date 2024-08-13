@@ -55,6 +55,8 @@ apiRouter.get("/api/tickets/:ticketId(\\d+)", TicketController.getById);
 apiRouter.get("/api/tickets/", TicketController.get);
 apiRouter.patch("/api/tickets/:ticketId(\\d+)",uploadMiddleware, TicketController.update);
 apiRouter.delete("/api/tickets/:ticketId(\\d+)", TicketController.remove);
+// shuffle ticket
+apiRouter.post("/api/tickets/shuffle-tickets/:ticketsRequired(\\d+)", TicketController.shuffleTickets);
 
 // Showtime Api
 apiRouter.post("/api/showtimes/", ShowtimeController.create);
@@ -68,7 +70,3 @@ apiRouter.post("/api/orders/", OrderController.create);
 apiRouter.get("/api/orders/:id", OrderController.getById);
 apiRouter.get("/api/orders", OrderController.get);
 
-// apiRouter.get("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.getById);
-// apiRouter.get("/api/showtimes/current", ShowtimeController.get);
-// apiRouter.patch("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.update);
-// apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);

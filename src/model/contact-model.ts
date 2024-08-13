@@ -7,6 +7,8 @@ export type ContactResponse = {
     email?: string | null;
     phone?: string | null;
     amount?: number | null;
+    gender?: string | null;
+    isGetTicket: Boolean | null ;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
     nationalId?:number | null;
@@ -18,6 +20,8 @@ export type CreateContactRequest = {
     email?: string;
     phone?: string;
     amount?: number;
+    gender?: string;
+    isGetTicket: Boolean;
     dateofbirth?: Date;
     ofcNo?:string;
     nationalId?:number;
@@ -30,6 +34,8 @@ export type UpdateContactRequest = {
     email?: string | null;
     phone?: string | null;
     amount?: number | null;
+    gender?: string | null;
+    isGetTicket: Boolean | null;
     dateofbirth?: Date | null;
     ofcNo?: string | null;
     nationalId?:number | null;
@@ -51,7 +57,9 @@ export function toContactResponse(contact : Contact): ContactResponse {
         photo: contact.photo,
         email: contact.email,
         amount: contact.amount,
+        gender: contact.gender,
         phone: contact.phone,
+        isGetTicket: contact.isGetTicket,
         dateofbirth: contact.dateofbirth,
         ofcNo:contact.ofcNo,
         nationalId:contact.nationalId

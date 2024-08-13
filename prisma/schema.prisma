@@ -26,23 +26,27 @@ model User {
 }
 
 model Contact {
-  id          Int     @id @default(autoincrement())
-  fullname    String  @db.VarChar(100)
-  photo       String? @db.VarChar(100)
-  email       String? @db.VarChar(100)
-  phone       String? @db.VarChar(20)
+  id          Int         @id @default(autoincrement())
+  fullname    String      @db.VarChar(100)
+  photo       String?     @db.VarChar(100)
+  email       String?     @db.VarChar(100)
+  phone       String?     @db.VarChar(20)
+  gender      String?     @db.VarChar(20)
   amount      Int?
   dateofbirth DateTime?
-  ofcNo       String?  @db.VarChar(20)
+  ofcNo       String?     @db.VarChar(20)
+  isGetTicket Boolean?    @default(false)
   nationalId  Int?   
-  username   String  @db.VarChar(100)
+  username    String      @db.VarChar(100)
 
-  user      User      @relation(fields: [username], references: [username])
-  addresses Address[]
-  ticket Ticket[]
+  user        User        @relation(fields: [username], references: [username])
+  tmp_shuffle TmpShuffle[]
+  addresses   Address[]
+  tickets     Ticket[]    // Updated plural form for consistency
 
   @@map("contacts")
 }
+
 
 
 model Address {
@@ -66,6 +70,7 @@ model Show {
   description String? @db.VarChar(2000)
   duration    String? @db.VarChar(50)
   rating      String? @db.VarChar(20)
+  price       Int?
   theaterId   Int     // Foreign key ke Theater
   showtimeId   Int
   
@@ -103,16 +108,18 @@ model Theater {
 model Ticket {
   id           Int     @id @default(autoincrement())
   seatNumber   String  @db.VarChar(255)
-  price        Int
   photo        String? @db.VarChar(100)
   purchaseDate DateTime?
+  status       String? @db.VarChar(100)
   showId       Int
   contactId   Int
 
   show Show @relation(fields: [showId], references: [id])
   contact Contact @relation(fields: [contactId], references: [id])
 
-  order Order[]   
+
+  tmp_shuffle TmpShuffle []
+  order Order[]
 
   @@map("tickets")
 }
@@ -128,4 +135,18 @@ model Order {
   ticket Ticket @relation(fields: [ticketId], references: [id])
 
   @@map("orders")
+}
+
+
+model TmpShuffle {
+  id            Int      @id @default(autoincrement())
+  isShuffle     Boolean
+  contactId     Int
+  ticketId      Int
+  shuffledAt    DateTime @default(now()) 
+
+  contact Contact @relation(fields: [contactId], references: [id])
+  ticket  Ticket  @relation(fields: [ticketId], references: [id])
+
+  @@map("tmp_shuffle")
 }

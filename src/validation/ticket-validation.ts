@@ -7,7 +7,6 @@ export class TicketValidation {
         showId: z.number().positive(),
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),
-        price: z.number().positive().optional(),
         country: z.string().min(1).max(100).optional(),
         purchaseDate: z.date().optional(),
     })
@@ -26,7 +25,6 @@ export class TicketValidation {
         showId: z.coerce.number().positive(),
         seatNumber: z.string().min(1).max(255).optional(),
         photo: z.string().min(1).max(100).optional(),
-        price: z.number().positive().optional(),
         country: z.string().min(1).max(100).optional(),
         purchaseDate: z.date().optional(),
     })

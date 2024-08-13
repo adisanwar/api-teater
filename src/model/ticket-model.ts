@@ -6,7 +6,6 @@ export type TicketResponse = {
   id: number;
   seatNumber?: String | null;
   photo?: String | null,
-  price?: number | null;
   purchaseDate?: Date | null;
   contactId: number;
   showId: number;
@@ -17,7 +16,6 @@ export type TicketResponse = {
 export type CreateTicketRequest = {
   seatNumber?: String;
   photo?: String;
-  price?: number;
   purchaseDate?: Date;
   showId:number;
   contactId:number;
@@ -52,7 +50,6 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
     id: ticket.id,
     seatNumber: ticket.seatNumber,
     photo: ticket.photo,
-    price: ticket.price,
     purchaseDate: ticket.purchaseDate,
     contactId: ticket.contactId,
     showId: ticket.showId,
@@ -62,6 +59,7 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
             photo: ticket.contact.photo,
             email: ticket.contact.email,
             phone: ticket.contact.phone,
+            isGetTicket: ticket.contact.isGetTicket,
             dateofbirth: ticket.contact.dateofbirth,
             ofcNo: ticket.contact.ofcNo,
             nationalId: ticket.contact.nationalId  
@@ -70,6 +68,7 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
             id: ticket.show.id,
             title: ticket.show.title,
             photo: ticket.show.photo,
+            price: ticket.show.price,
             description: ticket.show.description,
             duration: ticket.show.duration,
             rating: ticket.show.rating,

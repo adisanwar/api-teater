@@ -15,6 +15,7 @@ export class ContactValidation {
         photo: z.string().min(1).max(100).optional(),
         email: z.string().min(1).max(100).email().optional(),
         phone: z.string().min(1).max(20).optional(),
+        gender: z.string().min(1).max(20).optional(),
         amount: z.number().min(1).max(20).optional(),
         dateofbirth: z.date().optional(),
         ofcNo: z.string().min(1).max(20).optional(),
