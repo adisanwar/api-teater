@@ -46,7 +46,6 @@ export function toOrderResponse(order: Order & {ticket : Ticket & {show : Show}}
       id: order.ticket.id,
       seatNumber: order.ticket.seatNumber,
       // photo: order.ticket.photo,
-      price: order.ticket.price,
       purchaseDate: order.ticket.purchaseDate,
       contactId: order.ticket.contactId,
       showId: order.ticket.showId,

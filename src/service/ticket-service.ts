@@ -99,30 +99,89 @@ export class TicketService {
   }
 
 
-//   "errors": "EPERM: operation not permitted, unlink 'D:\\Programming\\api-teater\\test'"
-static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
-  const removeRequest = Validation.validate(TicketValidation.REMOVE, request);
+  //   "errors": "EPERM: operation not permitted, unlink 'D:\\Programming\\api-teater\\test'"
+  static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
+    const removeRequest = Validation.validate(TicketValidation.REMOVE, request);
 
-  const ticket = await prismaClient.ticket.findUnique({
-    where: {
-      id: removeRequest.id,
-    },
-  });
+    const ticket = await prismaClient.ticket.findUnique({
+      where: {
+        id: removeRequest.id,
+      },
+    });
 
-  if (!ticket) {
-    throw new ResponseError(404, "Ticket not found");
+    if (!ticket) {
+      throw new ResponseError(404, "Ticket not found");
+    }
+
+    if (ticket.photo) {
+      deleteOldFile(ticket.photo);
+    }
+
+    const response: any = await prismaClient.ticket.delete({
+      where: {
+        id: ticket.id,
+      },
+    });
+
+    return toTicketResponse(response);
   }
 
-  if (ticket.photo) {
-    deleteOldFile(ticket.photo);
-  }
+//   static async shuffleTickets(): Promise<void> {
+//     const tickets = await prisma.ticket.findMany();
+//     const tempTickets = await prisma.tempTicket.findMany();
 
-  const response: any = await prismaClient.ticket.delete({
-    where: {
-      id: ticket.id,
-    },
-  });
+//     if (tickets.length < 6) {
+//         if (tempTickets.length > 0) {
+//             const shuffledTickets = fisherYatesShuffle(tickets);
+//             // Perbarui tiket
+//             await this.updateTickets(shuffledTickets);
+//             // Kosongkan tabel sementara
+//             await prisma.tempTicket.deleteMany({});
+//         } else {
+//             const shuffledTickets = fisherYatesShuffle(tickets);
+//             await this.updateTickets(shuffledTickets);
+//         }
+//     } else {
+//         if (tickets.length >= 6 && tempTickets.length > 0) {
+//             const uniqueTickets = tickets.filter(t => !tempTickets.some(tt => tt.ticketId === t.id));
+//             if (uniqueTickets.length > 0) {
+//                 const shuffledTickets = fisherYatesShuffle(uniqueTickets);
+//                 await this.updateTickets(shuffledTickets);
+//                 await this.updateTempTickets(shuffledTickets);
+//             } else {
+//                 // Semua tiket ada di temp, kosongkan temp dan acak ulang
+//                 await prisma.tempTicket.deleteMany({});
+//                 const shuffledTickets = fisherYatesShuffle(tickets);
+//                 await this.updateTickets(shuffledTickets);
+//                 await this.updateTempTickets(shuffledTickets);
+//             }
+//         } else {
+//             const shuffledTickets = fisherYatesShuffle(tickets);
+//             await this.updateTickets(shuffledTickets);
+//             await this.updateTempTickets(shuffledTickets);
+//         }
+//     }
+// }
 
-  return toTicketResponse(response);
-}
+// static async updateTickets(shuffledTickets: any[]): Promise<void> {
+//     for (const ticket of shuffledTickets) {
+//         await prisma.ticket.update({
+//             where: { id: ticket.id },
+//             data: { /* perbarui kolom yang relevan di sini */ }
+//         });
+//     }
+// }
+
+// static async updateTempTickets(shuffledTickets: any[]): Promise<void> {
+//     for (const ticket of shuffledTickets) {
+//         await prisma.tempTicket.create({
+//             data: {
+//                 ticketId: ticket.id,
+//                 userId: ticket.userId,
+//                 shuffledAt: new Date(),
+//                 // kolom tambahan jika ada
+//             }
+//         });
+//     }
+// }
 }

@@ -75,7 +75,7 @@ export class ShowService {
   static async getById(request: GetShowRequest): Promise<ShowResponse> {
     const getRequest: any = Validation.validate(ShowValidation.GET, request);
 
-    const show = await prismaClient.show.findFirst({
+    const show : any = await prismaClient.show.findFirst({
       where: {
         id: getRequest.id,
       },

@@ -16,9 +16,11 @@ CREATE TABLE `contacts` (
     `photo` VARCHAR(100) NULL,
     `email` VARCHAR(100) NULL,
     `phone` VARCHAR(20) NULL,
+    `gender` VARCHAR(20) NULL,
     `amount` INTEGER NULL,
     `dateofbirth` DATETIME(3) NULL,
     `ofcNo` VARCHAR(20) NULL,
+    `isGetTicket` BOOLEAN NOT NULL,
     `nationalId` INTEGER NULL,
     `username` VARCHAR(100) NOT NULL,
 
@@ -46,6 +48,7 @@ CREATE TABLE `shows` (
     `description` VARCHAR(2000) NULL,
     `duration` VARCHAR(50) NULL,
     `rating` VARCHAR(20) NULL,
+    `price` INTEGER NULL,
     `theaterId` INTEGER NOT NULL,
     `showtimeId` INTEGER NOT NULL,
 
@@ -76,9 +79,9 @@ CREATE TABLE `theaters` (
 CREATE TABLE `tickets` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `seatNumber` VARCHAR(255) NOT NULL,
-    `price` INTEGER NOT NULL,
     `photo` VARCHAR(100) NULL,
     `purchaseDate` DATETIME(3) NULL,
+    `status` VARCHAR(100) NULL,
     `showId` INTEGER NOT NULL,
     `contactId` INTEGER NOT NULL,
 
@@ -95,6 +98,16 @@ CREATE TABLE `orders` (
     `ticketId` INTEGER NOT NULL,
 
     UNIQUE INDEX `orders_orderId_key`(`orderId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `tmp_shuffle` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `isShuffle` BOOLEAN NOT NULL,
+    `contactId` INTEGER NOT NULL,
+    `ticketId` INTEGER NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -118,3 +131,9 @@ ALTER TABLE `tickets` ADD CONSTRAINT `tickets_contactId_fkey` FOREIGN KEY (`cont
 
 -- AddForeignKey
 ALTER TABLE `orders` ADD CONSTRAINT `orders_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `tickets`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tmp_shuffle` ADD CONSTRAINT `tmp_shuffle_contactId_fkey` FOREIGN KEY (`contactId`) REFERENCES `contacts`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `tmp_shuffle` ADD CONSTRAINT `tmp_shuffle_ticketId_fkey` FOREIGN KEY (`ticketId`) REFERENCES `tickets`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
