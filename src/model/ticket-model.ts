@@ -59,7 +59,6 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
             photo: ticket.contact.photo,
             email: ticket.contact.email,
             phone: ticket.contact.phone,
-            isGetTicket: ticket.contact.isGetTicket,
             dateofbirth: ticket.contact.dateofbirth,
             ofcNo: ticket.contact.ofcNo,
             nationalId: ticket.contact.nationalId  

@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
 
 {
   "fullname" : "Adit Ganteng",
@@ -135,7 +135,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
 
 {
   "name" : "Theater 1",
@@ -168,7 +168,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 POST http://localhost:3000/api/showtimes
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
 
 {
     "showTime" : "test",
@@ -203,12 +203,13 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/shows
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
 
 {
     "title": "test",
     "description": "test",
     "duration": "25 test",
+    "price" : 250000,
     "rating":"test",
     "theaterId" : 1,
     "showtimeId" : 1
@@ -217,23 +218,27 @@ X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+
 
 ### get by Id
-GET http://localhost:3000/api/shows/1
+GET http://localhost:3000/api/shows/2
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 ###
-PATCH http://localhost:3000/api/shows/41
+PATCH http://localhost:3000/api/shows/2
 Content-Type: application/json
-X-API-TOKEN: 3b5f7166-9ebd-499b-95ba-325f67e09adc
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 {
    "title": "coba",
    "description": "test",
+   "price" : 250000,
   "duration": "test",
-  "rating": "test"
+  "rating": "test",
+  "theaterId": 1,
+  "showtimeId" : 1
 
 }
 
@@ -247,26 +252,24 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
 
 {
   "seatNumber": "test",
   "photo": "test",
-  "price": 200000,
-  "photo" : "test",
-  "showId": 1,
-  "contactId": 1
-}
+  "showId": 2,
+  "contactId": 1,
+} 
 
 ### get Ticket
 GET http://localhost:3000/api/tickets/
 Accept: application/json
-X-API-TOKEN: 1508873c-963a-4f09-8f3d-0b36602e3c87
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 ### get ticket by Id
 GET http://localhost:3000/api/tickets/1
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 ### Update Ticket
 PATCH http://localhost:3000/api/tickets/1
@@ -290,7 +293,7 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/orders
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 {  
     "amount": 50000,
@@ -301,7 +304,7 @@ X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
 ### get Orders
 GET http://localhost:3000/api/orders/
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 
 ### get order by Id
 GET http://localhost:3000/api/orders/2

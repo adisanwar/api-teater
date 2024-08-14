@@ -20,7 +20,6 @@ CREATE TABLE `contacts` (
     `amount` INTEGER NULL,
     `dateofbirth` DATETIME(3) NULL,
     `ofcNo` VARCHAR(20) NULL,
-    `isGetTicket` BOOLEAN NULL DEFAULT false,
     `nationalId` INTEGER NULL,
     `username` VARCHAR(100) NOT NULL,
 

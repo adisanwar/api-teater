@@ -35,7 +35,6 @@ model Contact {
   amount      Int?
   dateofbirth DateTime?
   ofcNo       String?     @db.VarChar(20)
-  isGetTicket Boolean?    @default(false)
   nationalId  Int?   
   username    String      @db.VarChar(100)
 

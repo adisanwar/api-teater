@@ -81,6 +81,7 @@ export class ShowService {
       },
       include: {
         theater: true,
+        showtime: true
       },
     });
 
@@ -98,6 +99,7 @@ export class ShowService {
     const show = await prismaClient.show.findMany({
       include: {
         theater: true,
+        showtime: true
       },
     });
     return show;
