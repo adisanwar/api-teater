@@ -53,7 +53,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/contacts
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
+X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 
 {
   "fullname" : "Adit Ganteng",
@@ -135,7 +135,7 @@ X-API-TOKEN: 33acb47e-545b-4a2b-b27c-c0ba8196627f
 POST http://localhost:3000/api/theaters
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
+X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 
 {
   "name" : "Theater 1",
@@ -168,7 +168,7 @@ X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 POST http://localhost:3000/api/showtimes
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
+X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 
 {
     "showTime" : "test",
@@ -203,7 +203,7 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/shows
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
+X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 
 {
     "title": "test",
@@ -252,19 +252,17 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: 43fba2ce-52bc-4797-a31a-e6c9b86aa93e
+X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 
 {
-  "seatNumber": "test",
-  "photo": "test",
-  "showId": 2,
-  "contactId": 1,
+  "showId": 1,
+  "contactId": 1
 } 
 
 ### get Ticket
 GET http://localhost:3000/api/tickets/
 Accept: application/json
-X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+X-API-TOKEN: bc66284a-2f3b-498e-a0d6-dd152bb308b1
 
 ### get ticket by Id
 GET http://localhost:3000/api/tickets/1
@@ -274,10 +272,9 @@ X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 ### Update Ticket
 PATCH http://localhost:3000/api/tickets/1
 Content-Type: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: bc66284a-2f3b-498e-a0d6-dd152bb308b1
 
 {
-   "seatNumber": "ROW J",
    "showId" : 1,
    "contactId": 1
 }

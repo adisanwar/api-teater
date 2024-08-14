@@ -77,9 +77,9 @@ CREATE TABLE `theaters` (
 -- CreateTable
 CREATE TABLE `tickets` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `seatNumber` VARCHAR(255) NOT NULL,
+    `seatNumber` VARCHAR(255) NULL,
     `photo` VARCHAR(100) NULL,
-    `purchaseDate` DATETIME(3) NULL,
+    `purchaseDate` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
     `status` VARCHAR(100) NULL,
     `showId` INTEGER NOT NULL,
     `contactId` INTEGER NOT NULL,

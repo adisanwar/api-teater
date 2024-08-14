@@ -106,9 +106,9 @@ model Theater {
 
 model Ticket {
   id           Int     @id @default(autoincrement())
-  seatNumber   String  @db.VarChar(255)
+  seatNumber   String?  @db.VarChar(255)
   photo        String? @db.VarChar(100)
-  purchaseDate DateTime?
+  purchaseDate DateTime? @default(now())
   status       String? @db.VarChar(100)
   showId       Int
   contactId   Int

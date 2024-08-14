@@ -29,6 +29,7 @@ export class TicketController {
       // Construct the request object with the properly typed fields
       const request: CreateTicketRequest = {
         ...req.body,
+        seatNumber : null,
         contactId, // Use the converted number
         showId, // Use the converted number
       };
