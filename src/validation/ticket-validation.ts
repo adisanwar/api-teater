@@ -5,9 +5,6 @@ export class TicketValidation {
     static readonly CREATE : ZodType = z.object({
         contactId: z.number().positive(),
         showId: z.number().positive(),
-        photo: z.string().min(1).max(100).optional(),
-        country: z.string().min(1).max(100).optional(),
-        purchaseDate: z.date().optional(),
     })
 
     static readonly GET : ZodType = z.object({
@@ -22,9 +19,6 @@ export class TicketValidation {
         id: z.number().positive(),
         contactId: z.coerce.number().positive(),  // Automatically converts strings to numbers
         showId: z.coerce.number().positive(),
-        photo: z.string().min(1).max(100).optional(),
-        country: z.string().min(1).max(100).optional(),
-        purchaseDate: z.date().optional(),
     })
 
 }
