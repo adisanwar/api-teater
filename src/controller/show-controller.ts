@@ -16,13 +16,24 @@ export class ShowController {
       if (isNaN(theaterId)) {
         throw new Error('Invalid theaterId');
       }
+      const showtimeId = Number(req.body.showtimeId);
+      if (isNaN(showtimeId)) {
+        throw new Error('Invalid showtime id');
+      }
+
+      const price = Number(req.body.price);
+      if (isNaN(price)) {
+        throw new Error('Invalid price');
+      }
       const request: CreateShowRequest = {
         ...req.body,
-        theaterId: theaterId
+        price:price,
+        theaterId: theaterId,
+        showtimeId: showtimeId
       };
-
-      handleFileUpload(req, request);
       console.log(request);
+      handleFileUpload(req, request);
+      
 
       const response = await ShowService.create(request);
       res.status(200).json({
@@ -67,14 +78,33 @@ export class ShowController {
   static async update(req: TheaterRequest, res: Response, next: NextFunction) {
     try {
         const request: UpdateShowRequest = req.body as UpdateShowRequest;
-        request.theaterId = Number(req.body.theaterId);
-        request.showtimeId = Number(req.body.showtimeId);
+        const theaterId = Number(req.body.theaterId);
+        const showtimeId = Number(req.body.showtimeId);
         request.id = Number(req.params.showId);
 
-        // Validate IDs
-        if (isNaN(request.theaterId) || isNaN(request.showtimeId) || isNaN(request.id)) {
-            return res.status(400).json({ error: 'Invalid theater or show ID' });
+        console.log(req.body)
+
+        if (isNaN(theaterId)) {
+          throw new Error('Invalid theaterId');
         }
+
+        if (isNaN(showtimeId)) {
+          throw new Error('Invalid showtime id');
+        }
+  
+        const price = Number(req.body.price);
+        if (isNaN(price)) {
+          throw new Error('Invalid price');
+        }
+
+        // const price = Number(req.body.price);
+        // if (isNaN(price)) {
+        //   throw new Error('Invalid price');
+        // }
+        // Validate IDs
+        // if (isNaN(request.theaterId) || isNaN(request.showtimeId) || isNaN(request.id)) {
+        //     return res.status(400).json({ error: 'Invalid theater or show ID' });
+        // }
 
         const show = await ShowService.getById(request);
 

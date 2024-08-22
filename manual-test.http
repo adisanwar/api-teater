@@ -22,7 +22,7 @@ Accept: application/json
 ### Get User
 GET http://localhost:3000/api/users/current
 Accept: application/json
-X-API-TOKEN: 431430af-ab05-45c4-bcfe-0b7308cc5c36
+X-API-TOKEN: ced3207d-3c97-4fed-a4fb-bb924e422260
 
 ### Logout User
 DELETE http://localhost:3000/api/users/current
@@ -144,9 +144,9 @@ X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 }
 
 ### get theater
-GET http://localhost:3000/api/theaters/1
+GET http://localhost:3000/api/theaters
 Accept: application/json
-X-API-TOKEN: 4e605860-fc81-4c63-94bb-7503af8dc594
+X-API-TOKEN: fe8843f7-25f1-4106-a66e-1167d41cf1aa
 
 ###
 PATCH http://localhost:3000/api/theaters/19
@@ -178,7 +178,7 @@ X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 ### get showstime
 GET http://localhost:3000/api/showtimes/current
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: 248a3a1c-f141-4737-8443-b8126b5abbef
 
 ### get by Id
 GET http://localhost:3000/api/showtimes/1
@@ -218,7 +218,7 @@ X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
 
 
 ### get by Id
@@ -301,7 +301,7 @@ X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
 ### get Orders
 GET http://localhost:3000/api/orders/
 Accept: application/json
-X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+X-API-TOKEN: 306d447d-781c-4d43-828a-609c4dd51abb
 
 ### get order by Id
 GET http://localhost:3000/api/orders/2

@@ -10,6 +10,7 @@ export class ShowtimeController{
             const request: CreateShowtimeRequest = req.body as CreateShowtimeRequest;       
             
             // console.log(request);
+            console.log(request);
             const response = await ShowtimeService.create(request);
             res.status(200).json({
                 data: response
