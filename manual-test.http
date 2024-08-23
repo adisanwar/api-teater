@@ -218,7 +218,7 @@ X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
 ### get shows
 GET http://localhost:3000/api/shows/current
 Accept: application/json
-X-API-TOKEN: 403cbaf6-af16-4d58-b82a-ca9f81940a59
+X-API-TOKEN: dc50f6f2-0821-4da8-b824-9211a52821bf
 
 
 ### get by Id
@@ -252,22 +252,22 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: e2da7119-f7f8-41eb-91f8-5ac4e9d758c9
+X-API-TOKEN: dc50f6f2-0821-4da8-b824-9211a52821bf
 
 {
-  "showId": 1,
+  "showId": 6,
   "contactId": 1
 } 
 
 ### get Ticket
 GET http://localhost:3000/api/tickets/
 Accept: application/json
-X-API-TOKEN: bc66284a-2f3b-498e-a0d6-dd152bb308b1
+X-API-TOKEN: dc50f6f2-0821-4da8-b824-9211a52821bf
 
 ### get ticket by Id
 GET http://localhost:3000/api/tickets/1
 Accept: application/json
-X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+X-API-TOKEN: dc50f6f2-0821-4da8-b824-9211a52821bf
 
 ### Update Ticket
 PATCH http://localhost:3000/api/tickets/1

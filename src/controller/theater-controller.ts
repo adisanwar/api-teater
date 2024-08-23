@@ -11,12 +11,15 @@ export class TheaterController {
     static async create(req: Request, res: Response, next: NextFunction) {
         try {
             const request: CreateTheaterRequest = req.body as CreateTheaterRequest;
+            console.log(request);
             getDestinationFolder('theater');
-            handleFileUpload(req, request);
+            const fileup = handleFileUpload(req, request);
+            console.log(request, req.file);
             const response = await TheaterService.create(request);
             res.status(200).json({
                 data: response
             })
+            
         } catch (e) {
             next(e);
         }
@@ -93,21 +96,5 @@ export class TheaterController {
             next(e);
         }
     }
-
-    // static async remove(req: Request, res: Response, next: NextFunction) {
-    //     try {
-    //         const theaterId = Number(req.params.theaterId);
-    //         if (isNaN(theaterId)) {
-    //             return res.status(400).json({ error: 'Invalid theater ID' });
-    //         }
-
-    //         await TheaterService.remove(theaterId);
-    //         res.status(200).json({
-    //             data: "OK"
-    //         });
-    //     } catch (e) {
-    //         next(e);
-    //     }
-    // }
 
 }

@@ -1,12 +1,11 @@
 import { UserRequest } from "../type/user-request";
 import { Request, Response, NextFunction, urlencoded } from "express";
-import { TheaterRequest } from "../type/theater-request";
 import { CreateShowRequest, GetShowRequest, RemoveShowRequest, toShowResponse, UpdateShowRequest } from "../model/show-model";
-import { TheaterService } from "../service/theater-service";
 import { logger } from "../application/logging";
 import path from "path";
 import { ShowService } from "../service/show-service";
 import { deleteOldFile, getDestinationFolder, handleFileUpload } from "../middleware/upload-middleware";
+import { ShowRequest } from "../type/show-request";
 
 export class ShowController {
 
@@ -27,13 +26,13 @@ export class ShowController {
       }
       const request: CreateShowRequest = {
         ...req.body,
-        price:price,
+        price: price,
         theaterId: theaterId,
         showtimeId: showtimeId
       };
       console.log(request);
       handleFileUpload(req, request);
-      
+
 
       const response = await ShowService.create(request);
       res.status(200).json({
@@ -75,55 +74,57 @@ export class ShowController {
     }
   }
 
-  static async update(req: TheaterRequest, res: Response, next: NextFunction) {
+  static async update(req: ShowRequest, res: Response, next: NextFunction) {
     try {
-        const request: UpdateShowRequest = req.body as UpdateShowRequest;
-        const theaterId = Number(req.body.theaterId);
-        const showtimeId = Number(req.body.showtimeId);
-        request.id = Number(req.params.showId);
 
-        console.log(req.body)
+      const theaterId = Number(req.body.theaterId);
+      const showtimeId = Number(req.body.showtimeId);
+      const showId = Number(req.params.showId);
 
-        if (isNaN(theaterId)) {
-          throw new Error('Invalid theaterId');
-        }
+     
+      if (isNaN(showId)) {
+        throw new Error('Invalid showtime id');
+      }
+      if (isNaN(theaterId) && isNaN(showtimeId)) {
+        throw new Error('Invalid theaterId');
+      }
 
-        if (isNaN(showtimeId)) {
-          throw new Error('Invalid showtime id');
-        }
-  
-        const price = Number(req.body.price);
-        if (isNaN(price)) {
-          throw new Error('Invalid price');
-        }
+      // if (isNaN(showtimeId)) {
+      //   throw new Error('Invalid showtime id');
+      // }
 
-        // const price = Number(req.body.price);
-        // if (isNaN(price)) {
-        //   throw new Error('Invalid price');
-        // }
-        // Validate IDs
-        // if (isNaN(request.theaterId) || isNaN(request.showtimeId) || isNaN(request.id)) {
-        //     return res.status(400).json({ error: 'Invalid theater or show ID' });
-        // }
 
-        const show = await ShowService.getById(request);
+      console.log(req.body, req.params)
 
-        // Handle file deletion if a new photo is being uploaded
-        if (show.photo) {
-          deleteOldFile(path.join(__dirname, '..', '..', show.photo));
-        }
-        // Handle file upload
-        handleFileUpload(req, request);
+      const request: UpdateShowRequest = {
+        ...req.body,
+        id: showId,
+        theaterId: theaterId,
+        showtimeId: showtimeId
+      }
 
-        // Proceed with the update
-        const response = await ShowService.update(request);
-        res.status(200).json({
-            data: response
-        });
+      console.log(request)
+
+      const show = await ShowService.getById(request);
+
+      // Handle file deletion if a new photo is being uploaded
+      if (show.photo) {
+        deleteOldFile(path.join(__dirname, '..', '..', show.photo));
+      }
+      // Handle file upload
+      handleFileUpload(req, request);
+
+      console.log(request)
+
+      // Proceed with the update
+      const response = await ShowService.update(request);
+      res.status(200).json({
+        data: response
+      });
     } catch (e) {
-        next(e);
+      next(e);
     }
-}
+  }
 
 
   static async remove(req: Request, res: Response, next: NextFunction) {

@@ -75,10 +75,10 @@ export class TicketService {
 
   static async get(): Promise<Ticket[]> {
     return await prismaClient.ticket.findMany({
-      include: {
-        contact: true,
-        show: true,
-      },
+      // include: {
+      //   contact: true,
+      //   show: true,
+      // },
     });
   }
 
