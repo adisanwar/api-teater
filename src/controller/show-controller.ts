@@ -30,7 +30,7 @@ export class ShowController {
         theaterId: theaterId,
         showtimeId: showtimeId
       };
-      console.log(request);
+      // console.log(request);
       handleFileUpload(req, request);
 
 
@@ -80,8 +80,9 @@ export class ShowController {
       const theaterId = Number(req.body.theaterId);
       const showtimeId = Number(req.body.showtimeId);
       const showId = Number(req.params.showId);
-
-     
+      const price = Number(req.body.price);
+      
+    
       if (isNaN(showId)) {
         throw new Error('Invalid showtime id');
       }
@@ -89,9 +90,9 @@ export class ShowController {
         throw new Error('Invalid theaterId');
       }
 
-      // if (isNaN(showtimeId)) {
-      //   throw new Error('Invalid showtime id');
-      // }
+      if (isNaN(price)) {
+        throw new Error('Invalid price');
+      }
 
 
       console.log(req.body, req.params)
@@ -99,6 +100,7 @@ export class ShowController {
       const request: UpdateShowRequest = {
         ...req.body,
         id: showId,
+        price:price,
         theaterId: theaterId,
         showtimeId: showtimeId
       }

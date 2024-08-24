@@ -21,48 +21,48 @@ export class OrderController {
         ticketId: ticketId,
         amount: req.body.amount,
         status: req.body.status || "pending",
-        paymentUrl: 'https://google.com',
+        paymentUrl: '',
       };
 
-      const createdOrder = await OrderService.createOrder(request)
+      // const createdOrder = await OrderService.createOrder(request)
 
-       const updatedOrder = await prismaClient.order.update({
-        where: { id: createdOrder.id },
-        data: {
-          paymentUrl: "https://google.com",
-        },
-      });
-
-      // const ticket = await prismaClient.ticket.findUnique({
-      //   where : {
-      //     id: ticketId
-      //   }
-      // })
-
-      // Prepare parameters for Midtrans Snap API
-      // const parameter = {
-      //   transaction_details: {
-      //     order_id: orderId,
-      //     gross_amount: request.amount,
-      //   },
-      //   credit_card: {
-      //     secure: true,
-      //   },
-      // };
-
-      // // Create transaction using Midtrans API
-      // const transaction = await midtransClient.createTransaction(parameter);
-
-      // // Create the order
-      // const createdOrder = await OrderService.createOrder(request);
-
-      // // Update order with payment URL returned by Midtrans
-      // const updatedOrder = await prismaClient.order.update({
+      //  const updatedOrder = await prismaClient.order.update({
       //   where: { id: createdOrder.id },
       //   data: {
-      //     paymentUrl: transaction.redirect_url,
+      //     paymentUrl: "https://google.com",
       //   },
       // });
+
+      const ticket = await prismaClient.ticket.findUnique({
+        where : {
+          id: ticketId
+        }
+      })
+
+      // Prepare parameters for Midtrans Snap API
+      const parameter = {
+        transaction_details: {
+          order_id: orderId,
+          gross_amount: request.amount,
+        },
+        credit_card: {
+          secure: true,
+        },
+      };
+
+      // Create transaction using Midtrans API
+      const transaction = await midtransClient.createTransaction(parameter);
+
+      // Create the order
+      const createdOrder = await OrderService.createOrder(request);
+
+      // Update order with payment URL returned by Midtrans
+      const updatedOrder = await prismaClient.order.update({
+        where: { id: createdOrder.id },
+        data: {
+          paymentUrl: transaction.redirect_url,
+        },
+      });
 
       res.status(200).json({
         data: updatedOrder,
