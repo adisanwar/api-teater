@@ -32,7 +32,8 @@ export class OrderService {
     static async get(): Promise<OrderResponse[]> {
       const orders = await prismaClient.order.findMany({
           include: {
-              ticket:{
+              ticket:
+              {
                 include :{
                   show:true
                 }

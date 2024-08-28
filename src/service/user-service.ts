@@ -112,4 +112,74 @@ export class UserService {
         return toUserResponse(result);
     }
 
+    static async getAll(): Promise<UserResponse[]> {
+        const users = await prismaClient.user.findMany();
+        return users.map(user => toUserResponse(user));
+    }
+
+    static async getById(username: string): Promise<UserResponse> {
+        const user = await prismaClient.user.findUnique({
+            where: {
+                username: username
+            }
+        });
+
+        if (!user) {
+            throw new ResponseError(404, "User not found");
+        }
+
+        return toUserResponse(user);
+    }
+
+    static async updateUser(username: string, request: UpdateUserRequest): Promise<UserResponse> {
+        const updateRequest = Validation.validate(UserValidation.UPDATE, request);
+
+        const existingUser = await prismaClient.user.findUnique({
+            where: {
+                username: username
+            }
+        });
+
+        if (!existingUser) {
+            throw new ResponseError(404, "User not found");
+        }
+
+        if (updateRequest.name) {
+            existingUser.name = updateRequest.name;
+        }
+
+        if (updateRequest.password) {
+            existingUser.password = await bcrypt.hash(updateRequest.password, 10);
+        }
+
+        const result = await prismaClient.user.update({
+            where: {
+                username: username
+            },
+            data: existingUser
+        });
+
+        return toUserResponse(result);
+    }
+
+    static async delete(username: string): Promise<void> {
+        const existingUser = await prismaClient.user.findUnique({
+            where: {
+                username: username
+            }
+        });
+
+        if (!existingUser) {
+            throw new ResponseError(404, "User not found");
+        }
+
+        await prismaClient.user.delete({
+            where: {
+                username: username
+            }
+        });
+    }
+
 }
+
+

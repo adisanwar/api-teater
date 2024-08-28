@@ -161,4 +161,16 @@ export class TicketController {
      next(e);
     }
   }
+
+  static async getShuffleData(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = await ShuffleService.getShuffle(); // Memanggil getShuffle dari ShuffleService
+      res.status(200).json({
+        data: response,
+      });
+    } catch (e) {
+      next(e);
+    }
+  }
+
 }

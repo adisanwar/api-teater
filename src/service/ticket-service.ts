@@ -1,4 +1,4 @@
-import { Contact, Show, Ticket, User } from "@prisma/client";
+import { Contact, Show, Ticket, TmpShuffle, User } from "@prisma/client";
 import { Validation } from "../validation/validation";
 import { prismaClient } from "../application/database";
 import { ResponseError } from "../error/response-error";
@@ -168,7 +168,8 @@ export class ShuffleService {
       // Kembalikan tiket yang sudah di-shuffle dengan field yang dibutuhkan
       return shuffledTickets.map(ticket => ({
           name: ticket.contact.fullname, // Asumsi 'contact' memiliki field 'fullname'
-          contactId: ticket.contactId
+          contactId: ticket.contactId,
+          
       }));
   }
 
@@ -218,5 +219,15 @@ export class ShuffleService {
               }
           });
       }
-  }
+  } 
+  
+  static async getShuffle(): Promise<TmpShuffle[]> {
+      return await prismaClient.tmpShuffle.findMany({
+        // Jika Anda ingin meng-include relasi, uncomment kode di bawah ini
+        // include: {
+        //   contact: true,
+        //   show: true,
+        // },
+      });
+    }
 }

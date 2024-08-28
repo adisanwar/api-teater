@@ -8,6 +8,7 @@ export class UserController {
     static async register(req: Request, res: Response, next: NextFunction) {
         try {
             const request: CreateUserRequest = req.body as CreateUserRequest;
+
             const response = await UserService.register(request);
             res.status(200).json({
                 data: response
@@ -63,4 +64,51 @@ export class UserController {
         }
     }
 
+    static async getAll(req: Request, res: Response, next: NextFunction) {
+        try {
+            const response = await UserService.getAll();
+            res.status(200).json({
+                data: response
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async getById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const username: string = req.params.username;
+            const response = await UserService.getById(username);
+            res.status(200).json({
+                data: response
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async updateUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const username: any = req.params.username;
+            const request: UpdateUserRequest = req.body as UpdateUserRequest;
+            const response = await UserService.update(username, request);
+            res.status(200).json({
+                data: response
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    static async delete(req: Request, res: Response, next: NextFunction) {
+        try {
+            const username: string = req.params.id;
+            await UserService.delete(username);
+            res.status(204).send();
+        } catch (e) {
+            next(e);
+        }
+    }
+
 }
+
