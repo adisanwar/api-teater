@@ -328,7 +328,7 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/tickets/shuffle-tickets/3
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: e58d3bdd-6aac-4117-806f-5bdae59d06c8
+X-API-TOKEN: f6198cbd-2271-49df-90c2-9a14f7cc3d11
 
 
 ### Create allshuffle Ticket

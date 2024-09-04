@@ -75,10 +75,10 @@ export class TicketService {
 
   static async get(): Promise<Ticket[]> {
     return await prismaClient.ticket.findMany({
-      // include: {
-      //   contact: true,
-      //   show: true,
-      // },
+      include: {
+        contact: true,
+        show: true,
+      },
     });
   }
 
@@ -129,105 +129,130 @@ export class TicketService {
 
 export class ShuffleService {
   static async shuffleTickets(maxShuffleCount: number = 6): Promise<any[]> {
-      const tickets = await prismaClient.ticket.findMany({
-          include: {
-              contact: true // Asumsikan 'contact' adalah relasi untuk mendapatkan detail kontak
-          }
-      });
-      const tempTickets = await prismaClient.tmpShuffle.findMany();
-
-      // Filter tiket untuk mengecualikan yang sudah di-shuffle berdasarkan contactId
-      let filteredTickets = tickets.filter(ticket => {
-          return !tempTickets.some(temp => temp.contactId === ticket.contactId);
-      });
-
-      let shuffledTickets = this.fisherYatesShuffle(filteredTickets);
-
-      if (shuffledTickets.length <= maxShuffleCount) {
-          // Kosongkan temporary table jika jumlah tiket yang di-shuffle kurang dari maxShuffleCount
-          await prismaClient.tmpShuffle.deleteMany();
+    const tickets = await prismaClient.ticket.findMany({
+      where: {
+        status: 'confirmed' // Hanya ambil tiket dengan status 'confirmed'
+      },
+      include: {
+        contact: true // Asumsikan 'contact' adalah relasi untuk mendapatkan detail kontak
       }
+    });
 
-      // Jika jumlah tiket yang di-shuffle kurang dari maxShuffleCount, tambahkan dari tmpShuffle
+    // Jika tidak ada tiket dengan status confirmed, return error
+    if (tickets.length === 0) {
+      throw new Error('Data tidak ditemukan'); // Lempar error jika tiket tidak ditemukan
+  }
+
+    const tempTickets = await prismaClient.tmpShuffle.findMany();
+
+    // Filter tiket untuk mengecualikan yang sudah di-shuffle berdasarkan contactId
+    let filteredTickets = tickets.filter(ticket => {
+      return !tempTickets.some(temp => temp.contactId === ticket.contactId);
+    });
+
+    let shuffledTickets = this.fisherYatesShuffle(filteredTickets);
+
+    if (shuffledTickets.length <= maxShuffleCount) {
+      // Kosongkan temporary table jika jumlah tiket yang di-shuffle kurang dari maxShuffleCount
+      await prismaClient.tmpShuffle.deleteMany();
+    }
+
+    // Jika jumlah tiket yang di-shuffle kurang dari maxShuffleCount, tambahkan dari tmpShuffle
     //   if (shuffledTickets.length < maxShuffleCount) {
     //     const additionalTickets : any = tempTickets.slice(0, maxShuffleCount - shuffledTickets.length);
     //     shuffledTickets = shuffledTickets.concat(additionalTickets);
     //     shuffledTickets = this.fisherYatesShuffle(shuffledTickets); // Shuffle ulang dengan tambahan data
     // }
 
-      // Batasi jumlah array yang di-shuffle ke maxShuffleCount elemen
-      shuffledTickets = shuffledTickets.slice(0, maxShuffleCount);
+    // Batasi jumlah array yang di-shuffle ke maxShuffleCount elemen
+    shuffledTickets = shuffledTickets.slice(0, maxShuffleCount);
 
-      await this.updateTickets(shuffledTickets);
+    await this.updateTickets(shuffledTickets);
 
-      // // Kosongkan tabel tmpShuffle sebelum menyimpan data baru
-      // await prismaClient.tmpShuffle.deleteMany({});
+    // // Kosongkan tabel tmpShuffle sebelum menyimpan data baru
+    // await prismaClient.tmpShuffle.deleteMany({});
 
-      await this.updateTempTickets(shuffledTickets);
+    await this.updateTempTickets(shuffledTickets);
 
-      // Kembalikan tiket yang sudah di-shuffle dengan field yang dibutuhkan
-      return shuffledTickets.map(ticket => ({
-          name: ticket.contact.fullname, // Asumsi 'contact' memiliki field 'fullname'
-          contactId: ticket.contactId,
-          
+    // Kembalikan tiket yang sudah di-shuffle dengan field yang dibutuhkan
+    return shuffledTickets.map(ticket => ({
+      name: ticket.contact.fullname, // Asumsi 'contact' memiliki field 'fullname'
+      contactId: ticket.contactId,
+      ticket: ticket.id, // Asumsi 'contact' memiliki field 'fullname'
       }));
   }
 
   static fisherYatesShuffle<T>(array: T[]): T[] {
-      let currentIndex = array.length, randomIndex;
+    let currentIndex = array.length, randomIndex;
 
-      while (currentIndex !== 0) {
-          randomIndex = Math.floor(Math.random() * currentIndex);
-          currentIndex--;
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
 
-          [array[currentIndex], array[randomIndex]] = [
-              array[randomIndex], array[currentIndex]];
-      }
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
 
-      return array;
+    return array;
   }
 
   static async updateTickets(shuffledTickets: any[]): Promise<void> {
-      for (const ticket of shuffledTickets) {
-          await prismaClient.ticket.update({
-              where: { id: ticket.id },
-              data: { 
-                  status: 'got this'
-                  // Update kolom yang relevan di sini
-              }
-          });
-      }
-  }
+    // Pertama, update tiket yang di-shuffle dengan status 'got this'
+    for (const ticket of shuffledTickets) {
+        await prismaClient.ticket.update({
+            where: { id: ticket.id },
+            data: { 
+                status: 'got this'
+            }
+        });
+    }
+
+    // Kedua, update tiket yang tidak di-shuffle dengan status 'try again'
+    const shuffledTicketIds = shuffledTickets.map(ticket => ticket.id); // Ambil ID dari tiket yang di-shuffle
+
+    await prismaClient.ticket.updateMany({
+        where: {
+            id: {
+                notIn: shuffledTicketIds // Tiket yang ID-nya tidak ada dalam array shuffledTicketIds
+            },
+            status: 'confirmed' // Hanya update tiket dengan status 'confirmed'
+        },
+        data: {
+            status: 'try again'
+        }
+    });
+}
+
 
   static async updateTempTickets(shuffledTickets: any[]): Promise<void> {
-      // Setelah menghapus data di tmpShuffle, sekarang kita bisa menambahkan data baru
-      for (const ticket of shuffledTickets) {
-          await prismaClient.tmpShuffle.create({
-              data: {
-                  isShuffle: true,
-                  shuffledAt: new Date(),
-                  contact: {
-                      connect: {
-                          id: ticket.contactId
-                      }
-                  },
-                  ticket: {
-                      connect: {
-                          id: ticket.id
-                      }
-                  }
-              }
-          });
-      }
-  } 
-  
-  static async getShuffle(): Promise<TmpShuffle[]> {
-      return await prismaClient.tmpShuffle.findMany({
-        // Jika Anda ingin meng-include relasi, uncomment kode di bawah ini
-        // include: {
-        //   contact: true,
-        //   show: true,
-        // },
+    // Setelah menghapus data di tmpShuffle, sekarang kita bisa menambahkan data baru
+    for (const ticket of shuffledTickets) {
+      await prismaClient.tmpShuffle.create({
+        data: {
+          isShuffle: true,
+          shuffledAt: new Date(),
+          contact: {
+            connect: {
+              id: ticket.contactId
+            }
+          },
+          ticket: {
+            connect: {
+              id: ticket.id
+            }
+          }
+        }
       });
     }
+  }
+
+  static async getShuffle(): Promise<TmpShuffle[]> {
+    return await prismaClient.tmpShuffle.findMany({
+      // Jika Anda ingin meng-include relasi, uncomment kode di bawah ini
+      // include: {
+      //   contact: true,
+      //   show: true,
+      // },
+    });
+  }
 }
