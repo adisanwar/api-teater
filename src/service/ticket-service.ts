@@ -249,10 +249,10 @@ export class ShuffleService {
   static async getShuffle(): Promise<TmpShuffle[]> {
     return await prismaClient.tmpShuffle.findMany({
       // Jika Anda ingin meng-include relasi, uncomment kode di bawah ini
-      // include: {
-      //   contact: true,
-      //   show: true,
-      // },
+      include: {
+        contact: true,
+        ticket: true,
+      },
     });
   }
 }
