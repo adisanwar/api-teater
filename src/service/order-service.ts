@@ -46,16 +46,16 @@ export class OrderService {
 
    
 
-    static async getOrderById(request: GetOrderRequest): Promise<OrderResponse> {
-        const getRequest = Validation.validate(OrderValidation.GET, request);
+    static async getOrderById(request: GetOrderIdRequest): Promise<OrderResponse> {
+        const getRequest = Validation.validate(OrderValidation.GETBYID, request);
 
-        if (!getRequest || !getRequest.id) {
+        if (!getRequest || !getRequest.orderId) {
           throw new ResponseError(400, "Invalid request: Missing or invalid ID.");
       }
   
         const order : any = await prismaClient.order.findFirst({
             where: { 
-                id: getRequest.id
+                orderId: getRequest.orderId
             },
             // include: {
             //   ticket:true
@@ -70,27 +70,33 @@ export class OrderService {
     }
 
     static async getOrderByOrderId(request: GetOrderIdRequest): Promise<OrderResponse> {
+      // Step 1: Validate the incoming request using Zod schema
       const getRequest = Validation.validate(OrderValidation.GETBYID, request);
-
+  
+      // Step 2: If validation fails or orderId is missing, throw an error
       if (!getRequest || !getRequest.orderId) {
         throw new ResponseError(400, "Invalid request: Missing or invalid ID.");
-    }
-
-      const order : any = await prismaClient.order.findFirst({
+      }
+  
+      // Step 3: Fetch the order using Prisma
+      const order: any = await prismaClient.order.findFirst({
           where: { 
-              orderId: getRequest.orderId
+              orderId: getRequest.orderId // Ensure this is a string (UUID)
           },
-          // include: {
-          //   ticket:true
-          // }
+          include: {
+            ticket: true // Optionally include related ticket information
+          }
       });
-
+  
+      // Step 4: If the order is not found, throw a 404 error
       if (!order) {
           throw new ResponseError(404, "Order not found");
       }
-
+  
+      // Step 5: Return the order response in the expected format
       return toOrderResponse(order);
   }
+  
 
 
     static async updateOrderStatus(orderId: string, status: string): Promise<void> {
