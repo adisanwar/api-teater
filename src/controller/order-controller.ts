@@ -1,10 +1,11 @@
 // src/controllers/orderController.ts
 import { Request, Response, NextFunction } from "express";
 import { OrderService } from "../service/order-service";
-import { CreateOrderRequest } from "../model/order-model";
+import { CreateOrderRequest, GetOrderIdRequest } from "../model/order-model";
 import midtransClient from "../application/midtrans-client";
 import { prismaClient } from "../application/database";
 import { v4 as uuidv4 } from "uuid"; // Import UUID to generate order IDs
+import { TicketService } from "../service/ticket-service";
 
 export class OrderController {
   static async create(req: Request, res: Response, next: NextFunction) {
@@ -21,7 +22,7 @@ export class OrderController {
         ticketId: ticketId,
         amount: req.body.amount,
         status: req.body.status || "pending",
-        paymentUrl: '',
+        paymentUrl: "",
       };
 
       // const createdOrder = await OrderService.createOrder(request)
@@ -34,10 +35,10 @@ export class OrderController {
       // });
 
       const ticket = await prismaClient.ticket.findUnique({
-        where : {
-          id: ticketId
-        }
-      })
+        where: {
+          id: ticketId,
+        },
+      });
 
       // Prepare parameters for Midtrans Snap API
       const parameter = {
@@ -74,15 +75,15 @@ export class OrderController {
 
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
-      const orderId : any = Number(req.params.id);
+      const orderId: any = Number(req.params.id);
 
-      if (isNaN(orderId)) {
-        return res.status(400).json({ error: "Invalid order ID" });
-      }
+      // if (isNaN(orderId)) {
+      //   return res.status(400).json({ error: "Invalid order ID" });
+      // }
 
-    //   console.log(orderId)
+      //   console.log(orderId)
 
-    const request = { id: orderId };
+      const request = { id: orderId };
 
       const response = await OrderService.getOrderById(request);
       res.status(200).json({
@@ -92,6 +93,24 @@ export class OrderController {
       next(error);
     }
   }
+
+  // Controller Method
+static async getByOrderId(req: Request, res: Response, next: NextFunction) {
+  try {
+      const orderId: string = req.params.orderId;  // Ensure orderId is treated as a string
+
+      // Log the received orderId for debugging
+      console.log("Received Order ID:", orderId);
+
+      const request: GetOrderIdRequest = { orderId }; // Structuring request with a UUID string
+      const response = await OrderService.getOrderByOrderId(request);
+
+      return res.status(200).json({ data: response });
+  } catch (error) {
+      next(error);
+  }
+}
+
 
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
@@ -104,7 +123,11 @@ export class OrderController {
     }
   }
 
-  static async handleMidtransNotification(req: Request, res: Response, next: NextFunction) {
+  static async handleMidtransNotification(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const notification = req.body;
 
@@ -118,24 +141,24 @@ export class OrderController {
       const transactionStatus = statusResponse.transaction_status;
       const fraudStatus = statusResponse.fraud_status;
 
-      let status = 'pending';
+      let status = "pending";
 
       switch (transactionStatus) {
-        case 'capture':
-          status = fraudStatus === 'challenge' ? 'challenge' : 'paid';
+        case "capture":
+          status = fraudStatus === "challenge" ? "challenge" : "paid";
           break;
-        case 'settlement':
-          status = 'paid';
+        case "settlement":
+          status = "paid";
           break;
-        case 'deny':
-          status = 'deny';
+        case "deny":
+          status = "deny";
           break;
-        case 'cancel':
-        case 'expire':
-          status = 'canceled';
+        case "cancel":
+        case "expire":
+          status = "canceled";
           break;
-        case 'pending':
-          status = 'pending';
+        case "pending":
+          status = "pending";
           break;
         default:
           throw new Error(`Unknown transaction status: ${transactionStatus}`);
@@ -144,8 +167,21 @@ export class OrderController {
       // Update the order status in your database
       await OrderService.updateOrderStatus(orderId, status);
 
+      console.log(orderId);
+
+      // Ambil ticketId dari orderId (misalnya melalui OrderService atau query langsung)
+      const order = await OrderService.getOrderById(orderId); // Asumsi ada relasi order dan tiket
+      const ticketId = order.ticketId; // Ambil ticketId yang terkait dengan order
+
+      console.log(ticketId);
+
+      // Update status ticket berdasarkan orderId
+      if (ticketId) {
+        await TicketService.updateStatus(ticketId); // Update status pada tiket
+      }
+
       res.status(200).json({
-        message: 'Notification handled successfully',
+        message: "Notification handled successfully",
       });
     } catch (error) {
       next(error);

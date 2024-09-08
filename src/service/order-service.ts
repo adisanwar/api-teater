@@ -1,4 +1,4 @@
-import { CreateOrderRequest, GetOrderRequest, OrderResponse, toOrderResponse } from '../model/order-model';
+import { CreateOrderRequest, GetOrderIdRequest, GetOrderRequest, OrderResponse, toOrderResponse } from '../model/order-model';
 import { Validation } from '../validation/validation';
 import { OrderValidation } from '../validation/order-validation';
 import { prismaClient } from '../application/database';
@@ -68,6 +68,29 @@ export class OrderService {
 
         return toOrderResponse(order);
     }
+
+    static async getOrderByOrderId(request: GetOrderIdRequest): Promise<OrderResponse> {
+      const getRequest = Validation.validate(OrderValidation.GETBYID, request);
+
+      if (!getRequest || !getRequest.orderId) {
+        throw new ResponseError(400, "Invalid request: Missing or invalid ID.");
+    }
+
+      const order : any = await prismaClient.order.findFirst({
+          where: { 
+              orderId: getRequest.orderId
+          },
+          // include: {
+          //   ticket:true
+          // }
+      });
+
+      if (!order) {
+          throw new ResponseError(404, "Order not found");
+      }
+
+      return toOrderResponse(order);
+  }
 
 
     static async updateOrderStatus(orderId: string, status: string): Promise<void> {

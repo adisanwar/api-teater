@@ -99,6 +99,42 @@ export class TicketService {
     return toTicketResponse(ticket);
   }
 
+  static async updateStatus(ticketId: number): Promise<void> {
+    // Pertama, update tiket yang di-shuffle dengan status 'got this
+        await prismaClient.ticket.update({
+            where: { id: ticketId },
+            data: { 
+                status: 'confirmed'
+            }
+        });
+    
+  }
+
+//   static async updateStatus(ticketId: number): Promise<TicketResponse> {
+
+//     // Validasi input
+//     const updateRequest = {
+//         id: ticketId,
+//         status: 'confirm',
+//     };
+
+//     // Cek apakah showId terkait dengan tiket ini masih valid, jika diperlukan
+//     // await this.checkShowMustExists(updateRequest.showId); // Pastikan showId ada di tiket (optional)
+
+//     // Update status tiket berdasarkan ticketId
+//     const ticket : any = await prismaClient.ticket.update({
+//         where: {
+//             id: updateRequest.id, // Filter berdasarkan ticketId saja
+//         },
+//         data: {
+//             status: updateRequest.status, // Update status tiket
+//         },
+//     });
+
+//     return toTicketResponse(ticket); // Mengembalikan response tiket yang sudah diupdate
+// }
+
+
   //   "errors": "EPERM: operation not permitted, unlink 'D:\\Programming\\api-teater\\test'"
   static async remove(request: RemoveTicketRequest): Promise<TicketResponse> {
     const removeRequest = Validation.validate(TicketValidation.REMOVE, request);

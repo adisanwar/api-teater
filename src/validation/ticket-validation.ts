@@ -5,6 +5,7 @@ export class TicketValidation {
     static readonly CREATE : ZodType = z.object({
         contactId: z.number().positive(),
         showId: z.number().positive(),
+        status: z.string().min(1).max(255),
     })
 
     static readonly GET : ZodType = z.object({

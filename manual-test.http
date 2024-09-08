@@ -252,10 +252,10 @@ X-API-TOKEN: 317d003d-fc6b-4d30-9b7b-883f7df50fef
 POST http://localhost:3000/api/tickets
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: dc50f6f2-0821-4da8-b824-9211a52821bf
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
 
 {
-  "showId": 6,
+  "showId": 1,
   "contactId": 1
 } 
 
@@ -279,6 +279,15 @@ X-API-TOKEN: bc66284a-2f3b-498e-a0d6-dd152bb308b1
    "contactId": 1
 }
 
+### Update Ticket
+PATCH http://localhost:3000/api/tickets/status/85
+Content-Type: application/json
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
+
+{
+   "status" : "confirmed"
+}
+
 ### Remove Tickets
 DELETE http://localhost:3000/api/tickets/9
 Accept: application/json
@@ -290,23 +299,46 @@ X-API-TOKEN: c9d88e2e-cc31-4cbc-ac80-e793ac2acad7
 POST http://localhost:3000/api/orders
 Accept: application/json
 Content-Type: application/json
-X-API-TOKEN: eac1ed79-8734-4790-81b1-45ef68201062
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
 
 {  
-    "amount": 50000,
+    "amount": 1000,
     "status": "pending",
-    "ticketId": 1
+    "ticketId": 87
+}
+
+
+###  status Orders
+PATCH http://localhost:3000/api/orders/status/38
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
+
+{  
+    "order_id" : "1cd8c279-c3ab-4b8f-963e-6db49fdc7f6d",
+    "status": "paid"
+}
+
+###  status Orders
+PATCH http://localhost:3000//api/orders/notifications
+Accept: application/json
+Content-Type: application/json
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
+
+{  
+    "order_id" : "1cd8c279-c3ab-4b8f-963e-6db49fdc7f6d",
+    "status": "paid"
 }
 
 ### get Orders
-GET http://localhost:3000/api/orders/
+GET http://localhost:3000/api/orders/32
 Accept: application/json
-X-API-TOKEN: 306d447d-781c-4d43-828a-609c4dd51abb
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
 
 ### get order by Id
-GET http://localhost:3000/api/orders/2
+GET http://localhost:3000/api/orders/a74fed03-b0fc-424c-8814-2f6416f651e4
 Accept: application/json
-X-API-TOKEN: 82c86fc3-6d08-4638-b511-10db0a602883
+X-API-TOKEN: 984310e4-d2cd-4e73-b2af-45c812ec9c82
 
 ### Update Orders
 PATCH http://localhost:3000/api/orders/7

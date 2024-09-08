@@ -8,6 +8,7 @@ export type OrderResponse = {
   amount?: number | null;
   status?: string | null;
   paymentUrl?: string | null;
+  ticketId: number;
   ticket? : TicketResponse;
   show? : ShowResponse;
 };
@@ -33,6 +34,10 @@ export type GetOrderRequest = {
   id: number;
 }
 
+export type GetOrderIdRequest = {
+  orderId: string;
+}
+
 export type RemoveOrderRequest = GetOrderRequest;
 
 export function toOrderResponse(order: Order & {ticket : Ticket & {show : Show}}): OrderResponse {
@@ -42,6 +47,7 @@ export function toOrderResponse(order: Order & {ticket : Ticket & {show : Show}}
     amount: order.amount,
     status: order.status,
     paymentUrl: order.paymentUrl,
+    ticketId: order.ticketId,
     ticket: order.ticket ? {
       id: order.ticket.id,
       seatNumber: order.ticket.seatNumber,

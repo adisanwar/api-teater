@@ -12,6 +12,10 @@ export class OrderValidation {
     id: z.number().positive(),
   });
 
+  static readonly GETBYID: ZodType = z.object({
+    orderId: z.string().uuid(),
+  });
+
   static readonly REMOVE: ZodType = z.object({
     id: z.number().positive(),
   });

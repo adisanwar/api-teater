@@ -7,6 +7,7 @@ export type TicketResponse = {
   seatNumber?: String | null;
   photo?: String | null,
   purchaseDate?: Date | null;
+  status? : String | null;
   contactId: number;
   showId: number;
   contact?: ContactResponse;
@@ -51,6 +52,7 @@ export function toTicketResponse(ticket: Ticket & {show: Show, contact: Contact}
     seatNumber: ticket.seatNumber,
     photo: ticket.photo,
     purchaseDate: ticket.purchaseDate,
+    status: ticket.status,
     contactId: ticket.contactId,
     showId: ticket.showId,
     contact: ticket.contact ? {

@@ -20,6 +20,7 @@ export class TicketController {
       // Convert contactId and showId to numbers
       const contactId = Number(req.body.contactId);
       const showId = Number(req.body.showId);
+      const status = 'pending'; // Set status to 'pending'
 
       // Check if the conversion was successful and if the numbers are valid
       if (isNaN(contactId) || isNaN(showId)) {
@@ -29,16 +30,15 @@ export class TicketController {
       // Construct the request object with the properly typed fields
       const request: CreateTicketRequest = {
         ...req.body,
-        seatNumber : null,
+        seatNumber: null,  // Example of setting seatNumber to null
         contactId, // Use the converted number
         showId, // Use the converted number
+        status,  // Ensure status is passed as 'pending'
       };
 
       // Ensure required fields are present
       if (!request.contactId || !request.showId) {
-        return res
-          .status(400)
-          .json({ error: "contactId and showId are required" });
+        return res.status(400).json({ error: "contactId and showId are required" });
       }
 
       getDestinationFolder("ticket");
@@ -46,9 +46,10 @@ export class TicketController {
 
       logger.debug("request : " + JSON.stringify(request));
 
-      const response = await TicketService.create(request);
+      const response = await TicketService.create(request); // Call to service
       logger.debug("response : " + JSON.stringify(response));
       console.log(response);
+
       res.status(200).json({
         data: response,
       });
@@ -56,6 +57,7 @@ export class TicketController {
       next(e);
     }
   }
+
 
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
@@ -126,6 +128,32 @@ export class TicketController {
       });
     } catch (e) {
       next(e);
+    }
+  }
+
+  static async updateTicketStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      // Ambil ticketId dan status dari body request
+      const  status = req.body.status;
+      const ticketId = Number(req.params.ticketId);
+
+      // Validasi input, pastikan ticketId dan status disertakan
+      if (!ticketId || !status) {
+        return res.status(400).json({
+          message: 'ticketId dan status harus disertakan.',
+        });
+      }
+
+      // Panggil TicketService untuk memperbarui status
+      const updatedTicket = await TicketService.updateStatus(ticketId);
+
+      // Berikan respons jika berhasil
+      return res.status(200).json({
+        message: 'Status tiket berhasil diperbarui.',
+        data: updatedTicket,
+      });
+    } catch (error) {
+      next(error); // Kirim error ke middleware penanganan error
     }
   }
 
