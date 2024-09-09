@@ -238,7 +238,7 @@ export class ShuffleService {
         await prismaClient.ticket.update({
             where: { id: ticket.id },
             data: { 
-                status: 'got this'
+                status: 'win'
             }
         });
     }
