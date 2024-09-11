@@ -75,49 +75,49 @@ export class OrderController {
 
   static async getById(req: Request, res: Response, next: NextFunction) {
     try {
-        // Convert `req.params.id` to a number
-        const orderId = Number(req.params.id);
+      // Convert `req.params.id` to a number
+      const orderId = Number(req.params.id);
 
-        // Validate if orderId is a valid number
-        if (isNaN(orderId) || orderId <= 0) {
-            return res.status(400).json({ error: "Invalid or missing order ID" });
-        }
+      // Validate if orderId is a valid number
+      if (isNaN(orderId) || orderId <= 0) {
+        return res.status(400).json({ error: "Invalid or missing order ID" });
+      }
 
-        console.log("Id Order: " + orderId);
+      console.log("Id Order: " + orderId);
 
-        // Construct the request object for the service layer
-        const request: GetOrderRequest = { id: orderId };
+      // Construct the request object for the service layer
+      const request: GetOrderRequest = { id: orderId };
 
-        // Call the service to get the order by ID
-        const response = await OrderService.getById(request);
+      // Call the service to get the order by ID
+      const response = await OrderService.getById(request);
 
-        // Send the response back to the client
-        return res.status(200).json({
-            data: response,
-        });
+      // Send the response back to the client
+      return res.status(200).json({
+        data: response,
+      });
     } catch (error) {
-        // Forward the error to the error handler middleware
-        next(error);
+      // Forward the error to the error handler middleware
+      next(error);
     }
-}
+  }
 
 
   static async getByOrderId(req: Request, res: Response, next: NextFunction) {
     try {
-        const orderId: string = req.params.orderId;  // Treat orderId as a string (UUID)
-  
-        // Log the received orderId for debugging purposes
-        console.log("Received Order ID:", orderId);
-  
-        const request: GetOrderIdRequest = { orderId }; // Structuring request with the UUID
-        const response = await OrderService.getOrderByOrderId(request); // Calling service method
-  
-        return res.status(200).json({ data: response });
+      const orderId: string = req.params.orderId;  // Treat orderId as a string (UUID)
+
+      // Log the received orderId for debugging purposes
+      console.log("Received Order ID:", orderId);
+
+      const request: GetOrderIdRequest = { orderId }; // Structuring request with the UUID
+      const response = await OrderService.getOrderByOrderId(request); // Calling service method
+
+      return res.status(200).json({ data: response });
     } catch (error) {
-        next(error); // Pass errors to error handler
+      next(error); // Pass errors to error handler
     }
   }
-  
+
 
 
   static async get(req: Request, res: Response, next: NextFunction) {
@@ -175,21 +175,6 @@ export class OrderController {
       // Update the order status in your database
       await OrderService.updateOrderStatus(orderId, status);
 
-      // console.log(orderId);
-
-      // // Ambil ticketId dari orderId (misalnya melalui OrderService atau query langsung)
-      // const order = await OrderService.getOrderByOrderId(orderId); // Asumsi ada relasi order dan tiket
-      // const ticketId = order.ticketId; // Ambil ticketId yang terkait dengan order
-
-      // console.log(ticketId);
-
-      // // Update status ticket berdasarkan orderId
-      // if (ticketId) {
-      //   await TicketService.updateStatus(ticketId); // Update status pada tiket
-      // } else {
-      //   console.log("Tiket gagal Diupdate")
-      // }
-
       res.status(200).json({
         message: "Notification handled successfully",
       });
@@ -197,4 +182,29 @@ export class OrderController {
       next(error);
     }
   }
+
+  // Finish Redirect Handler (when user is redirected after payment)
+  static async handleFinishRedirect(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orderId = String(req.query.order_id);
+
+      if (!orderId) {
+        return res.status(400).send('Missing order ID');
+      }
+
+      // Fetch the transaction status from Midtrans to ensure it's up to date
+      const statusResponse = await midtransClient.transaction.status(orderId);
+      const transactionStatus = statusResponse.transaction_status;
+
+      // Redirect to success or failure page based on payment status
+      if (transactionStatus === "settlement" || transactionStatus === "capture") {
+        return res.redirect(`/payment/success?order_id=${orderId}`);
+      } else {
+        return res.redirect(`/payment/failure?order_id=${orderId}`);
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }

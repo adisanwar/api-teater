@@ -76,6 +76,6 @@ apiRouter.post("/api/orders/", OrderController.create);
 apiRouter.get("/api/orders/:id(\\d+)", OrderController.getById);
 apiRouter.get("/api/orders/getbyorderid/:orderId", OrderController.getByOrderId);
 apiRouter.get("/api/orders", OrderController.get);
-// apiRouter.post("/api/orders/notifications", OrderController.updateStatus);
-// apiRouter.patch("/api/orders/status/:id", OrderController.updateStatus);
+apiRouter.get('/payment/finish', OrderController.handleFinishRedirect);
+
 
