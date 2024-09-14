@@ -8,7 +8,6 @@ import { ShowController } from "../controller/show-controller";
 import { uploadMiddleware } from "../middleware/upload-middleware";
 import {ShowtimeController} from "../controller/showtime-controller";
 import { TicketController } from "../controller/ticket-controller";
-import  path from "path";
 import { OrderController } from "../controller/order-controller";
 
 export const apiRouter = express.Router();
@@ -18,6 +17,7 @@ apiRouter.use(authMiddleware);
 apiRouter.get("/api/users/current", UserController.get);
 apiRouter.patch("/api/users/current", UserController.update);
 apiRouter.delete("/api/users/current", UserController.logout);
+
 
 apiRouter.get("/api/users/", UserController.getAll);
 apiRouter.patch("/api/users/:username", UserController.updateUser);
@@ -75,6 +75,6 @@ apiRouter.delete("/api/showtimes/:showtimeId(\\d+)", ShowtimeController.remove);
 apiRouter.post("/api/orders/", OrderController.create);
 apiRouter.get("/api/orders/:id(\\d+)", OrderController.getById);
 apiRouter.get("/api/orders", OrderController.get);
-// apiRouter.post("/api/orders/notifications", OrderController.updateStatus);
-// apiRouter.patch("/api/orders/status/:id", OrderController.updateStatus);
+apiRouter.get('/payment/finish', OrderController.handleFinishRedirect);
+
 
