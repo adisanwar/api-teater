@@ -101,25 +101,6 @@ export class OrderController {
     }
 }
 
-
-  static async getByOrderId(req: Request, res: Response, next: NextFunction) {
-    try {
-        const orderId: string = req.params.orderId;  // Treat orderId as a string (UUID)
-  
-        // Log the received orderId for debugging purposes
-        console.log("Received Order ID:", orderId);
-  
-        const request: GetOrderIdRequest = { orderId }; // Structuring request with the UUID
-        const response = await OrderService.getOrderByOrderId(request); // Calling service method
-  
-        return res.status(200).json({ data: response });
-    } catch (error) {
-        next(error); // Pass errors to error handler
-    }
-  }
-  
-
-
   static async get(req: Request, res: Response, next: NextFunction) {
     try {
       const response = await OrderService.get();
