@@ -20,6 +20,7 @@ apiRouter.delete("/api/users/current", UserController.logout);
 
 
 apiRouter.get("/api/users/", UserController.getAll);
+apiRouter.get("/api/users/:username", UserController.getById);
 apiRouter.patch("/api/users/:username", UserController.updateUser);
 apiRouter.delete("/api/users/:username", UserController.delete);
 

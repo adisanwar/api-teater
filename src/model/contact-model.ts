@@ -38,6 +38,10 @@ export type UpdateContactRequest = {
     nationalId?:number | null;
 }
 
+export type RemoveContactRequest = {
+    id: number;
+}
+
 export type SearchContactRequest = {
     fullname?: string;
     name?: string;

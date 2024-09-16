@@ -44,6 +44,15 @@ export class ContactService {
         return toContactResponse(contact);
     }
 
+    // static async getByUsername(username: string): Promise<ContactResponse> {
+    //     const contact: any =await prismaClient.contact.findFirst({
+    //         where: { 
+    //             username : username 
+    //         }
+    //     })
+    //     return toContactResponse(contact);
+    // }
+
     static async update(user: User, request: UpdateContactRequest): Promise<ContactResponse> {
         const updateRequest: any = Validation.validate(ContactValidation.UPDATE, request);
         await this.checkContactMustExists(user.username, updateRequest.id);

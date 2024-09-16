@@ -23,7 +23,11 @@ export type LoginUserRequest = {
 export type UpdateUserRequest = {
     name?: string;
     password?: string;
-    isAdmin: boolean;
+    isAdmin?: boolean;
+}
+
+export type RemoveUserRequest = {
+    username: string;
 }
 
 export function toUserResponse(user: User): UserResponse {

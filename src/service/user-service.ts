@@ -9,7 +9,7 @@ import {Validation} from "../validation/validation";
 import {UserValidation} from "../validation/user-validation";
 import {prismaClient} from "../application/database";
 import {ResponseError} from "../error/response-error";
-import bcrypt from "bcrypt";
+import bcrypt, { compare } from "bcrypt";
 import {v4 as uuid} from "uuid";
 import {User} from "@prisma/client";
 
@@ -118,68 +118,126 @@ export class UserService {
     }
 
     static async getById(username: string): Promise<UserResponse> {
+        if (!username) {
+            throw new ResponseError(400, "Username is required");
+        }
+    
         const user = await prismaClient.user.findUnique({
             where: {
-                username: username
+                username: username,
             }
         });
-
+    
         if (!user) {
             throw new ResponseError(404, "User not found");
         }
-
+    
         return toUserResponse(user);
     }
+    
 
     static async updateUser(username: string, request: UpdateUserRequest): Promise<UserResponse> {
+        // Validate the update request
         const updateRequest = Validation.validate(UserValidation.UPDATE, request);
-
+    
+        // Find the existing user
         const existingUser = await prismaClient.user.findUnique({
             where: {
                 username: username
             }
         });
-
+    
         if (!existingUser) {
             throw new ResponseError(404, "User not found");
         }
-
+    
+        // Create an update data object
+        const updateData: any = {};
+    
         if (updateRequest.name) {
-            existingUser.name = updateRequest.name;
+            updateData.name = updateRequest.name;
         }
-
+    
         if (updateRequest.password) {
-            existingUser.password = await bcrypt.hash(updateRequest.password, 10);
+            updateData.password = await bcrypt.hash(updateRequest.password, 10);
         }
-
+    
+        // Add a check for optional 'isAdmin' if needed
+        if (updateRequest.isAdmin !== undefined) {
+            updateData.isAdmin = updateRequest.isAdmin;
+        }
+    
+        // Update the user with new data
         const result = await prismaClient.user.update({
             where: {
                 username: username
             },
-            data: existingUser
+            data: updateData
         });
-
+    
         return toUserResponse(result);
     }
+    
+    
 
     static async delete(username: string): Promise<void> {
+        // Find the existing user
         const existingUser = await prismaClient.user.findUnique({
             where: {
                 username: username
             }
         });
-
+    
         if (!existingUser) {
             throw new ResponseError(404, "User not found");
         }
-
+    
+        // Find the associated contact
+        const contact = await prismaClient.contact.findFirst({
+            where: {
+                username: username
+            }
+        });
+    
+        if (contact) {
+            // Delete all addresses related to the contact
+            await prismaClient.address.deleteMany({
+                where: {
+                    contactId: contact.id
+                }
+            });
+    
+            // Delete all tmp_shuffle entries related to the contact
+            await prismaClient.tmpShuffle.deleteMany({
+                where: {
+                    contactId: contact.id
+                }
+            });
+    
+            // Delete all tickets related to the contact
+            await prismaClient.ticket.deleteMany({
+                where: {
+                    contactId: contact.id
+                }
+            });
+    
+            // Delete the contact
+            await prismaClient.contact.delete({
+                where: {
+                    id: contact.id
+                }
+            });
+        }
+    
+        // Delete the user
         await prismaClient.user.delete({
             where: {
                 username: username
             }
         });
     }
-
+    
+    
 }
 
 

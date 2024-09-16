@@ -1,7 +1,8 @@
 import {Request, Response, NextFunction} from "express";
-import {CreateUserRequest, LoginUserRequest, UpdateUserRequest} from "../model/user-model";
+import {CreateUserRequest, LoginUserRequest, RemoveUserRequest, UpdateUserRequest} from "../model/user-model";
 import {UserService} from "../service/user-service";
 import {UserRequest} from "../type/user-request";
+import { ResponseError } from "../error/response-error";
 
 export class UserController {
 
@@ -64,6 +65,7 @@ export class UserController {
         }
     }
 
+    // Get all users
     static async getAll(req: Request, res: Response, next: NextFunction) {
         try {
             const response = await UserService.getAll();
@@ -75,9 +77,14 @@ export class UserController {
         }
     }
 
+    // Get user by username
     static async getById(req: Request, res: Response, next: NextFunction) {
         try {
             const username: string = req.params.username;
+            console.log(username);
+            if (!username) {
+                throw new ResponseError(400, "Username is required");
+            }
             const response = await UserService.getById(username);
             res.status(200).json({
                 data: response
@@ -86,12 +93,24 @@ export class UserController {
             next(e);
         }
     }
+    
+
+    // Remove user by username (new method)
+    static async deleteUser(req: Request, res: Response, next: NextFunction) {
+        try {
+            const request: RemoveUserRequest = { username: req.params.username };
+            await UserService.delete(request.username);
+            res.status(204).send(); // No Content on successful deletion
+        } catch (e) {
+            next(e);
+        }
+    }
 
     static async updateUser(req: Request, res: Response, next: NextFunction) {
         try {
-            const username: any = req.params.username;
+            const username: string = req.params.username; // Ensure username is a string
             const request: UpdateUserRequest = req.body as UpdateUserRequest;
-            const response = await UserService.update(username, request);
+            const response = await UserService.updateUser(username, request);
             res.status(200).json({
                 data: response
             });
@@ -99,12 +118,16 @@ export class UserController {
             next(e);
         }
     }
+    
 
     static async delete(req: Request, res: Response, next: NextFunction) {
         try {
-            const username: string = req.params.id;
+            const username: string = req.params.username;
+            console.log(username)
             await UserService.delete(username);
-            res.status(204).send();
+            res.status(200).json({
+                data : 'User Deleted'
+            });
         } catch (e) {
             next(e);
         }
