@@ -1,0 +1,199 @@
+import { exec } from 'child_process';
+import * as fs from 'fs';
+import prismaClient from './prismaClient'; // Pastikan Anda mengimpor prismaClient dengan benar
+
+export class ShuffleService {
+  static async shuffleTickets(maxShuffleCount: number = 6): Promise<any[]> {
+    const tickets = await prismaClient.ticket.findMany({
+      where: {
+        status: 'confirmed' // Hanya ambil tiket dengan status 'confirmed'
+      },
+      include: {
+        contact: true // Asumsikan 'contact' adalah relasi untuk mendapatkan detail kontak
+      }
+    });
+
+    // Jika tidak ada tiket dengan status confirmed, return error
+    if (tickets.length === 0) {
+      throw new Error('Data tidak ditemukan'); // Lempar error jika tiket tidak ditemukan
+    }
+
+    const tempTickets = await prismaClient.tmpShuffle.findMany();
+
+    // Filter tiket untuk mengecualikan yang sudah di-shuffle berdasarkan contactId
+    let filteredTickets = tickets.filter(ticket => {
+      return !tempTickets.some(temp => temp.contactId === ticket.contactId);
+    });
+
+    let shuffledTickets = this.fisherYatesShuffle(filteredTickets);
+
+    if (shuffledTickets.length <= maxShuffleCount) {
+      // Kosongkan temporary table jika jumlah tiket yang di-shuffle kurang dari maxShuffleCount
+      await prismaClient.tmpShuffle.deleteMany();
+    }
+
+    // Batasi jumlah array yang di-shuffle ke maxShuffleCount elemen
+    shuffledTickets = shuffledTickets.slice(0, maxShuffleCount);
+
+    await this.updateTickets(shuffledTickets);
+
+    await this.updateTempTickets(shuffledTickets);
+
+    // Ekspor hasil shuffle ke file untuk digunakan oleh skrip Python
+    fs.writeFileSync('shuffledTickets.json', JSON.stringify(shuffledTickets));
+
+    // Eksekusi skrip Python
+    return new Promise((resolve, reject) => {
+      exec('python3 your_script.py', (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error: ${error.message}`);
+          reject(error);
+        }
+        if (stderr) {
+          console.error(`Stderr: ${stderr}`);
+          reject(stderr);
+        }
+        // Ambil hasil dari output skrip Python
+        const result = JSON.parse(stdout);
+        console.log('Hasil dari skrip Python:', result);
+        
+        resolve({
+          shuffledTickets,
+          pythonResult: result
+        });
+      });
+    });
+  }
+
+  static fisherYatesShuffle<T>(array: T[]): T[] {
+    let currentIndex = array.length, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+  }
+
+  static async updateTickets(shuffledTickets: any[]): Promise<void> {
+    // Pertama, update tiket yang di-shuffle dengan status 'win'
+    for (const ticket of shuffledTickets) {
+      await prismaClient.ticket.update({
+        where: { id: ticket.id },
+        data: { 
+          status: 'win'
+        }
+      });
+    }
+
+    // Kedua, update tiket yang tidak di-shuffle dengan status 'try again'
+    const shuffledTicketIds = shuffledTickets.map(ticket => ticket.id);
+
+    await prismaClient.ticket.updateMany({
+      where: {
+        id: {
+          notIn: shuffledTicketIds
+        },
+        status: 'confirmed'
+      },
+      data: {
+        status: 'try again'
+      }
+    });
+  }
+
+  static async updateTempTickets(shuffledTickets: any[]): Promise<void> {
+    // Setelah menghapus data di tmpShuffle, sekarang kita bisa menambahkan data baru
+    for (const ticket of shuffledTickets) {
+      await prismaClient.tmpShuffle.create({
+        data: {
+          isShuffle: true,
+          shuffledAt: new Date(),
+          contact: {
+            connect: {
+              id: ticket.contactId
+            }
+          },
+          ticket: {
+            connect: {
+              id: ticket.id
+            }
+          }
+        }
+      });
+    }
+  }
+
+  static async getShuffle(): Promise<any[]> {
+    return await prismaClient.tmpShuffle.findMany({
+      include: {
+        contact: true,
+        ticket: true,
+      },
+    });
+  }
+}
+
+
+
+import numpy as np
+import math
+import json
+
+# Membaca data dari JSON file
+with open('shuffledTickets.json', 'r') as f:
+    shuffled_tickets = json.load(f)
+
+# Ubah data ke format yang diperlukan
+n = len(shuffled_tickets)
+n1 = sum(1 for ticket in shuffled_tickets if ticket['status'] == 'win')
+n2 = n - n1
+
+# Generate data awal (n1 nilai 1 dan n2 nilai 0)
+data = np.array([1] * n1 + [0] * n2)
+
+# Pengacakan menggunakan Algoritma Fisher-Yates Shuffle
+np.random.seed(42)
+for i in range(len(data) - 1, 0, -1):
+    j = np.random.randint(0, i + 1)
+    data[i], data[j] = data[j], data[i]
+
+# Menghitung Jumlah Runs (R)
+def count_runs(sequence):
+    runs = 1  # Memulai dengan run pertama
+    for i in range(1, len(sequence)):
+        if sequence[i] != sequence[i - 1]:
+            runs += 1
+    return runs
+
+runs_count = count_runs(data)
+
+# Menghitung Ekspektasi Runs (\(\mu_R\)) dan Standar Deviasi (\(\sigma_R\))
+mu_R = (2 * n1 * n2) / (n1 + n2) + 1
+sigma_R = np.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / ((n1 + n2) ** 2 * (n1 + n2 - 1)))
+
+# Menghitung Gap
+gap = runs_count - mu_R
+
+# Menghitung Z-Index
+Z = gap / sigma_R
+
+# Menghitung Permutasi Unik
+permutations_unique = math.factorial(n) / (math.factorial(n1) * math.factorial(n2))
+
+# Hasil
+result = {
+    "runs_count": runs_count,
+    "mu_R": mu_R,
+    "sigma_R": sigma_R,
+    "gap": gap,
+    "Z": Z,
+    "permutations_unique": permutations_unique
+}
+
+# Tulis hasil ke stdout dalam format JSON
+print(json.dumps(result))
