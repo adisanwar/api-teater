@@ -37,7 +37,7 @@ async function generateAndInsertFakeTickets(count: number) {
 }
 
 // Jalankan skrip untuk membuat dan menyimpan tiket palsu
-generateAndInsertFakeTickets(50)
+generateAndInsertFakeTickets(500)
   .then(() => {
     console.log('Ticket generation completed');
   })
