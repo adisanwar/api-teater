@@ -72,7 +72,7 @@ function generateFakeAddresses(count: number) {
 }
 
 // Run the script
-generateAndInsertFakeUsers(50)
+generateAndInsertFakeUsers(10)
     .then(() => {
         console.log('Data insertion completed');
     })

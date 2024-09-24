@@ -3,22 +3,25 @@ import math
 import json
 
 # Membaca data dari JSON file
-with open('shuffledTickets.json', 'r') as f:
+import os
+file_path = os.path.join(os.path.dirname(__file__), 'shuffledTickets.json')
+
+with open(file_path, 'r') as f:
     shuffled_tickets = json.load(f)
 
-# Ubah data ke format yang diperlukan
-n = len(shuffled_tickets)
-n1 = sum(1 for ticket in shuffled_tickets if ticket['status'] == 'win')
-n2 = n - n1
+# Mengambil hanya ID dari tiket yang di-shuffle
+ticket_ids = [ticket['ticketId'] for ticket in shuffled_tickets]
 
-# Generate data awal (n1 nilai 1 dan n2 nilai 0)
-data = np.array([1] * n1 + [0] * n2)
+# Data yang diberikan: urutan angka-angka tertentu
+data_given = ticket_ids
 
-# Pengacakan menggunakan Algoritma Fisher-Yates Shuffle
-np.random.seed(42)
-for i in range(len(data) - 1, 0, -1):
-    j = np.random.randint(0, i + 1)
-    data[i], data[j] = data[j], data[i]
+# 1. Pengaturan Data
+n = 20   # Total data 
+n1 = 10  # Jumlah nilai 1 (representasi dari 1 hingga 10)
+n2 = n - n1  # Jumlah nilai 0 (representasi dari 11 hingga 20)
+
+# Ubah angka dari 1 hingga 10 menjadi 1, dan dari 11 hingga 20 menjadi 0
+binary_data = np.array([1 if x <= 10 else 0 for x in data_given])
 
 # Menghitung Jumlah Runs (R)
 def count_runs(sequence):
@@ -28,9 +31,8 @@ def count_runs(sequence):
             runs += 1
     return runs
 
-runs_count = count_runs(data)
-
 # Menghitung Ekspektasi Runs (\(\mu_R\)) dan Standar Deviasi (\(\sigma_R\))
+runs_count = count_runs(binary_data)
 mu_R = (2 * n1 * n2) / (n1 + n2) + 1
 sigma_R = np.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / ((n1 + n2) ** 2 * (n1 + n2 - 1)))
 
@@ -45,6 +47,8 @@ permutations_unique = math.factorial(n) / (math.factorial(n1) * math.factorial(n
 
 # Hasil
 result = {
+    "original_data": data_given,
+    "binary_data": binary_data.tolist(),  # Konversi data biner ke bentuk list
     "runs_count": runs_count,
     "mu_R": mu_R,
     "sigma_R": sigma_R,
@@ -54,4 +58,5 @@ result = {
 }
 
 # Tulis hasil ke stdout dalam format JSON
-print(json.dumps(result))
+import json
+print(json.dumps(result, indent=2))
